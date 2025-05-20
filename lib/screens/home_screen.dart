@@ -4,8 +4,7 @@ import "package:magicposbeta/bloc/shared_bloc/shared_bloc.dart";
 import "package:magicposbeta/screens/screens.dart";
 import "package:magicposbeta/templates/main_screens_template.dart";
 import "package:magicposbeta/theme/locale/locale.dart";
-import "../providers/depts_provider.dart";
-import "package:provider/provider.dart";
+import "package:magicposbeta/theme/pages_profiles.dart";
 import "../components/custom_button.dart";
 
 class HomeScreen extends StatelessWidget {
@@ -32,31 +31,17 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         //client
 
                         CustomButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              PersonCard.clientRoute,
-                            );
-                          },
-                          icon: Icons.supervisor_account,
-                          engText: "Clients",
-                          arText: "الزبائن",
+                          profile: PagesProfiles.clients,
                         ),
                         //suppliers
                         CustomButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              PersonCard.supplierRoute,
-                            );
-                          },
-                          icon: Icons.group_add_rounded,
-                          engText: "Suppliers",
-                          arText: "الموردون",
+                          profile: PagesProfiles.suppliers,
                         ),
                       ],
                     ),
@@ -70,26 +55,12 @@ class HomeScreen extends StatelessWidget {
                               .read<SharedCubit>()
                               .currentUser
                               .isManger(),
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              UserCard.route,
-                            );
-                          },
-                          icon: Icons.person,
-                          engText: "Users",
-                          arText: "المستخدمون",
+                          profile: PagesProfiles.users,
                         ),
                         //manual
 
-                        CustomButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              "/",
-                            );
-                          },
-                          icon: Icons.menu_book_rounded,
-                          engText: "Manual",
-                          arText: "دليل الاستخدام",
+                        const CustomButton(
+                          profile: PagesProfiles.manual,
                         ),
                       ],
                     ),
@@ -98,23 +69,12 @@ class HomeScreen extends StatelessWidget {
               ),
               //Point Of Sale
 
-              Consumer<DeptsProvider>(
-                builder: (context, value, child) => CustomButton(
-                  fontSize: 34,
-                  iconSize: 100,
-                  width: 380,
-                  height: 380,
-                  onPressed: () async {
-                    value.getDeptsList();
-                    Navigator.of(context).pushNamed(
-                      isPos ? PosScreen.route : ResturantScreen.route,
-                    );
-                  },
-                  icon:
-                      isPos ? Icons.screenshot_monitor : Icons.fastfood_rounded,
-                  engText: isPos ? "POS" : "Resturant",
-                  arText: isPos ? "نقطة البيع" : "المطعم",
-                ),
+              CustomButton(
+                fontSize: 34,
+                iconSize: 100,
+                width: 380,
+                height: 380,
+                profile: isPos ? PagesProfiles.pos : PagesProfiles.restaurant,
               ),
               SizedBox(
                 width: 380,
@@ -122,33 +82,19 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 180,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           //products
                           CustomButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                ProductCard.route,
-                              );
-                            },
-                            icon: Icons.widgets,
-                            engText: "Products",
-                            arText: "المواد",
+                            profile: PagesProfiles.products,
                           ),
                           //reports
 
                           CustomButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                ReportsNavigatorScreen.route,
-                              );
-                            },
-                            icon: Icons.contact_page_outlined,
-                            engText: "Reports",
-                            arText: "التقارير",
+                            profile: PagesProfiles.reports,
                           ),
                         ],
                       ),
@@ -160,32 +106,16 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           // In/Out
 
-                          CustomButton(
-                            onPressed: () async {
-                              Navigator.of(context).pushNamed(
-                                InOutScreen.route,
-                              );
-                              await platform.invokeMethod("connect");
-                            },
-                            icon: Icons.compare_arrows_rounded,
-                            engText: "Input/Output",
-                            arText: "إدخال/إخراج",
+                          const CustomButton(
+                            profile: PagesProfiles.inOut,
                           ),
                           //settings
                           CustomButton(
-                            nullOnPressed: !context
-                                .read<SharedCubit>()
-                                .currentUser
-                                .isManger(),
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                SettingsScreen.route,
-                              );
-                            },
-                            icon: Icons.settings,
-                            engText: "Settings",
-                            arText: "الإعدادات",
-                          ),
+                              nullOnPressed: !context
+                                  .read<SharedCubit>()
+                                  .currentUser
+                                  .isManger(),
+                              profile: PagesProfiles.settings),
                         ],
                       ),
                     ),
@@ -213,3 +143,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+// finish refactor

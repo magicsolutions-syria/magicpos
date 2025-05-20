@@ -48,9 +48,7 @@ class InOutProductCubit extends Cubit<InOutProductStates> {
     if (currentUser.product.outProduct) {
       data.add(SearchTypes.outOperation);
     }
-    print("&&&&&&&&&&&&&&*******************************&&&&&&&&&");
-    print(currentUser.product.inProduct);
-    print(currentUser.product.outProduct);
+
     return data;
   }
 
@@ -75,8 +73,8 @@ class InOutProductCubit extends Cubit<InOutProductStates> {
         emit(CompletedOperationState(
             phrase: SuccessDialogPhrases.outOperationComplete));
       }
-
-      await platform.invokeMethod("printText", printText);
+   //   Print
+      //await platform.invokeMethod("printText", printText);
     } catch (e) {
       emit(FailureInOutProductState(error: e.toString()));
     }

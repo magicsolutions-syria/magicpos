@@ -1,11 +1,10 @@
 import "package:flutter/material.dart";
+import "package:magicposbeta/modules/page_profile.dart";
+import "package:magicposbeta/theme/pages_profiles.dart";
 
 class CustomButton extends StatelessWidget {
   final double ratio = 0.12;
-  final VoidCallback onPressed;
-  final IconData icon;
-  final String engText;
-  final String arText;
+  final PageProfile profile;
   final double fontSize;
   final bool nullOnPressed;
   final double width;
@@ -14,15 +13,12 @@ class CustomButton extends StatelessWidget {
 
   const CustomButton(
       {super.key,
-      required this.onPressed,
-      required this.icon,
-      required this.engText,
-      required this.arText,
       this.fontSize = 20,
       this.iconSize = 40,
       this.height = 180,
       this.nullOnPressed = false,
-      this.width = 180});
+      this.width = 180,
+      required this.profile,});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +26,14 @@ class CustomButton extends StatelessWidget {
       width: width,
       height: height,
       child: ElevatedButton(
-        onPressed: nullOnPressed ? null : onPressed,
+        onPressed: nullOnPressed
+            ? null
+            : () {
+
+                Navigator.of(context).pushNamed(
+                  profile.route,
+                );
+              },
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
@@ -43,12 +46,12 @@ class CustomButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                icon,
+                profile.icon,
                 color: Colors.blue,
                 size: iconSize,
               ),
               Text(
-                '$engText\n$arText',
+                '${profile.enName}\n${profile.arName}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -62,3 +65,4 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+//todo remove provider

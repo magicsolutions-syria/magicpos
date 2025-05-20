@@ -71,7 +71,7 @@ class InformationPage extends StatelessWidget {
                 GeneralTextField(
                   width: 350,
                   withSpacer: true,
-                  title: FieldsNames.phone,
+                  title: FieldsNames.mobile,
                   controller: phone,
                   onChangeFunc: (text) {
                     context.read<UserCubit>().user.phone = text;

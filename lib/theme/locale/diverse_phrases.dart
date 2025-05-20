@@ -6,6 +6,7 @@ class DiversePhrases {
   static const String password = "password";
   static String inventory = "مستودعية";
   static String weight = "وزنية";
+  static const String scaleSettings="إعدادات الميزان";
 
   static List<String> productTypes() => [inventory, weight];
 

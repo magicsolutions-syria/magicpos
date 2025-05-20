@@ -231,7 +231,7 @@ class PersonCard extends StatelessWidget {
                                 },
                               ),
                               GeneralTextField(
-                                title: FieldsNames.phoneNumber,
+                                title: FieldsNames.tel,
                                 width: 350,
                                 height: 45,
                                 inputType: TextInputType.phone,
@@ -393,3 +393,4 @@ class PersonCard extends StatelessWidget {
     );
   }
 }
+// finish refactor

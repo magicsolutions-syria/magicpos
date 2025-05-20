@@ -13,13 +13,11 @@ import 'package:magicposbeta/screens_data/functions_keys_data.dart';
 import 'package:provider/provider.dart';
 
 import '../components/cash_view.dart';
-import '../components/ch_view.dart';
 import '../components/description_widget.dart';
 import '../components/functions_keys_bar.dart';
 import '../components/my_dialog.dart';
 import '../components/pd_view.dart';
 import '../components/rc_view.dart';
-import '../database/database_functions.dart';
 import '../database/functions/functions_keys_bar_handle_click.dart';
 import '../modules/product.dart';
 import '../providers/products_table_provider.dart';
@@ -27,7 +25,7 @@ import '../providers/products_table_provider.dart';
 class ResturantScreen extends StatelessWidget {
   const ResturantScreen({super.key});
 
-  static String route = "/rest";
+  static const String route = "/rest";
 
   static const platform = MethodChannel('IcodPrinter');
 
@@ -193,8 +191,10 @@ class ResturantScreen extends StatelessWidget {
                         flex: 45,
                         child: Column(
                           children: [
-                            Expanded(flex:54,child: DescriptionWidget(isRest: true)),
-                            Expanded(flex:46,child: CustomViewPanel()),
+                            Expanded(
+                                flex: 54,
+                                child: DescriptionWidget(isRest: true)),
+                            Expanded(flex: 46, child: CustomViewPanel()),
                           ],
                         ),
                       ),
@@ -253,17 +253,16 @@ class ResturantScreen extends StatelessWidget {
                                 mp["onPressed"] = () {
                                   try {
                                     value.addProduct(
-                                      groupLs[i]["txt"],
-                                      1,
-                                      value.getAnsAsDouble(),
-                                      "-2",
-                                      -1,
-                                      -1,
-                                      -1,
-                                      groupLs[i]["department"],
-                                      groupLs[i]["Print_Name"],
-                                      -1
-                                    );
+                                        groupLs[i]["txt"],
+                                        1,
+                                        value.getAnsAsDouble(),
+                                        "-2",
+                                        -1,
+                                        -1,
+                                        -1,
+                                        groupLs[i]["department"],
+                                        groupLs[i]["Print_Name"],
+                                        -1);
                                   } catch (e) {
                                     MyDialog.showAnimateWarningDialog(
                                       context: context,
@@ -281,8 +280,7 @@ class ResturantScreen extends StatelessWidget {
                                 };
                                 ls.add(mp);
                               }
-                            }
-                            else {
+                            } else {
                               ls = groupLs;
                             }
                           }

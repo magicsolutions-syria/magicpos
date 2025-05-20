@@ -9,7 +9,6 @@ import 'package:magicposbeta/database/shared_preferences_functions.dart';
 
 import '../../../components/waiting_widget.dart';
 import '../../../database/database_functions.dart';
-import '../../../database/database_functions.dart';
 import '../../printer.dart';
 
 class BillPage extends StatelessWidget {

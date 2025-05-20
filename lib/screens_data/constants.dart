@@ -92,7 +92,7 @@ const List<String> jopTitleData = [
   "محاسب",
   "كاشير",
   "كاشير إرجاع",
-  "أمين مستودع"
+  "أمين مستودع",
 ];
 const List<String> settingsPages = [
   "الطابعات",

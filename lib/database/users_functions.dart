@@ -100,17 +100,17 @@ class UsersFunctions {
   static Future<User> verifyUser(String name, String password) async {
     PosData data = PosData();
     if (name == "") {
-      throw Exception("اسم المستخدم لا يمكن أن يكون فارغاً");
+      throw CustomException("اسم المستخدم لا يمكن أن يكون فارغاً");
     }
     if (password == "") {
-      throw Exception("كلمة السر لا يمكن أن تكون فارغة");
+      throw CustomException("كلمة السر لا يمكن أن تكون فارغة");
     }
     List<Map> response = await getUsersList(
         secondCondition: "ar_name='$name' AND password='$password'",
         searchText: '',
         searchType: '');
     if (response.isEmpty) {
-      throw Exception("كلمة السر أو المستخدم خاطئ");
+      throw CustomException("كلمة السر أو المستخدم خاطئ");
     }
 
     return await User.instanceFromMap(response[0]);
@@ -146,23 +146,23 @@ class UsersFunctions {
 
   static Future<void> _checkUniqueFields(User user) async {
     if (user.arName == "") {
-      throw Exception("حقل الاسم بالعربي لا يمكن أن يكون فارغاً");
+      throw CustomException("حقل الاسم بالعربي لا يمكن أن يكون فارغاً");
     }
 
     if (await _checkUniqueField("ar_name", user.arName, user.id)) {
-      throw Exception("الاسم بالعربي موجود مسبقاً");
+      throw CustomException("الاسم بالعربي موجود مسبقاً");
     }
     if (await _checkUniqueField("en_name", user.enName, user.id) &&
         user.enName != "") {
-      throw Exception("الاسم بالإنكليزي موجود مسبقاً");
+      throw CustomException("الاسم بالإنكليزي موجود مسبقاً");
     }
     if (await _checkUniqueField("mobile", user.phone, user.id) &&
         user.phone != "") {
-      throw Exception("الموبايل موجود مسبقاً");
+      throw CustomException("الموبايل موجود مسبقاً");
     }
     if (await _checkUniqueField("email", user.email, user.id) &&
         user.email != "") {
-      throw Exception("الإيميل موجود مسبقاً");
+      throw CustomException("الإيميل موجود مسبقاً");
     }
   }
 
@@ -179,7 +179,7 @@ class UsersFunctions {
       List<Map> response0 = await getUsersList(
           secondCondition: " jop_title_name='${jopTitleData.first}'", searchText: '', searchType: '');
       if (response0.length == 1) {
-        throw Exception("يجب وجود مستخدم على الأقل بصلاحيات مدير");
+        throw CustomException("يجب وجود مستخدم على الأقل بصلاحيات مدير");
       }
     }
 

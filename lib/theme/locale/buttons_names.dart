@@ -2,6 +2,8 @@ class ButtonsNames {
   static  const String logOut= "تسجيل الخروج";
   static  const String execute= "تنفيذ";
   static  const String chooseProduct= "اختيار مادة";
+
+  static const String save="حفظ";
   static String get whatsAppButton {
     return "إرسال الرصيد عبر الوتساب";
   }

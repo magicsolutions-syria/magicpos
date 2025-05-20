@@ -4,6 +4,8 @@ import 'package:magicposbeta/screens/sign_up_screen.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
 
 import '../bloc/start_app_bloc/start_app_bloc.dart';
+import '../screens_data/constants.dart';
+import '../theme/app_profile.dart';
 
 class StartAppScreen extends StatelessWidget {
   static const route = "/initial_screen";
@@ -25,7 +27,7 @@ class StartAppScreen extends StatelessWidget {
                 backgroundColor: Colors.white,
                 body: Center(
                   child: Image.asset(
-                    "assets/images/logo-test.jpg",
+                   AppProfile.logo,
                     width: 150,
                     height: 150,
                   ),
@@ -51,3 +53,4 @@ class StartAppScreen extends StatelessWidget {
     );
   }
 }
+// finish refactor

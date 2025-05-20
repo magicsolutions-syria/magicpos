@@ -112,12 +112,12 @@ class UserCard extends StatelessWidget {
                   ),
                   PageSliderWidget(
                     pagesData: {
-                      PagesNames.reports:   const ReportsPage(),
-                      PagesNames.products:   const ProductsPage(),
-                      PagesNames.suppliersClients:   const SuppliersClientsPage(),
-                      PagesNames.payKey:   const PayKeysPage(),
-                      PagesNames.operationKey:   const OperatorKeyPage(),
-                      PagesNames.information:  InformationPage(),
+                      SliderPagesNames.reports:   const ReportsPage(),
+                      SliderPagesNames.products:   const ProductsPage(),
+                      SliderPagesNames.suppliersClients:   const SuppliersClientsPage(),
+                      SliderPagesNames.payKey:   const PayKeysPage(),
+                      SliderPagesNames.operationKey:   const OperatorKeyPage(),
+                      SliderPagesNames.information:  InformationPage(),
                     },
                     width: 1400,
                     height: 318,
@@ -212,3 +212,4 @@ class UserCard extends StatelessWidget {
     );
   }
 }
+// finish refactor

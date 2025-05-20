@@ -39,7 +39,7 @@ class PrinterHelperFunctions{
   static Future<void> print(ProductsTableProvider productVal,BuildContext context,String printerText,Map<int,List<Product>> mp)async{
 
       try {
-        //await Printer.defaultPrint(printerText);
+        await Printer.defaultPrint(printerText);
       } catch (e) {
         MyDialog.showAnimateWarningDialog(
             context: context, isWarning: true, title: e.toString());

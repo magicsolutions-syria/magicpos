@@ -10,17 +10,26 @@ class PageSliderWidget extends StatelessWidget {
       {super.key,
       required this.pagesData,
       required this.width,
-      required this.height});
+      required this.height,
+      this.inHeight = 250,
+      this.inWidth = 1400,
+      this.buttonsWidth = 1261.9});
 
   final Map<String, Widget> pagesData;
   final double width;
   final double height;
+  final double inHeight;
+  final double inWidth;
+  final double buttonsWidth;
 
   @override
   Widget build(BuildContext context) {
-     PageController pageController = PageController(initialPage: pagesData.length-1);
-List<String>titles=List.generate(pagesData.length,(index)=>pagesData.keys.elementAt(index));
-     List<Widget>widgets=List.generate(pagesData.length,(index)=>pagesData.values.elementAt(index));
+    PageController pageController =
+        PageController(initialPage: pagesData.length - 1);
+    List<String> titles = List.generate(
+        pagesData.length, (index) => pagesData.keys.elementAt(index));
+    List<Widget> widgets = List.generate(
+        pagesData.length, (index) => pagesData.values.elementAt(index));
 
     return Container(
       width: width,
@@ -32,15 +41,16 @@ List<String>titles=List.generate(pagesData.length,(index)=>pagesData.keys.elemen
           border: Border.all(),
           borderRadius: BorderRadius.circular(20)),
       child: BlocProvider(create: (BuildContext context) {
-        return PageSliderCubit(() => InitialPageSliderState(index: titles.length-1));
+        return PageSliderCubit(
+            () => InitialPageSliderState(index: titles.length - 1));
       }, child: BlocBuilder<PageSliderCubit, PageSliderStates>(
         builder: (BuildContext context, PageSliderStates state) {
           if (state is InitialPageSliderState) {
             return Column(
               children: [
                 SizedBox(
-                  height: 250,
-                  width: 1400,
+                  height: inHeight,
+                  width: inWidth,
                   child: PageView(
                     controller: pageController,
                     onPageChanged: (value) {
@@ -59,10 +69,11 @@ List<String>titles=List.generate(pagesData.length,(index)=>pagesData.keys.elemen
                       return ListViewButton(
                         currentIndex: state.index,
                         buttonIndex: index,
-                        title:titles[index],
+                        title: titles[index],
                         controller: pageController,
                         length: pagesData.length,
-                        totalWidth: 1261.9,
+                          totalWidth: buttonsWidth,
+
                         onPressed: () {
                           context.read<PageSliderCubit>().changeIndex(index);
                         },

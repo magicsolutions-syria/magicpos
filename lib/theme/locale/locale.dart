@@ -8,5 +8,5 @@ export 'diverse_phrases.dart';
 export 'fields_phrases.dart';
 export 'lists_columns_names.dart';
 export 'check_boxes_names.dart';
-export 'pages_names.dart';
+export 'slider_pages_names.dart';
 export 'radios_names.dart';

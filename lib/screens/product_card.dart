@@ -29,7 +29,8 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ProductCardCubit>(
       create: (BuildContext context) {
-        return ProductCardCubit(() => InitialProductCardState(),context.read<SharedCubit>().currentUser);
+        return ProductCardCubit(() => InitialProductCardState(),
+            context.read<SharedCubit>().currentUser);
       },
       child: ScreensTemplate(
         appBar: AppBar(
@@ -45,9 +46,9 @@ class ProductCard extends StatelessWidget {
                               productItem = item;
                             },
                           ));
-                  if(productItem.isNotEmpty&&context.mounted) {
-                   BlocProvider.of<ProductCardCubit>(context)
-                      .initialProduct(productItem);
+                  if (productItem.isNotEmpty && context.mounted) {
+                    BlocProvider.of<ProductCardCubit>(context)
+                        .initialProduct(productItem);
                   }
                 },
                 iconSize: 42,
@@ -118,10 +119,10 @@ class ProductCard extends StatelessWidget {
                       ),
                       PageSliderWidget(
                         pagesData: {
-                          PagesNames.details:  DetailsPage(),
-                          PagesNames.prices:  PricesPage(),
-                          PagesNames.units:  UnitsPage(),
-                          PagesNames.general:  GeneralPage(),
+                          SliderPagesNames.details: DetailsPage(),
+                          SliderPagesNames.prices: PricesPage(),
+                          SliderPagesNames.units: UnitsPage(),
+                          SliderPagesNames.general: GeneralPage(),
                         },
                         width: 1400,
                         height: 318,
@@ -148,7 +149,8 @@ class ProductCard extends StatelessWidget {
                             MyDialog.showWarningOperatorDialog(
                               context: context,
                               isWarning: true,
-                              title: WarningsDialogPhrases.areYouSureOfUpdateProduct,
+                              title: WarningsDialogPhrases
+                                  .areYouSureOfUpdateProduct,
                               onTap: () async {
                                 await context
                                     .read<ProductCardCubit>()
@@ -168,7 +170,8 @@ class ProductCard extends StatelessWidget {
                               MyDialog.showWarningOperatorDialog(
                                 context: context,
                                 isWarning: true,
-                                title: WarningsDialogPhrases.areYouSureOfDeleteProduct,
+                                title: WarningsDialogPhrases
+                                    .areYouSureOfDeleteProduct,
                                 onTap: () async {
                                   await context
                                       .read<ProductCardCubit>()
@@ -184,7 +187,9 @@ class ProductCard extends StatelessWidget {
                         OperatorButton(
                             width: 180,
                             onPressed: () {
-                              if (context.read<ProductCardCubit>().isChanged()) {
+                              if (context
+                                  .read<ProductCardCubit>()
+                                  .isChanged()) {
                                 MyDialog.showWarningOperatorDialog(
                                     context: context,
                                     isWarning: true,
@@ -210,7 +215,9 @@ class ProductCard extends StatelessWidget {
           listener: (BuildContext context, ProductCardStates state) {
             if (state is FailureProductCardState) {
               MyDialog.showAnimateWrongDialog(
-                  context: context, title: state.error.toString(), );
+                context: context,
+                title: state.error.toString(),
+              );
             }
             if (state is CompletedOperationState) {
               MyDialog.showWarningDialog(
@@ -222,3 +229,4 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+// finish refactor

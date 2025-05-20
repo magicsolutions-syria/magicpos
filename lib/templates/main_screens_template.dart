@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
+import 'package:magicposbeta/theme/locale/locale.dart';
 
 import '../components/text_with_icon.dart';
+import '../theme/app_profile.dart';
 
 class MainScreensTemplate extends StatelessWidget {
   const MainScreensTemplate({super.key, required this.child});
@@ -34,10 +36,10 @@ class MainScreensTemplate extends StatelessWidget {
                   const Image(
                     width: 150,
                     height: 150,
-                    image: AssetImage("assets/images/logo-test.jpg"),
+                    image: AssetImage(AppProfile.logo),
                   ),
                   Text(
-                    "MagicPOS",
+                    AppProfile.name,
                     style: TextStyle(
                       fontSize: 42,
                       color: Theme.of(context).primaryColor,
@@ -55,19 +57,19 @@ class MainScreensTemplate extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextWithIcon(
-                    title: "Tel: 011 322 7272",
+                    title: "${FieldsNames.tel}${AppProfile.tel}",
                     icon: Icons.phone_outlined,
                   ),
                   TextWithIcon(
-                    title: "Mobile: 0949 298 938",
+                    title: "${FieldsNames.mobile}${AppProfile.mobile}",
                     icon: Icons.phone_android_outlined,
                   ),
                   TextWithIcon(
-                    title: "Facebook: MagicPOS",
+                    title: "${FieldsNames.faceBook}${AppProfile.facebook}",
                     icon: Icons.facebook_outlined,
                   ),
                   TextWithIcon(
-                    title: "Email: magicpos@gmail.com",
+                    title: "${FieldsNames.email}${AppProfile.email}",
                     icon: Icons.email_outlined,
                   ),
                 ],
@@ -79,3 +81,4 @@ class MainScreensTemplate extends StatelessWidget {
     );
   }
 }
+// finish refactor

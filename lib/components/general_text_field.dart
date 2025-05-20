@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -103,8 +101,7 @@ class GeneralTextField extends StatelessWidget {
           title,
           style: TextStyle(fontSize: titleFontSize),
         ),
-        withSpacer
-            ? const Spacer()
+        withSpacer ? const Spacer()
             : const SizedBox(
                 width: 0,
                 height: 0,

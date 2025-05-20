@@ -1,12 +1,23 @@
 class FieldsNames {
-  static const String inBalance="المدفوعات  :  ";
+  static const String inBalance = "المدفوعات  :  ";
 
-  static const String outBalance="المقبوضات  :  ";
+  static const String outBalance = "المقبوضات  :  ";
 
-  static const String balance="الرصيد  :  ";
-  static const String inOut= " : إدخال/إخراج";
-  static const String totalQty=  " : الكمية الإجمالية";
-  static const String totalPrice= " : السعر الإجمالي";static const String supplier= " : المورد";
+  static const String balance = "الرصيد  :  ";
+  static const String inOut = " : إدخال/إخراج";
+  static const String totalQty = " : الكمية الإجمالية";
+  static const String totalPrice = " : السعر الإجمالي";
+  static const String supplier = " : المورد";
+
+  static const String mobile = " : الموبايل";
+
+
+  static const String tel = " : رقم الهاتف";
+  static const String faceBook = " : فيسبوك";
+  static const String email = " : الإيميل";
+  static const String weight = " : الوزن/(عدد الخانات)";
+  static const String productNumber = " : رقم المادة/(عدد الخانات)";
+
   static String get arabicName {
     return " : الاسم بالعربي";
   }
@@ -67,16 +78,8 @@ class FieldsNames {
     return " : سعر الكلفة";
   }
 
-  static String get email {
-    return " : الإيميل";
-  }
-
   static String get jopTitle {
     return " : المسمى الوظيفي";
-  }
-
-  static String get phone {
-    return " : الموبايل";
   }
 
   static String get password {
@@ -87,15 +90,7 @@ class FieldsNames {
     return " : كلمة السر الجديدة";
   }
 
-  static String get phoneNumber {
-    return " : رقم الهاتف";
-  }
-
   static String get whatsAppNumber {
     return " : رقم الواتساب";
   }
-
-
-
-
 }

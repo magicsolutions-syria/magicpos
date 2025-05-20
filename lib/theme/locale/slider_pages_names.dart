@@ -1,4 +1,4 @@
-class PagesNames {
+class SliderPagesNames {
   static String details = "تفاصيل و كميات";
   static String prices = "الأسعار";
   static String units = "الوحدات";

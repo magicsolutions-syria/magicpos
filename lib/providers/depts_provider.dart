@@ -31,4 +31,7 @@ class DeptsProvider with ChangeNotifier {
     _isDepts = false;
     notifyListeners();
   }
+  DeptsProvider(){
+    getDeptsList();
+  }
 }

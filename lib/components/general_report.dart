@@ -11,6 +11,7 @@ import '../database/shared_preferences_functions.dart';
 import '../modules/pair.dart';
 import '../providers/reports_provider.dart';
 import 'custom_button.dart';
+import 'custom_button3.dart';
 import 'my_dialog.dart';
 import 'printer_helper_functions.dart';
 
@@ -567,7 +568,7 @@ abstract class ReportsScreenState extends State<ReportsScreen> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          CustomButton(
+                          CustomButton3(
                             width: 200,
                             height: 200,
                             onPressed: () {
@@ -586,7 +587,7 @@ abstract class ReportsScreenState extends State<ReportsScreen> {
                             arText: "طباعة التقرير اليومي",
                             nullOnPressed: button1(),
                           ),
-                          CustomButton(
+                          CustomButton3(
                             width: 200,
                             height: 200,
                             onPressed: () {
@@ -609,7 +610,7 @@ abstract class ReportsScreenState extends State<ReportsScreen> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          CustomButton(
+                          CustomButton3(
                             width: 200,
                             height: 200,
                             onPressed: onPressedZ1,
@@ -618,7 +619,7 @@ abstract class ReportsScreenState extends State<ReportsScreen> {
                             arText: "تصفير التقرير اليومي",
                             nullOnPressed: button3(),
                           ),
-                          CustomButton(
+                          CustomButton3(
                             width: 200,
                             height: 200,
                             onPressed: onPressedZ2,

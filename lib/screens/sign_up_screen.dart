@@ -27,3 +27,4 @@ class SignUpScreen extends StatelessWidget {
         buttonName: DiversePhrases.createAccount);
   }
 }
+// finish refactor

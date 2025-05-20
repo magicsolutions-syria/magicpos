@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:magicposbeta/bloc/shared_bloc/shared_bloc.dart';
 import 'package:magicposbeta/components/choose_number_field.dart';
 import 'package:magicposbeta/components/operator_button.dart';
 import 'package:magicposbeta/components/settings_title.dart';
 import 'package:magicposbeta/components/small_hint_text.dart';
 import 'package:magicposbeta/components/waiting_widget.dart';
 import 'package:magicposbeta/screens_data/constants.dart';
+import 'package:magicposbeta/theme/locale/locale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:magicposbeta/database/shared_preferences_functions.dart';
 
@@ -103,21 +106,16 @@ class GeneralSettingsPage extends StatelessWidget {
                       children: [
                         OperatorButton(
                           onPressed: () async {
-                            SharedPreferences data =
-                                await SharedPreferences.getInstance();
-                            await data.setString(
-                                "start_scale", scaleStart.text);
-                            await data.setInt("product_number_scale",
-                                int.parse(scaleProductNumber.text));
-                            await data.setInt(
-                                "weight_scale", int.parse(scaleWeight.text));
+                            context.read<SharedCubit>().settings.setProductNumberScale(value:  int.parse(scaleWeight.text));
+                            context.read<SharedCubit>().settings.setWeightScale(value:  int.parse(scaleProductNumber.text));
+                            context.read<SharedCubit>().settings.setStartScale(value:  scaleStart.text);
                           },
-                          text: "حفظ",
+                          text: ButtonsNames.save,
                           color: Theme.of(context).primaryColor,
                           enable: true,
                           textColor: Colors.white,
                         ),
-                        const SettingsTitle(title: "إعدادات الميزان"),
+                        const SettingsTitle(title: DiversePhrases.scaleSettings),
                       ],
                     ),
                     const SizedBox(height: 15),
@@ -126,12 +124,12 @@ class GeneralSettingsPage extends StatelessWidget {
                         ChooseNumberField(
                             controller: scaleWeight,
                             maxNumber: 9,
-                            title: " : الوزن/(عدد الخانات)"),
+                            title:FieldsNames.weight ),
                         const Spacer(),
                         ChooseNumberField(
                             controller: scaleProductNumber,
                             maxNumber: 9,
-                            title: " : رقم المادة/(عدد الخانات)"),
+                            title: FieldsNames.productNumber),
                         const Spacer(),
                         const SmallHintText(title: "(خانتين فقط)"),
                         const SizedBox(width: 5),
@@ -187,7 +185,7 @@ class GeneralSettingsPage extends StatelessWidget {
                   }),
             ),
             Container(
-              height: 250,
+              height: 282,
               width: 4,
               color: Theme.of(context).colorScheme.outlineVariant,
             ),
@@ -210,7 +208,7 @@ class GeneralSettingsPage extends StatelessWidget {
                               ": سعر الجملة",
                               ": سعر المستهلك"
                             ],
-                            hieght: 238,
+                            hieght: 270,
                             width: 199,
                             initialValue: snapshot.data!,
                             sharePrefernekeyName: 'price_type',
