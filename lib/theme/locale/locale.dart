@@ -1,0 +1,12 @@
+export 'errors.dart';
+export 'search_types.dart';
+export 'buttons_names.dart';
+export 'warning_dialogs_phrases.dart';
+export 'success_dialog_phrases.dart';
+export 'fields_names.dart';
+export 'diverse_phrases.dart';
+export 'fields_phrases.dart';
+export 'lists_columns_names.dart';
+export 'check_boxes_names.dart';
+export 'pages_names.dart';
+export 'radios_names.dart';

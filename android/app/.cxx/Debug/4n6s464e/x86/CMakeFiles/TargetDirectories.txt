@@ -1,0 +1,2 @@
+E:/projects_flutter/magicposbeta_2/android/app/.cxx/Debug/4n6s464e/x86/CMakeFiles/edit_cache.dir
+E:/projects_flutter/magicposbeta_2/android/app/.cxx/Debug/4n6s464e/x86/CMakeFiles/rebuild_cache.dir
