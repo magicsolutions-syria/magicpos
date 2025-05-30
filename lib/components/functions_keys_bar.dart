@@ -5,9 +5,6 @@ import "package:magicposbeta/components/general_list.dart";
 import "package:magicposbeta/components/my_dialog.dart";
 import "package:magicposbeta/components/operator_button.dart";
 import "package:magicposbeta/database/database_functions.dart";
-import "package:magicposbeta/modules/users_library/permissions_classes/operation_key_permission.dart";
-import "package:magicposbeta/modules/users_library/permissions_classes/pay_key_permission.dart";
-import "package:magicposbeta/modules/users_library/users_pages/pay_key_page.dart";
 import "package:magicposbeta/providers/depts_provider.dart";
 import "package:magicposbeta/providers/products_table_provider.dart";
 import "package:magicposbeta/screens/product_card.dart";
@@ -15,6 +12,7 @@ import "package:magicposbeta/screens_data/constants.dart";
 import "package:magicposbeta/theme/locale/locale.dart";
 import "package:provider/provider.dart";
 import "../database/functions/product_functions.dart";
+import "../modules/permissions_classes/permissions_classes.dart";
 import "../screens_data/functions_keys_data.dart";
 
 class FunctionsKeysBar extends StatefulWidget {

@@ -57,19 +57,20 @@ class MainScreensTemplate extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextWithIcon(
-                    title: "${FieldsNames.tel}${AppProfile.tel}",
+                    title: "${AppProfile.tel}${FieldsNames.tel}",
                     icon: Icons.phone_outlined,
                   ),
                   TextWithIcon(
-                    title: "${FieldsNames.mobile}${AppProfile.mobile}",
+                    title: "${AppProfile.mobile}${FieldsNames.mobile}",
                     icon: Icons.phone_android_outlined,
                   ),
                   TextWithIcon(
-                    title: "${FieldsNames.faceBook}${AppProfile.facebook}",
+
+                    title: "${AppProfile.facebook}${FieldsNames.faceBook}",
                     icon: Icons.facebook_outlined,
                   ),
                   TextWithIcon(
-                    title: "${FieldsNames.email}${AppProfile.email}",
+                    title: "${AppProfile.email}${FieldsNames.email}",
                     icon: Icons.email_outlined,
                   ),
                 ],

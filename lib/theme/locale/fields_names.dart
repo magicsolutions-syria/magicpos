@@ -10,13 +10,24 @@ class FieldsNames {
   static const String supplier = " : المورد";
 
   static const String mobile = " : الموبايل";
-
+  static const String name = " : الاسم";
+  static const String attachToSection = " : الربط مع القسم";
+  static const String depKeyNumber = ' : رقم زر القسم';
 
   static const String tel = " : رقم الهاتف";
   static const String faceBook = " : فيسبوك";
   static const String email = " : الإيميل";
   static const String weight = " : الوزن/(عدد الخانات)";
   static const String productNumber = " : رقم المادة/(عدد الخانات)";
+
+  static const String pricesWidth = " : عرض الأسعار";
+
+  static const String qtyWidth = " : عرض الكميات";
+  static const String start = " : البداية";
+
+  static const String oldName = " : الاسم القديم";
+
+  static const String newName = " : الاسم الجديد";
 
   static String get arabicName {
     return " : الاسم بالعربي";

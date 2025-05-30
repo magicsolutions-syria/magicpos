@@ -15,11 +15,16 @@ class SectionsFunctions {
     return id;
   }
 
-  static Future<List<Map>> getDepartmentList(String name, {String printerCondition = ""}) async {
+  static Future<List<Map>> getDepartmentList(String name, {String printerCondition = "",bool sameDepartment=false}) async {
     PosData data = PosData();
     String condition = "";
     if (name != "") {
-      condition = "WHERE section_name LIKE '%$name%'";
+      if(sameDepartment){
+        condition="WHERE section_name='$name'";
+      }
+      else {
+        condition = "WHERE section_name LIKE '%$name%'";
+      }
     }
     if(printerCondition !=""){
       condition = "WHERE $printerCondition";

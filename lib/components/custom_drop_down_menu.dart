@@ -14,6 +14,7 @@ class CustomDropDownMenu extends StatelessWidget {
   final double fontSize;
   final bool enableFilter;
   final Function notify;
+  final Function(String value) onChanged;
 
   const CustomDropDownMenu(
       {super.key,
@@ -26,7 +27,9 @@ class CustomDropDownMenu extends StatelessWidget {
       this.scaleY = 1,
       required this.data,
       required this.controller,
-      this.fontSize = 24, required this.notify});
+      this.fontSize = 24,
+      required this.notify,
+      required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +85,11 @@ class CustomDropDownMenu extends StatelessWidget {
                   ),
                 ),
               );
-            }).toList(), focusNode: FocusNode(),
+            }).toList(),
+            focusNode: FocusNode(),
+            onChanged: (String value) {
+              onChanged(value);
+            },
           ),
         ),
         Text(

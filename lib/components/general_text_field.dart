@@ -17,7 +17,7 @@ class GeneralTextField extends StatelessWidget {
   final double height;
   final bool readOnly;
   final Color borderColor;
-  final Function onChangeFunc;
+  final Function(String s) onChangeFunc;
 
   static void _defaultFunction(String text) {}
   final bool withSpacer;
@@ -58,7 +58,9 @@ class GeneralTextField extends StatelessWidget {
                   onSubmitted: (value) {
                     if (value == "") controller.text = initVal;
                   },
-                  onChanged: (String text) => onChangeFunc(text),
+                  onChanged: (String text) {
+                    print("555555555555555555555555555555555555555555000000000000000000000000000000000000");
+                    onChangeFunc(text);},
                   inputFormatters: onlyNumber,
                   keyboardType: inputType,
                   readOnly: readOnly,

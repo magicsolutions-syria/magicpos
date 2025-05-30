@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isPos =
-        context.read<SharedCubit>().settings.screenType == RadiosNames.pos;
+        context.read<SharedCubit>().settings.screenType == RadiosValues.pos;
     return MainScreensTemplate(
       child: Column(
         children: [

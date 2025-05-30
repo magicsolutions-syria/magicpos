@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:magicposbeta/modules/general_settings.dart';
-import 'package:magicposbeta/theme/locale/radios_names.dart';
+import 'package:magicposbeta/theme/locale/radios_values.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens_data/constants.dart';
@@ -179,11 +179,11 @@ class DefaultValues {
   }
 
   static String get priceType {
-    return  RadiosNames.piece;
+    return  RadiosValues.piece;
   }
 
   static String get screenType {
-    return RadiosNames.pos;
+    return RadiosValues.pos;
   }
 }
 

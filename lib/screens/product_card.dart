@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:magicposbeta/bloc/product_bloc/product_bloc.dart';
 import 'package:magicposbeta/bloc/shared_bloc/shared_cubit.dart';
-import 'package:magicposbeta/components/page_slider/page_slider_widget.dart';
 import 'package:magicposbeta/components/waiting_widget.dart';
 import 'package:magicposbeta/screens/home_screen.dart';
 import 'package:magicposbeta/theme/app_formatters.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
-
-import '../components/lists/product_card_list.dart';
+import '../complex_components/page_slider/page_slider_widget.dart';
 import '../components/my_dialog.dart';
 import '../components/operator_button.dart';
 import '../components/general_text_field.dart';
-import '../modules/product_library/pages/products_pages.dart';
-
-import '../screens_data/constants.dart';
+import '../lists/product_card_list.dart';
+import '../slider_pages/product_pages/products_pages.dart';
 import '../templates/screens_template.dart';
 
 class ProductCard extends StatelessWidget {
   static const String route = "${HomeScreen.route}/product_card";
 
-  ProductCard({super.key});
-
-  TextEditingController arName = TextEditingController();
-  TextEditingController enName = TextEditingController();
+  const ProductCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +57,6 @@ class ProductCard extends StatelessWidget {
                 state is LoadingProductCardState) {
               return const WaitingWidget();
             } else {
-              arName.text = context.read<ProductCardCubit>().product.arName;
-              enName.text = context.read<ProductCardCubit>().product.enName;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -76,7 +68,7 @@ class ProductCard extends StatelessWidget {
                         color: Theme.of(context).primaryColor),
                     child: Center(
                       child: Text(
-                        AppFormatters.idFormat(
+                        AppFormatters.leftZerosFormat(
                             context.read<ProductCardCubit>().product.id),
                         style: const TextStyle(fontSize: 27),
                       ),
@@ -97,7 +89,11 @@ class ProductCard extends StatelessWidget {
                             width: 350,
                             inputType: TextInputType.text,
                             onlyNumber: const [],
-                            controller: enName,
+                            controller: TextEditingController(
+                                text: context
+                                    .read<ProductCardCubit>()
+                                    .product
+                                    .enName),
                             onChangeFunc: (text) {
                               context.read<ProductCardCubit>().product.enName =
                                   text;
@@ -109,7 +105,11 @@ class ProductCard extends StatelessWidget {
                             width: 350,
                             inputType: TextInputType.text,
                             onlyNumber: const [],
-                            controller: arName,
+                            controller: TextEditingController(
+                                text: context
+                                    .read<ProductCardCubit>()
+                                    .product
+                                    .arName),
                             onChangeFunc: (text) {
                               context.read<ProductCardCubit>().product.arName =
                                   text;
@@ -119,10 +119,10 @@ class ProductCard extends StatelessWidget {
                       ),
                       PageSliderWidget(
                         pagesData: {
-                          SliderPagesNames.details: DetailsPage(),
-                          SliderPagesNames.prices: PricesPage(),
-                          SliderPagesNames.units: UnitsPage(),
-                          SliderPagesNames.general: GeneralPage(),
+                          SliderPagesNames.details: const DetailsPage(),
+                          SliderPagesNames.prices: const PricesPage(),
+                          SliderPagesNames.units: const UnitsPage(),
+                          SliderPagesNames.general: const GeneralPage(),
                         },
                         width: 1400,
                         height: 318,

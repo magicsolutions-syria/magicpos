@@ -135,7 +135,7 @@ class _GroupReportState extends ReportsScreenState {
 
   @override
   Widget drop(Function notify) {
-    return CustomDropDownMenu(title: " : اختيار القسم", data: departmentsNames, controller: departmentController, width: 150,fontSize: 15, notify: notify,);
+    return CustomDropDownMenu(title: " : اختيار القسم", data: departmentsNames, controller: departmentController, width: 150,fontSize: 15, notify: notify, onChanged: (String value) {  },);
   }
   @override
   List<Pair<String, Pair<int,int>>> getColumns() {

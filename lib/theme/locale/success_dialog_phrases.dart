@@ -2,6 +2,8 @@ class SuccessDialogPhrases{
   static const String inOperationComplete ="تمت عملية الإدخال";
   static const String outOperationComplete ="تمت عملية الإخراج";
 
+  static const String saveDeptSettingsComplete="تم حفظ إعدادات زر القسم";
+
   static String get deleteOperationComplete{
     return "تمت عملية الحذف بنجاح";
   }

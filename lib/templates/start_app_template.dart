@@ -3,11 +3,12 @@ import "package:magicposbeta/bloc/shared_bloc/shared_bloc.dart";
 import "package:magicposbeta/components/label_text_feild.dart";
 import "package:magicposbeta/components/my_dialog.dart";
 import "package:magicposbeta/components/operator_button.dart";
-import "package:magicposbeta/components/secured_text_field/secured_field_widget.dart";
 import "package:magicposbeta/components/waiting_widget.dart";
 import "package:magicposbeta/screens/home_screen.dart";
 import "package:magicposbeta/templates/main_screens_template.dart";
 import "package:magicposbeta/theme/locale/locale.dart";
+
+import "../complex_components/secured_text_field/secured_field_widget.dart";
 
 
 class StartAppTemplate extends StatelessWidget {

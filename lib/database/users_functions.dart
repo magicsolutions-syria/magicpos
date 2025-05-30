@@ -2,15 +2,9 @@ import 'package:magicposbeta/components/reverse_string.dart';
 import 'package:magicposbeta/database/database_functions.dart';
 import 'package:magicposbeta/database/initialize_database.dart';
 import 'package:magicposbeta/modules/custom_exception.dart';
-import 'package:magicposbeta/modules/users_library/permissions_classes/client_permission.dart';
-import 'package:magicposbeta/modules/users_library/permissions_classes/operation_key_permission.dart';
-import 'package:magicposbeta/modules/users_library/permissions_classes/pay_key_permission.dart';
-import 'package:magicposbeta/modules/users_library/permissions_classes/reports_permission.dart';
-import 'package:magicposbeta/modules/users_library/permissions_classes/supplier_permission.dart';
 import 'package:magicposbeta/screens_data/constants.dart';
-
+import '../modules/permissions_classes/permissions_classes.dart';
 import '../modules/user.dart';
-import '../modules/users_library/permissions_classes/total_product_perrmission.dart';
 import '../theme/locale/search_types.dart';
 
 class UsersFunctions {

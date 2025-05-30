@@ -1,14 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:magicposbeta/database/users_functions.dart';
-import 'package:magicposbeta/modules/users_library/permissions_classes/client_permission.dart';
-import 'package:magicposbeta/modules/users_library/permissions_classes/supplier_permission.dart';
-import 'package:magicposbeta/screens_data/constants.dart';
+import 'package:magicposbeta/modules/permissions_classes/permissions_classes.dart';
 
-import 'users_library/permissions_classes/operation_key_permission.dart';
-import 'users_library/permissions_classes/pay_key_permission.dart';
-import 'users_library/permissions_classes/product_permission.dart';
-import 'users_library/permissions_classes/reports_permission.dart';
-import 'users_library/permissions_classes/total_product_perrmission.dart';
+import '../screens_data/constants.dart';
 
 class User implements Equatable {
   int id;

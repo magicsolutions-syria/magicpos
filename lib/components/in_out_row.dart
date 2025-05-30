@@ -84,7 +84,7 @@ class InOutRow extends StatelessWidget {
                 ),
               );
             }).toList(),
-            focusNode: FocusNode(),
+            focusNode: FocusNode(), onChanged: (String value) {  },
           ),
         ),
         SizedBox(
@@ -183,7 +183,7 @@ class InOutRow extends StatelessWidget {
                     ),
                   );
                 }).toList(),
-                focusNode: _node1,
+                focusNode: _node1, onChanged: (String value) {  },
               ),
             );
           },

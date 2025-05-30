@@ -4,7 +4,6 @@ import 'package:magicposbeta/screens/sign_up_screen.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
 
 import '../bloc/start_app_bloc/start_app_bloc.dart';
-import '../screens_data/constants.dart';
 import '../theme/app_profile.dart';
 
 class StartAppScreen extends StatelessWidget {

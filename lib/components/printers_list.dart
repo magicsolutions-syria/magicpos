@@ -34,7 +34,7 @@ class PrintersList extends StatelessWidget {
                 children: [
                   CustomDropDownMenu(title: "   :   طريقة الوصل  ", data: const [
                     "usb"
-                  ], controller: departmentController,initVal: "usb",notify: (){},),
+                  ], controller: departmentController,initVal: "usb",notify: (){}, onChanged: (String value) {  },),
                 ],
               ),
             ),
@@ -81,7 +81,7 @@ class PrintersList extends StatelessWidget {
                                       width: 100,
                                       fontSize: 20,
                                       scaleY: 0.7,
-                                      notify: (){},
+                                      notify: (){}, onChanged: (String value) {  },
                                     ),
                                   ],
                                 ),

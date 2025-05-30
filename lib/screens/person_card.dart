@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:magicposbeta/bloc/shared_bloc/shared_bloc.dart';
-import 'package:magicposbeta/components/lists/person_info_list.dart';
 import 'package:magicposbeta/components/person_box.dart';
 import 'package:magicposbeta/components/waiting_widget.dart';
+import 'package:magicposbeta/modules/person.dart';
 import 'package:magicposbeta/screens/home_screen.dart';
 import 'package:magicposbeta/theme/app_formatters.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
-
 import '../bloc/person_bloc/person_bloc.dart';
 import '../components/my_dialog.dart';
 import '../components/operator_button.dart';
 import '../components/general_text_field.dart';
-
+import '../lists/person_info_list.dart';
 import '../templates/screens_template.dart';
 
 class PersonCard extends StatelessWidget {
   static const String clientRoute = "${HomeScreen.route}/client_card";
   static const String supplierRoute = "${HomeScreen.route}/supplier_card";
 
-  PersonCard(
+  const PersonCard(
       {super.key,
       required this.tableName,
       required this.color,
@@ -33,12 +32,7 @@ class PersonCard extends StatelessWidget {
   final IconData icon;
   final int fractionDigits;
 
-  TextEditingController arName = TextEditingController();
-  TextEditingController enName = TextEditingController();
-  TextEditingController mobile = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController barcode = TextEditingController();
-  TextEditingController phone = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +72,8 @@ class PersonCard extends StatelessWidget {
             if (state is InitialPersonState || state is LoadingPersonState) {
               return const WaitingWidget();
             } else {
-              arName.text = context.read<PersonCubit>().person.arName;
-              enName.text = context.read<PersonCubit>().person.enName;
-              mobile.text = context.read<PersonCubit>().person.whatsNum;
-              phone.text = context.read<PersonCubit>().person.tel;
-              email.text = context.read<PersonCubit>().person.email;
-              barcode.text = context.read<PersonCubit>().person.barcode;
+              Person person=context.read<PersonCubit>().person;
+
               return SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -197,7 +187,7 @@ class PersonCard extends StatelessWidget {
                                       color: Theme.of(context).primaryColor),
                                   child: Center(
                                     child: Text(
-                                      AppFormatters.idFormat(context
+                                      AppFormatters.leftZerosFormat(context
                                           .read<PersonCubit>()
                                           .person
                                           .id),
@@ -212,7 +202,7 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.text,
                                 onlyNumber: const [],
-                                controller: arName,
+                                controller: TextEditingController(text:person.arName ),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.arName =
                                       text;
@@ -224,7 +214,7 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.text,
                                 onlyNumber: const [],
-                                controller: enName,
+                                controller: TextEditingController(text: person.enName),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.enName =
                                       text;
@@ -236,7 +226,7 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.phone,
                                 onlyNumber: AppFormatters.numbersIntFormat(),
-                                controller: phone,
+                                controller: TextEditingController(text: person.tel),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.tel = text;
                                 },
@@ -247,7 +237,7 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.emailAddress,
                                 onlyNumber: const [],
-                                controller: email,
+                                controller: TextEditingController(text: person.tel),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.email =
                                       text;
@@ -259,7 +249,7 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.phone,
                                 onlyNumber: AppFormatters.numbersIntFormat(),
-                                controller: mobile,
+                                controller: TextEditingController(text: person.whatsNum),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.whatsNum =
                                       text;
@@ -271,7 +261,7 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.number,
                                 onlyNumber: AppFormatters.numbersIntFormat(),
-                                controller: barcode,
+                                controller: TextEditingController(text: person.barcode),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.barcode =
                                       text;

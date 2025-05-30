@@ -92,12 +92,13 @@ class UserCubit extends Cubit<UserStates> {
   Future<void> initialUser(Map item) async {
     emit(LoadingUserState());
     user = await User.instanceFromMap(item);
-    constUser=user;
+    constUser = user;
     isAddMode = false;
     emit(SuccessUserState());
   }
 
   void givePermission({required String job}) {
+    user.jobTitle = job;
 
     user.givePermission(job: job);
   }
@@ -110,7 +111,7 @@ class UserCubit extends Cubit<UserStates> {
     }
   }
 
-  bool isChanged(){
-    return !(constUser==user);
+  bool isChanged() {
+    return !(constUser == user);
   }
 }

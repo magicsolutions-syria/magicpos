@@ -71,11 +71,19 @@ class InfoProduct implements Equatable {
   }
 
   void updateMinAmount(text) {
-    minQty = double.parse(text);
+    if (text == "") {
+      minQty = 0;
+    } else {
+      minQty = double.parse(text);
+    }
   }
 
   void updateMaxAmount(text) {
-    maxQty == double.parse(text);
+    if (text == "") {
+      maxQty = 0;
+    } else {
+      maxQty = double.parse(text);
+    }
   }
 
   int get id {
@@ -94,10 +102,10 @@ class InfoProduct implements Equatable {
     return _productType;
   }
 
-  get productTypeName =>  DiversePhrases.productTypes().elementAt(_productType);
+  get productTypeName => DiversePhrases.productTypes().elementAt(_productType);
 
   void updateProductType(String productType) {
-    _productType =  DiversePhrases.productTypes().indexOf(productType);
+    _productType = DiversePhrases.productTypes().indexOf(productType);
   }
 
   bool checkBarcodes() {
@@ -137,7 +145,7 @@ class InfoProduct implements Equatable {
         enName: "",
         departmentName: "",
         groupName: "",
-        productType:  DiversePhrases.productTypes()[0],
+        productType: DiversePhrases.productTypes()[0],
         minQty: 0,
         maxQty: 0,
         description: "",
@@ -203,7 +211,8 @@ class InfoProduct implements Equatable {
         enName: item["en_name"],
         departmentName: item["section_name"],
         groupName: item["group_name"],
-        productType:  DiversePhrases.productTypes().elementAt(item["product_type"]),
+        productType:
+            DiversePhrases.productTypes().elementAt(item["product_type"]),
         minQty: item["min_amount"].toDouble(),
         maxQty: item["max_amount"].toDouble(),
         description: item["description"],
