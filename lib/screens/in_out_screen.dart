@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:magicposbeta/bloc/shared_bloc/shared_cubit.dart';
 import 'package:magicposbeta/components/custom_drop_down_menu.dart';
 import 'package:magicposbeta/components/first_in_out_row.dart';
@@ -13,12 +12,10 @@ import 'package:magicposbeta/theme/app_formatters.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/modules/in_out_product.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
-
 import '../bloc/in_out_product_bloc/in_out_product_bloc.dart';
 import '../components/general_list_row.dart';
 import '../components/in_out_row.dart';
-import '../components/lists/client_supplier_list.dart';
-import '../screens_data/constants.dart';
+import '../lists/client_supplier_list.dart';
 import '../templates/screens_template.dart';
 
 class InOutScreen extends StatelessWidget {
@@ -270,7 +267,7 @@ class InOutScreen extends StatelessWidget {
                         enable:
                             context.read<InOutProductCubit>().enableDropDown(),
                         controller: inOutController,
-                        notify: () {},
+                        notify: () {}, onChanged: (String value) {  },
                       ),
                     ],
                   );

@@ -1,6 +1,8 @@
 class WarningsDialogPhrases {
   static const String areYouSureOfDeleteSection="هل أنت متأكد أنك تريد حذف هذا القسم؟";
 
+  static const String areYouSureOfUpdateSection="هل أنت متأكد أنك تريد تعديل القسم";
+
   static String get doYouWantCancelOperation {
     return "هل تريد تجاهل العملية الحالية؟";
   }

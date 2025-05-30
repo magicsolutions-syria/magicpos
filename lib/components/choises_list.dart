@@ -97,7 +97,7 @@ class _ChoicesListState extends State<ChoicesList> {
                               ],
                               controller: widget.controller,
                               width: 140,
-                              fontSize: 14, notify: (){},
+                              fontSize: 14, notify: (){}, onChanged: (String value) {  },
                             ),
                             const SizedBox(
                               width: 55,

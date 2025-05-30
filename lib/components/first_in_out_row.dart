@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:magicposbeta/bloc/in_out_product_bloc/in_out_product_bloc.dart';
-import 'package:magicposbeta/components/lists/in_out_product_list.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
 
+import '../lists/in_out_product_list.dart';
 import 'edited_drop_down_menu.dart';
 import 'operator_button.dart';
 
@@ -36,7 +36,7 @@ class FirstInOutRow extends StatelessWidget {
                 ),
               );
             }).toList(),
-            focusNode: FocusNode(),
+            focusNode: FocusNode(), onChanged: (String value) {  },
           ),
         ),
         SizedBox(
@@ -85,7 +85,7 @@ class FirstInOutRow extends StatelessWidget {
                 ),
               );
             }).toList(),
-            focusNode: FocusNode(),
+            focusNode: FocusNode(), onChanged: (String value) {  },
           ),
         ),
         SizedBox(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:magicposbeta/components/page_slider/page_slider_widget.dart';
-import '../modules/settings_library/settings_pages/settings_pages.dart';
+import '../complex_components/page_slider/page_slider_widget.dart';
+import '../slider_pages/settings_pages/settings_pages.dart';
 import '../theme/locale/slider_pages_names.dart';
 
 class SettingsScreen extends StatelessWidget {

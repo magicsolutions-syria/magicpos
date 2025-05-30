@@ -442,7 +442,7 @@ Future<void> initialTablesData() async {
 
   for (int i = 1; i < 17; i++) {
     await db.insertData(
-        "INSERT INTO 'dept'('name', 'Print_Name')VALUES('dept$i', 'dept$i')");
+        "INSERT INTO 'dept'(id_dept,'name', 'Print_Name')VALUES($i,'dept$i', 'dept$i')");
   }
   await db.insertData(
       "INSERT INTO unit_2 (id_2,name_2,cost_price_2,group_price_2,piece_price_2,code_2,pieces_quantity_2)VALUES(0,'',0,0,0,'',0)");

@@ -17,6 +17,7 @@ class TextWithIcon extends StatelessWidget {
         ),
         Text(
           title,
+
           style: const TextStyle(
             fontSize: 17,
           ),

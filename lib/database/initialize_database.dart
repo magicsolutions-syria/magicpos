@@ -5,6 +5,7 @@ import "package:path/path.dart";
 class PosData {
   //check that data is not null
   static Database? _db;
+
   Future<Database?> get db async {
     if (_db == null) {
       _db = await initialNew();
@@ -181,6 +182,7 @@ class PosData {
 //depts table
     await db.execute('''
     CREATE TABLE IF NOT EXISTS "dept"(
+      'id_dept' INTEGER  PRIMARY KEY,
       'name' TEXT,
       'Print_Name' TEXT(20) NOT NULL,
       'department' INTEGER DEFAULT 0,

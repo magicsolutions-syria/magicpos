@@ -1,39 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:magicposbeta/theme/app_formatters.dart';
 
 import 'general_text_field.dart';
 
 class ChooseNumberField extends StatelessWidget {
-  const ChooseNumberField(
+  ChooseNumberField(
       {super.key,
-      required this.controller,
       required this.maxNumber,
       required this.title,
       this.minNumber = 1,
-      this.enableEditing = false});
-  final TextEditingController controller;
+      this.enableEditing = false,
+      required this.onChanged,
+      required int initialValue,
+      TextEditingController ?controller}) {
+    this.controller=controller??TextEditingController();
+    this.controller.text =
+        AppFormatters.leftZerosFormat(initialValue, digitsNumber: 2);
+  }
+
   final int maxNumber;
   final int minNumber;
   final String title;
   final bool enableEditing;
+  final Function(int number) onChanged;
+  late final TextEditingController controller;
+
   @override
   Widget build(BuildContext context) {
+    controller.addListener((){
+      onChanged(int.parse(controller.text));
+    });
     return GeneralTextField(
       width: 130,
-      initVal: (int.parse(controller.text) < 10 ? "0" : "") + controller.text,
       prefix: MaterialButton(
           padding: EdgeInsets.zero,
           onPressed: () {
             int index = int.parse(controller.text);
             index--;
             if (index >= minNumber) {
-              controller.text = (index < 10 ? "0" : "") + index.toString();
+              controller.text =
+                  AppFormatters.leftZerosFormat(index, digitsNumber: 2);
             }
           },
           minWidth: 10,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: Text(
+          child: const Text(
             "-",
             style: TextStyle(fontSize: 24),
           )),
@@ -43,25 +56,26 @@ class ChooseNumberField extends StatelessWidget {
             int index = int.parse(controller.text);
             index++;
             if (index <= maxNumber) {
-              controller.text = (index < 10 ? "0" : "") + index.toString();
+              controller.text =
+                  AppFormatters.leftZerosFormat(index, digitsNumber: 2);
             }
           },
           minWidth: 10,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: Text(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Text(
             "+",
             style: TextStyle(fontSize: 24),
           )),
       title: title,
       readOnly: !enableEditing,
-      onlyNumber: [
-        FilteringTextInputFormatter.allow(
-          RegExp(r'^(?:[1-9]?[0-9])$'),
-        ),
-      ],
+      onlyNumber: AppFormatters.numbersIntFormat(),
       inputType: TextInputType.number,
       controller: controller,
+      onChangeFunc: (s) {
+
+      },
     );
   }
 }

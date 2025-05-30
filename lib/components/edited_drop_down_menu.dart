@@ -140,33 +140,34 @@ class EditedDropDownMenu<T> extends StatefulWidget {
   ///
   /// Except leading and trailing icons, the text field can be configured by the
   /// [InputDecorationTheme] property. The menu can be configured by the [menuStyle].
-  const EditedDropDownMenu({
-    super.key,
-    this.enabled = true,
-    this.width,
-    this.menuHeight,
-    this.leadingIcon,
-    this.trailingIcon,
-    this.label,
-    this.hintText,
-    this.helperText,
-    this.errorText,
-    this.selectedTrailingIcon,
-    this.enableFilter = false,
-    this.enableSearch = true,
-    this.textStyle,
-    this.inputDecorationTheme,
-    this.menuStyle,
-    this.controller,
-    this.initialSelection,
-    this.onSelected,
-    this.requestFocusOnTap,
-    this.expandedInsets,
-    this.searchCallback,
-    this.keyBoardType = TextInputType.text,
-    this.inputFormat = const [],
-    required this.dropdownMenuEntries, required this.focusNode,
-  });
+  const EditedDropDownMenu(
+      {super.key,
+      this.enabled = true,
+      this.width,
+      this.menuHeight,
+      this.leadingIcon,
+      this.trailingIcon,
+      this.label,
+      this.hintText,
+      this.helperText,
+      this.errorText,
+      this.selectedTrailingIcon,
+      this.enableFilter = false,
+      this.enableSearch = true,
+      this.textStyle,
+      this.inputDecorationTheme,
+      this.menuStyle,
+      this.controller,
+      this.initialSelection,
+      this.onSelected,
+      this.requestFocusOnTap,
+      this.expandedInsets,
+      this.searchCallback,
+      this.keyBoardType = TextInputType.text,
+      this.inputFormat = const [],
+      required this.dropdownMenuEntries,
+      required this.focusNode,
+      required this.onChanged});
 
   /// Determine if the [DropdownMenu] is enabled.
   ///
@@ -174,6 +175,7 @@ class EditedDropDownMenu<T> extends StatefulWidget {
   final bool enabled;
   final TextInputType keyBoardType;
   final List<TextInputFormatter> inputFormat;
+  final Function(String value) onChanged;
 
   /// Determine the width of the [DropdownMenu].
   ///
@@ -364,6 +366,7 @@ class _EditedDropDownMenuState<T> extends State<EditedDropDownMenu<T>> {
   double? leadingPadding;
   bool _menuHasEnabledItem = false;
   TextEditingController? _localTextEditingController;
+
   TextEditingController get _textEditingController {
     return widget.controller ??
         (_localTextEditingController ??= TextEditingController());
@@ -758,11 +761,13 @@ class _EditedDropDownMenuState<T> extends State<EditedDropDownMenu<T>> {
                   handlePressed(controller);
                 },
                 onChanged: (String text) {
+
                   controller.open();
                   setState(() {
                     filteredEntries = widget.dropdownMenuEntries;
                     _enableFilter = widget.enableFilter;
                   });
+                  widget.onChanged(text);
                 },
                 decoration: InputDecoration(
                   enabled: widget.enabled,
@@ -863,6 +868,7 @@ class _RenderDropdownMenuBody extends RenderBox
 
   double? get width => _width;
   double? _width;
+
   set width(double? value) {
     if (_width == value) {
       return;

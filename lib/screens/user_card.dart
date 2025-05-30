@@ -3,29 +3,22 @@ import 'package:magicposbeta/bloc/user_bloc/user_bloc.dart';
 import 'package:magicposbeta/components/my_dialog.dart';
 import 'package:magicposbeta/screens/home_screen.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
-
 import 'package:magicposbeta/theme/locale/locale.dart';
-
+import '../complex_components/page_slider/page_slider_widget.dart';
 import '../components/general_text_field.dart';
-import '../components/lists/user_list.dart';
 import '../components/operator_button.dart';
-
-import '../components/page_slider/page_slider_widget.dart';
 import '../components/waiting_widget.dart';
-import '../modules/users_library/users_pages/users_pages.dart';
-import '../screens_data/constants.dart';
+import '../lists/user_list.dart';
+import '../slider_pages/users_pages/users_pages.dart';
 import '../templates/screens_template.dart';
 import '../theme/app_formatters.dart';
 
 class UserCard extends StatelessWidget {
   static const String route = "${HomeScreen.route}/user-card";
 
-  UserCard({
+  const UserCard({
     super.key,
   });
-
-  TextEditingController arName = TextEditingController();
-  TextEditingController enName = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +41,8 @@ class UserCard extends StatelessWidget {
                             },
                           ));
                   if (userItem.isNotEmpty && context.mounted) {
-                   await BlocProvider.of<UserCubit>(context).initialUser(userItem);
+                    await BlocProvider.of<UserCubit>(context)
+                        .initialUser(userItem);
                   }
                 },
                 iconSize: 42,
@@ -62,9 +56,6 @@ class UserCard extends StatelessWidget {
             if (state is InitialUserState || state is LoadingUserState) {
               return const WaitingWidget();
             } else {
-              arName.text = context.read<UserCubit>().user.arName;
-              enName.text = context.read<UserCubit>().user.enName;
-
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -76,7 +67,7 @@ class UserCard extends StatelessWidget {
                         color: Theme.of(context).primaryColor),
                     child: Center(
                       child: Text(
-                        AppFormatters.idFormat(
+                        AppFormatters.leftZerosFormat(
                             context.read<UserCubit>().user.id),
                         style: const TextStyle(fontSize: 27),
                       ),
@@ -94,7 +85,8 @@ class UserCard extends StatelessWidget {
                           title: FieldsNames.englishName,
                           width: 350,
                           inputType: TextInputType.name,
-                          controller: enName,
+                          controller: TextEditingController(
+                              text: context.read<UserCubit>().user.enName),
                           onChangeFunc: (text) {
                             context.read<UserCubit>().user.enName = text;
                           }),
@@ -104,7 +96,8 @@ class UserCard extends StatelessWidget {
                           width: 350,
                           inputType: TextInputType.name,
                           onlyNumber: const [],
-                          controller: arName,
+                          controller: TextEditingController(
+                              text: context.read<UserCubit>().user.arName),
                           onChangeFunc: (text) {
                             context.read<UserCubit>().user.arName = text;
                           }),
@@ -112,12 +105,13 @@ class UserCard extends StatelessWidget {
                   ),
                   PageSliderWidget(
                     pagesData: {
-                      SliderPagesNames.reports:   const ReportsPage(),
-                      SliderPagesNames.products:   const ProductsPage(),
-                      SliderPagesNames.suppliersClients:   const SuppliersClientsPage(),
-                      SliderPagesNames.payKey:   const PayKeysPage(),
-                      SliderPagesNames.operationKey:   const OperatorKeyPage(),
-                      SliderPagesNames.information:  InformationPage(),
+                      SliderPagesNames.reports: const ReportsPage(),
+                      SliderPagesNames.products: const ProductsPage(),
+                      SliderPagesNames.suppliersClients:
+                          const SuppliersClientsPage(),
+                      SliderPagesNames.payKey: const PayKeysPage(),
+                      SliderPagesNames.operationKey: const OperatorKeyPage(),
+                      SliderPagesNames.information: const InformationPage(),
                     },
                     width: 1400,
                     height: 318,
@@ -171,17 +165,16 @@ class UserCard extends StatelessWidget {
                         OperatorButton(
                             width: 180,
                             onPressed: () {
-                              if(context.read<UserCubit>().isChanged()) {
+                              if (context.read<UserCubit>().isChanged()) {
                                 MyDialog.showWarningOperatorDialog(
-                                  context: context,
-                                  isWarning: true,
-                                  title: WarningsDialogPhrases
-                                      .doYouWantCancelOperation,
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  });
-                              }
-                              else{
+                                    context: context,
+                                    isWarning: true,
+                                    title: WarningsDialogPhrases
+                                        .doYouWantCancelOperation,
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    });
+                              } else {
                                 Navigator.pop(context);
                               }
                             },

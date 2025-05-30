@@ -9,4 +9,6 @@ export 'fields_phrases.dart';
 export 'lists_columns_names.dart';
 export 'check_boxes_names.dart';
 export 'slider_pages_names.dart';
+export 'radios_values.dart';
+export 'settings_names.dart';
 export 'radios_names.dart';

@@ -53,4 +53,13 @@ class SharedCubit extends Cubit<SharedStates> {
       emit(FailureSharedState(error: e.toString()));
     }
   }
+
+  void setScaleSettings(
+      {required String productNumber,
+      required String weight,
+      required String start}) {
+    settings.setWeightScale(value: int.parse(weight));
+    settings.setProductNumberScale(value: int.parse(productNumber));
+    settings.setStartScale(value: start);
+  }
 }
