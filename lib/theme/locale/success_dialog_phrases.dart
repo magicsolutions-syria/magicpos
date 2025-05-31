@@ -4,6 +4,8 @@ class SuccessDialogPhrases{
 
   static const String saveDeptSettingsComplete="تم حفظ إعدادات زر القسم";
 
+  static const String saveSelectedGroups="تم حفظ المجموعات المختارة";
+
   static String get deleteOperationComplete{
     return "تمت عملية الحذف بنجاح";
   }

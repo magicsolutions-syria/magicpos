@@ -7,4 +7,5 @@ class SettingsNames {
   static const String groupsToView = "اختيار مجموعات العرض";
   static const String chooseGroupsToView = "اختيار مجموعات العرض";
   static const String updateDepartment= "تعديل قسم";
+  static const String updateGroup= "تعديل مجموعة";
 }

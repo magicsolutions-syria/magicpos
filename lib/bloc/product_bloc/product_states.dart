@@ -5,6 +5,7 @@ class InitialProductCardState extends ProductCardStates {}
 class LoadingProductCardState extends ProductCardStates {}
 
 class SuccessProductCardState extends ProductCardStates {}
+class ChangedValueState extends ProductCardStates {}
 
 class FailureProductCardState extends ProductCardStates {
   String error;

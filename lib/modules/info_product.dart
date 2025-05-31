@@ -247,4 +247,5 @@ class InfoProduct implements Equatable {
   @override
   // TODO: implement stringify
   bool? get stringify => true;
+
 }

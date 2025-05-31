@@ -223,7 +223,7 @@ class ProductCard extends StatelessWidget {
               MyDialog.showWarningDialog(
                   context: context, isWarning: false, title: state.phrase);
             }
-          },
+          },buildWhen: (p,c)=>c is! ChangedValueState,
         ),
       ),
     );

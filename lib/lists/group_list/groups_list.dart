@@ -28,7 +28,7 @@ class GroupsList extends StatelessWidget {
 
   final TextEditingController _groupController = TextEditingController();
   String _department = "";
-  final Function({String groupValue, String departmentValue}) onDoubleTap;
+  final Function({required String groupValue,required String departmentValue}) onDoubleTap;
 
   final ScrollController scrollController = ScrollController();
 
@@ -101,7 +101,7 @@ class GroupsList extends StatelessWidget {
                                         },
                                         height: 52,
                                         width: 130,
-                                        text: ButtonsNames.deleteButton,
+                                        text: ButtonsNames.addButton,
                                         color: Theme.of(context).primaryColor,
                                         enable: context
                                             .read<GroupListCubit>()

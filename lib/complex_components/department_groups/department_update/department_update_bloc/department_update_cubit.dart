@@ -19,9 +19,16 @@ class DepartmentUpdateCubit extends Cubit<DepartmentUpdateStates> {
     try {
       await SectionsFunctions.updateDepartmentName(
           oldName: oldName, newName: newName);
+      oldName="";
+      newName="";
       emit(DepartmentOperationCompleteState());
     } catch (e) {
       emit(FailureDepartmentState(error: e.toString()));
     }
+  }
+
+  void updateOldName(String text) {
+    oldName = text;
+    emit(ChangedValueState());
   }
 }

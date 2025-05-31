@@ -17,8 +17,8 @@ class DepartmentUpdateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<DepartmentUpdateCubit>(
       create: (BuildContext context) {
-        return DepartmentUpdateCubit(
-            () => InitialDeptState(), context.read<SharedCubit>().currentUser);
+        return DepartmentUpdateCubit(() => InitialDepartmentState(),
+            context.read<SharedCubit>().currentUser);
       },
       child: BlocConsumer<DepartmentUpdateCubit, DepartmentUpdateStates>(
         builder: (context, state) {
@@ -53,7 +53,7 @@ class DepartmentUpdateWidget extends StatelessWidget {
                       enable:
                           context.read<DepartmentUpdateCubit>().permission(),
                     ),
-                    const SettingsTitle(title:SettingsNames.updateDepartment)
+                    const SettingsTitle(title: SettingsNames.updateDepartment)
                   ],
                 ),
               ),
@@ -66,22 +66,22 @@ class DepartmentUpdateWidget extends StatelessWidget {
                     await showDialog(
                         context: context,
                         builder: (context) => SectionsList(
-                              value: departmentValue,
-                              onDoubleTap: (String value) {
-                                departmentValue = value;
-                              },
-                            ));
+                          value: departmentValue,
+                          onDoubleTap: (String value) {
+                            departmentValue = value;
+                          },
+                        ));
                     if (context.mounted) {
-                      context.read<DepartmentUpdateCubit>().oldName =
-                          departmentValue;
+                      context.read<DepartmentUpdateCubit>().updateOldName(departmentValue) ;
+
                     }
                   },
                   icon: const Icon(Icons.list),
                   iconSize: 25,
                 ),
                 readOnly: true,
-                title:FieldsNames.oldName,
-                controller: TextEditingController(),
+                title: FieldsNames.oldName,
+                controller: TextEditingController( text: context.read<DepartmentUpdateCubit>().oldName),
               ),
               GeneralTextField(
                 width: 350,
