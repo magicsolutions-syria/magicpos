@@ -63,7 +63,7 @@ class InOutRow extends StatelessWidget {
                 filled: true,
                 border: InputBorder.none),
             menuStyle: const MenuStyle(
-              padding: WidgetStatePropertyAll(EdgeInsets.zero),
+              padding: MaterialStatePropertyAll(EdgeInsets.zero),
             ),
             initialSelection: product.names.first,
             onSelected: (value) {
@@ -78,7 +78,7 @@ class InOutRow extends StatelessWidget {
                 value: item,
                 label: item,
                 style: const ButtonStyle(
-                  textStyle: WidgetStatePropertyAll(
+                  textStyle: MaterialStatePropertyAll(
                     TextStyle(fontSize: 21),
                   ),
                 ),
@@ -160,7 +160,7 @@ class InOutRow extends StatelessWidget {
                     filled: true,
                     border: InputBorder.none),
                 menuStyle: const MenuStyle(
-                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                  padding: MaterialStatePropertyAll(EdgeInsets.zero),
                 ),
                 initialSelection:
                 AppFormatters.formatPriceText(product.price, priceComma),
@@ -177,7 +177,7 @@ class InOutRow extends StatelessWidget {
                     label: AppFormatters.formatPriceText(
                         double.parse(item), priceComma),
                     style: const ButtonStyle(
-                      textStyle: WidgetStatePropertyAll(
+                      textStyle: MaterialStatePropertyAll(
                         TextStyle(fontSize: 21),
                       ),
                     ),

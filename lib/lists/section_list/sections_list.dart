@@ -111,7 +111,7 @@ class SectionsList extends StatelessWidget {
                           child: Theme(
                             data: ThemeData(
                               scrollbarTheme: ScrollbarThemeData(
-                                thumbColor: WidgetStatePropertyAll(
+                                thumbColor: MaterialStatePropertyAll(
                                   Theme.of(context).disabledColor,
                                 ),
                               ),

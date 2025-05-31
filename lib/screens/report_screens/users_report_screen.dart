@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:magicposbeta/components/check_boxes.dart';
+import 'package:magicposbeta/complex_components/check_boxes/check_boxes_widget.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/modules/pair.dart';
 import '../../components/general_report.dart';
