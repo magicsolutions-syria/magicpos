@@ -149,7 +149,7 @@ class InOutScreen extends StatelessWidget {
                     Expanded(
                       child: ScrollbarTheme(
                         data: const ScrollbarThemeData(
-                          thumbColor: WidgetStatePropertyAll(Colors.grey),
+                          thumbColor: MaterialStatePropertyAll(Colors.grey),
                         ),
                         child: Scrollbar(
                           trackVisibility: true,
