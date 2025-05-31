@@ -15,23 +15,34 @@ class SectionsFunctions {
     return id;
   }
 
-  static Future<List<Map>> getDepartmentList(String name, {String printerCondition = "",bool sameDepartment=false}) async {
+  static Future<List<Map>> getDepartmentList(String name,
+      {String printerCondition = "",
+      bool sameDepartment = false,
+      String groupFilterValue = ""}) async {
     PosData data = PosData();
-    String condition = "";
+    String condition = "WHERE ";
+    String joinText = "";
     if (name != "") {
-      if(sameDepartment){
-        condition="WHERE section_name='$name'";
-      }
-      else {
-        condition = "WHERE section_name LIKE '%$name%'";
+      if (sameDepartment) {
+        condition += "section_name='$name'";
+      } else {
+        condition += "section_name LIKE '%$name%'";
       }
     }
-    if(printerCondition !=""){
-      condition = "WHERE $printerCondition";
+    if (printerCondition != "") {
+      if (name != "") condition += " AND ";
+      condition += printerCondition;
     }
+    if (groupFilterValue != "") {
+      if (name != "" || printerCondition != "") condition += " AND ";
+      condition += "group_name LIKE '%$groupFilterValue%'";
+      joinText =
+          "JOIN `groups` ON(departments.id_department=`groups`.section_number)";
+    }
+    if(condition=="WHERE ")condition="";
 
     return await data.readData(
-        "SELECT * FROM departments $condition ORDER BY section_name ");
+        "SELECT departments.* FROM departments $joinText $condition ORDER BY section_name ");
   }
 
   static Future<int> addSection(
@@ -101,7 +112,7 @@ class SectionsFunctions {
       required double productQTY}) async {
     PosData data = PosData();
     int id = 0;
-    List<Map> response = await getDepartmentList(name);
+    List<Map> response = await getDepartmentList(name, sameDepartment: true);
     if (response.isEmpty) {
       id = await addSection(name);
     } else {
@@ -125,7 +136,7 @@ class SectionsFunctions {
       required double productQTY}) async {
     PosData data = PosData();
     int id = 0;
-    List<Map> response = await getDepartmentList(name);
+    List<Map> response = await getDepartmentList(name, sameDepartment: true);
 
     id = response[0]['id_department'];
 
@@ -192,7 +203,7 @@ class SectionsFunctions {
   static checkSelectedUnselected(String sectionName, int id) async {
     PosData data = PosData();
     String condition =
-        sectionName == "" ? "id_department=$id" : "section_name=$sectionName";
+        sectionName == "" ? "id_department=$id" : "section_name='$sectionName'";
     List<Map> checkSelect = await GroupsFunctions.getSelectedUnSelectedGroups(
         false, sectionName, id);
     await data.changeData(

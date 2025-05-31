@@ -71,6 +71,7 @@ class CustomDropDownMenu extends StatelessWidget {
             initialSelection: initVal,
             onSelected: (value) {
               controller.text = value!;
+              onChanged(value);
               notify();
             },
             controller: controller,

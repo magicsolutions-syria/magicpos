@@ -33,11 +33,11 @@ class UnitsPage extends StatelessWidget {
               controller: TextEditingController(text: unit3.name),
               title: FieldsNames.unitThree,
               data: BlocProvider.of<ProductCardCubit>(context).names_3,
-              notify: () {},
+
               onChanged: (String value) {
                 BlocProvider.of<ProductCardCubit>(context).product.unit3.name =
                     value;
-              },
+              }, notify: (){},
             ),
             const SizedBox(
               height: 17,

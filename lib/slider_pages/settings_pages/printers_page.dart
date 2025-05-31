@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:magicposbeta/lists/group_view_list/group_view_list.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 
 import '../../../components/default_printer_list.dart';
@@ -7,7 +8,6 @@ import '../../../components/printers_list.dart';
 import '../../../components/waiting_widget.dart';
 import '../../../database/initialize_database.dart';
 import '../../../database/printers_database_functions.dart';
-import '../../lists/select_group_list.dart';
 
 class PrintersPage extends StatelessWidget {
   const PrintersPage({super.key});
@@ -134,7 +134,7 @@ class PrintersPage extends StatelessWidget {
                           child: OperatorButton(onPressed: () {
                                 showDialog(context: context, builder:
                                 (context){
-                                  return SelectGroupList(departmentField: "printer_id",groupField: "printer_id",pivot: snapshot.data![index]
+                                  return GroupViewList(departmentField: "printer_id",groupField: "printer_id",pivot: snapshot.data![index]
                                   ["id"],defaultValue: -1,);
                                 });
                           }, text: 'عرض المجموعات', color: Theme.of(context).primaryColor, enable: true,textColor: Colors.white ,fontSize: 25,width: 220,height: 50  ,)

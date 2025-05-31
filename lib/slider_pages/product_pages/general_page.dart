@@ -21,66 +21,92 @@ class GeneralPage extends StatelessWidget {
       padding: const EdgeInsets.only(top: 20, left: 70, right: 70),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GeneralTextField(
-                  prefix: IconButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            String groupVal = prod.groupName;
-                            String departmentVal = prod.departmentName;
-                            return GroupsList(
+          BlocBuilder<ProductCardCubit, ProductCardStates>(
+            builder: (context, state) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GeneralTextField(
+                      prefix: IconButton(
+                        onPressed: () async {
+                          String groupVal = prod.groupName;
+                          String departmentVal = prod.departmentName;
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) => GroupsList(
                               groupValue: groupVal,
                               departmentValue: departmentVal,
                               onDoubleTap: (
                                   {String? departmentValue,
                                   String? groupValue}) {
-                                departmentVal = departmentValue ?? "";
-                                groupVal = groupValue ?? "";
+                                departmentVal =
+                                    departmentValue ?? prod.departmentName;
+                                groupVal = groupValue ?? prod.groupName;
                               },
-                            );
-                          });
-                    },
-                    icon: const Icon(Icons.list),
-                    iconSize: 25,
-                  ),
-                  width: 350,
-                  title: FieldsNames.groupName,
-                  onChangeFunc: (text) {
-                    BlocProvider.of<ProductCardCubit>(context)
-                        .product
-                        .groupName = text;
-                  },
-                  controller: TextEditingController(text: prod.groupName),
-                  inputType: TextInputType.text,
-                  onlyNumber: const []),
-              GeneralTextField(
-                  prefix: IconButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            String departmentVal = prod.departmentName;
-                            return SectionsList(
-                              value: departmentVal,
-                              onDoubleTap: (String value) {
-                                departmentVal = value;
-                              },
-                            );
-                          });
-                    },
-                    icon: const Icon(Icons.list),
-                    iconSize: 25,
-                  ),
-                  width: 350,
-                  title: FieldsNames.departmentName,
-                  controller: TextEditingController(text: prod.departmentName),
-                  inputType: TextInputType.text,
-                  onlyNumber: const []),
-            ],
+                            ),
+                          );
+                          if (context.mounted) {
+                            context.read<ProductCardCubit>().updateGroupName(
+                                group: groupVal, department: departmentVal);
+                          }
+                        },
+                        icon: const Icon(Icons.list),
+                        iconSize: 25,
+                      ),
+                      width: 350,
+                      title: FieldsNames.groupName,
+                      onChangeFunc: (text) {
+                        BlocProvider.of<ProductCardCubit>(context)
+                            .product
+                            .groupName = text;
+                      },
+                      controller: TextEditingController(
+                          text: context
+                              .read<ProductCardCubit>()
+                              .product
+                              .groupName),
+                      inputType: TextInputType.text,
+                      onlyNumber: const []),
+                  GeneralTextField(
+                      prefix: IconButton(
+                        onPressed: () async {
+                          String departmentVal = prod.departmentName;
+                          await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SectionsList(
+                                  value: departmentVal,
+                                  onDoubleTap: (String value) {
+                                    departmentVal = value;
+                                  },
+                                );
+                              });
+                          if (context.mounted) {
+                            BlocProvider.of<ProductCardCubit>(context)
+                                .updateDepartmentName(departmentVal);
+                          }
+                        },
+                        icon: const Icon(Icons.list),
+                        iconSize: 25,
+                      ),
+                      onChangeFunc: (text) {
+                        BlocProvider.of<ProductCardCubit>(context)
+                            .product
+                            .departmentName = text;
+                      },
+                      width: 350,
+                      title: FieldsNames.departmentName,
+                      controller: TextEditingController(
+                          text: context
+                              .read<ProductCardCubit>()
+                              .product
+                              .departmentName),
+                      inputType: TextInputType.text,
+                      onlyNumber: const []),
+                ],
+              );
+            },
+            buildWhen: (p, c) => c is ChangedValueState,
           ),
           const SizedBox(
             height: 50,

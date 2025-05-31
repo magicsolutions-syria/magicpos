@@ -6,32 +6,34 @@ import '../../components/reverse_string.dart';
 import '../initialize_database.dart';
 
 class GroupsFunctions {
-  static Future<List<Map>> getGroupsList({
-    required String groupName,
-    String departmentName = "",
-    int departmentId = -1,
-    bool sameGroup = false,
-    printerCondition= ""
-  }) async {
-    PosData data = PosData();
-    String condition = "";
-    String groupNameCondition = sameGroup
-        ? "group_name='$groupName'"
-        : "group_name LIKE '%$groupName%'";
-    if (groupName != "") {
-      condition =
-          "${_departmentCondition(departmentName: departmentName, departmentId: departmentId)} AND $groupNameCondition";
-    }else if(printerCondition!=""){
-      condition =
-      "${_departmentCondition(departmentName: departmentName, departmentId: departmentId)} AND ($printerCondition)";
+  static Future<List<Map>> getGroupsList(
+      {required String groupName,
+      String departmentName = "",
+      int departmentId = -1,
+      bool sameGroup = false,
+      printerCondition = ""}) async {
+    try {
+      PosData data = PosData();
+      String condition = "";
+      String groupNameCondition = sameGroup
+          ? "group_name='$groupName'"
+          : "group_name LIKE '%$groupName%'";
+      if (groupName != "") {
+        condition =
+            "${_departmentCondition(departmentName: departmentName, departmentId: departmentId)} AND $groupNameCondition";
+      } else if (printerCondition != "") {
+        condition =
+            "${_departmentCondition(departmentName: departmentName, departmentId: departmentId)} AND ($printerCondition)";
+      } else {
+        condition = _departmentCondition(
+            departmentId: departmentId, departmentName: departmentName);
+      }
+      print("condition: $condition");
+      return await data.readData(
+          "SELECT `groups`.*,departments.section_name FROM `groups` JOIN departments ON departments.id_department=`groups`.section_number $condition ORDER BY group_name");
+    } catch (e) {
+      throw CustomException(e.toString());
     }
-    else {
-      condition = _departmentCondition(
-          departmentId: departmentId, departmentName: departmentName);
-    }
-    print("condition: $condition");
-    return await data.readData(
-        "SELECT `groups`.*,departments.section_name FROM `groups` JOIN departments ON departments.id_department=`groups`.section_number $condition ORDER BY group_name");
   }
 
   static String _departmentCondition({
@@ -241,64 +243,62 @@ class GroupsFunctions {
       required String sectionOld,
       required String sectionNew}) async {
     if (oldName == "") {
-      throw Exception("يرجى تحديد مجموعة من قائمة المجموعات");
+      throw CustomException("يرجى تحديد مجموعة من قائمة المجموعات");
     }
     PosData data = PosData();
-
-    if (oldName != "") {
-      List<Map> response = await getGroupsList(
-          groupName: newName,
-          departmentName: sectionNew,
-          departmentId: -1,
-          sameGroup: true);
-      if (response.isEmpty) {
-        List<Map> groupOldData = await getGroupsList(
-            groupName: oldName, departmentName: sectionOld, sameGroup: true);
-
-        List<Map> response =
-            await SectionsFunctions.getDepartmentList(sectionNew);
-        int index = response[0]["id_department"];
-        String printName = reversArString(newName);
-        String updateName = newName == ""
-            ? ""
-            : ",group_name ='$newName' , Print_Name_group='$printName'";
-        await data.changeData(
-            "UPDATE `groups` SET section_number=$index $updateName WHERE group_name='$oldName' ");
-
-        await SectionsFunctions.checkSelectedUnselected(sectionOld, -1);
-        await SectionsFunctions.checkSelectedUnselected(sectionNew, -1);
-        await SectionsFunctions.transferQtySells(
-            nameNew: sectionNew,
-            nameOld: sectionOld,
-            qty1: groupOldData[0]["sold_quantity_one"],
-            sells1: groupOldData[0]["total_sells_price_one"],
-            qty2: groupOldData[0]["sold_quantity_two"],
-            sells2: groupOldData[0]["total_sells_price_two"],
-            productQTY: groupOldData[0]["products_QTY"]);
-        await data.changeData(
-            "UPDATE products SET `department`=$index WHERE `group`=${groupOldData[0]["id_group"]}");
-      } else {
-        throw Exception("هذه المجموعة موجودة\nمسبقاً");
+    if (newName == "") {
+      if (sectionOld == sectionNew) {
+        return;
       }
+      newName = oldName;
+    }
+    List<Map> response = await getGroupsList(
+        groupName: newName,
+        departmentName: sectionNew,
+        departmentId: -1,
+        sameGroup: true);
+    if (response.isEmpty) {
+      List<Map> groupOldData = await getGroupsList(
+          groupName: oldName, departmentName: sectionOld, sameGroup: true);
+
+      List<Map> response =
+          await SectionsFunctions.getDepartmentList(sectionNew);
+      int index = response[0]["id_department"];
+      String printName = reversArString(newName);
+      String updateName = newName == ""
+          ? ""
+          : ",group_name ='$newName' , Print_Name_group='$printName'";
+      await data.changeData(
+          "UPDATE `groups` SET section_number=$index $updateName WHERE group_name='$oldName' ");
+
+      await SectionsFunctions.checkSelectedUnselected(sectionOld, -1);
+      await SectionsFunctions.checkSelectedUnselected(sectionNew, -1);
+      await SectionsFunctions.transferQtySells(
+          nameNew: sectionNew,
+          nameOld: sectionOld,
+          qty1: groupOldData[0]["sold_quantity_one"],
+          sells1: groupOldData[0]["total_sells_price_one"],
+          qty2: groupOldData[0]["sold_quantity_two"],
+          sells2: groupOldData[0]["total_sells_price_two"],
+          productQTY: groupOldData[0]["products_QTY"]);
+      await data.changeData(
+          "UPDATE products SET `department`=$index WHERE `group`=${groupOldData[0]["id_group"]}");
     } else {
-      throw Exception("حقل المجموعة لا يمكن أن يكون فارغاً");
+      throw Exception("هذه المجموعة موجودة\nمسبقاً");
     }
   }
 
   static Future<List<Map>> getSelectedUnSelectedGroups(
       bool selected, String departmentName, int id) async {
     PosData data = PosData();
-    String condition="";
-    if(departmentName != "")
-      {
-        condition=" AND section_name=$departmentName";
-      }
-    else if(id!=-1){
-      condition =
-    "  AND  section_number=$id";
+    String condition = "";
+    if (departmentName != "") {
+      condition = " AND section_name='$departmentName'";
+    } else if (id != -1) {
+      condition = "  AND  section_number=$id";
     }
 
     return await data.readData(
-        "SELECT * FROM `groups`  WHERE `selected_group`=${selected ? 1 : 0} $condition ORDER BY group_name");
+        "SELECT * FROM `groups` JOIN departments ON (`groups`.section_number=`departments`.id_department) WHERE `selected_group`=${selected ? 1 : 0} $condition ORDER BY group_name");
   }
 }

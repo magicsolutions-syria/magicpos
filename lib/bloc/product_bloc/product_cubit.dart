@@ -142,4 +142,15 @@ print(currentUser.product.product.delete);
   bool isChanged() {
     return !(constProduct == product);
   }
+
+  void updateDepartmentName(String departmentVal) {
+    product.departmentName=departmentVal;
+    emit(ChangedValueState());
+  }
+
+  void updateGroupName({required String group, required String department}) {
+    product.departmentName=department;
+    product.groupName=group;
+    emit(ChangedValueState());
+  }
 }
