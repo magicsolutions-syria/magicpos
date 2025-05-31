@@ -6,6 +6,8 @@ class SuccessDialogPhrases{
 
   static const String saveSelectedGroups="تم حفظ المجموعات المختارة";
 
+  static const String saveOperationComplete="تم الحفظ";
+
   static String get deleteOperationComplete{
     return "تمت عملية الحذف بنجاح";
   }

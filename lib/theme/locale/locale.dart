@@ -12,3 +12,4 @@ export 'slider_pages_names.dart';
 export 'radios_values.dart';
 export 'settings_names.dart';
 export 'radios_names.dart';
+export 'wrong_dialog_phrases.dart';

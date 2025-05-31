@@ -8,7 +8,7 @@ import 'add_picture_bloc/add_picture_states.dart';
 
 class AddPictureWidget extends StatelessWidget {
   const AddPictureWidget(
-      {super.key, this.initialPath = "", required this.onChanged});
+      {super.key, this.initialPath = "", required this.onChanged,});
 
   final String initialPath;
   final Function(String path) onChanged;
@@ -31,6 +31,7 @@ class AddPictureWidget extends StatelessWidget {
                   onChanged(value);
                 },
                 minWidth: 240,
+                height: 220,
                 padding: EdgeInsets.zero,
                 color: Colors.white,
                 shape: RoundedRectangleBorder(

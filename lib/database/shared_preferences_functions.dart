@@ -6,14 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../screens_data/constants.dart';
 
 class SharedPreferencesFunctions {
-  static Future<String> getScreen() async {
-    SharedPreferences data = await SharedPreferences.getInstance();
-    return data.getString("screen_type") ?? posScreenGroup.first;
-  }
 
   static Future<String> getPrice() async {
     SharedPreferences data = await SharedPreferences.getInstance();
-    return data.getString("price_type") ?? priceGroup.first;
+    return data.getString("price_type") ?? "cost";
   }
 
   static Future<Map<String, String>> getScaleData() async {
@@ -143,7 +139,7 @@ class DefaultValues {
     return -1;
   }
   static String get billHeaderType {
-    return "header";
+    return RadiosValues.text;
   }
 
   static String get billHeader {

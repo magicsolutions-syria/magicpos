@@ -50,7 +50,7 @@ class GeneralSettings {
       priceType: data.getString(SharedPreferencesNames.priceType) ??
           DefaultValues.priceType,
       screenType: data.getString(SharedPreferencesNames.screenType) ??
-          "resturant",
+         DefaultValues.screenType,
       startScale: data.getString(SharedPreferencesNames.startScale) ??
           DefaultValues.startScale,
       weightScale: data.getInt(SharedPreferencesNames.weightScale) ??

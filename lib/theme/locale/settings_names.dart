@@ -8,4 +8,8 @@ class SettingsNames {
   static const String chooseGroupsToView = "اختيار مجموعات العرض";
   static const String updateDepartment= "تعديل قسم";
   static const String updateGroup= "تعديل مجموعة";
+
+  static const String billFooter="ذيل الفاتورة";
+
+  static const String billHeader= "رأس الفاتورة";
 }

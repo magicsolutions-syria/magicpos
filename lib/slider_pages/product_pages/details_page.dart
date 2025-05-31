@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:magicposbeta/bloc/product_bloc/product_bloc.dart';
+import 'package:magicposbeta/components/big_text_field.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
 
@@ -13,8 +14,6 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController scrollController = ScrollController();
-
     return Row(
       children: [
         Padding(
@@ -66,47 +65,18 @@ class DetailsPage extends StatelessWidget {
                     const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(
-              width: 650,
-              height: 190,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 45, left: 55),
-                child: Scrollbar(
-                  thumbVisibility: true,
-                  controller: scrollController,
-                  interactive: true,
-                  thickness: 15,
-                  radius: const Radius.circular(10),
-                  child: TextField(
-                    scrollController: scrollController,
-                    minLines: 7,
-                    maxLines: 9,
-                    onChanged: (text) {
-                      context.read<ProductCardCubit>().updateDescription(text);
-                    },
-                    controller: TextEditingController(
-                        text: context
-                            .read<ProductCardCubit>()
-                            .product
-                            .description),
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(fontSize: 23),
-                    decoration: InputDecoration(
-                        hintText: FieldsPhrases.addDescriptionForProductHere,
-                        hintStyle: const TextStyle(fontSize: 23),
-                        hintTextDirection: TextDirection.rtl,
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 1.5),
-                            borderRadius: BorderRadius.circular(10)),
-                        border: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 1.5),
-                            borderRadius: BorderRadius.circular(10)),
-                        fillColor: Theme.of(context).fieldsColor,
-                        filled: true),
-                  ),
-                ),
-              ),
-            ),
+            BigTextField(
+                minLines: 7,
+                maxLines: 9,
+                maxLength: 700,
+                controller: TextEditingController(
+                    text: context.read<ProductCardCubit>().product.description),
+                height: 190,
+                width: 650,
+                onChanged: (text) {
+                  context.read<ProductCardCubit>().updateDescription(text);
+                },
+                title: FieldsPhrases.addDescriptionForProductHere)
           ],
         ),
         AddPictureWidget(

@@ -94,12 +94,5 @@ const List<String> jopTitleData = [
   "كاشير إرجاع",
   "أمين مستودع",
 ];
-const List<String> settingsPages = [
-  "الطابعات",
-  "الفاتورة",
-  "مجموعات و أقسام",
-  "عام",
-];
-const List<String> posScreenGroup = ["restaurant", "POS"];
-const List<String> priceGroup = ["cost", "group", "piece"];
+
 User currentUserss = User();

@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:magicposbeta/components/choises_list.dart';
 import 'package:magicposbeta/database/functions/groups_functions.dart';
 import 'package:magicposbeta/modules/department.dart';
 import 'package:magicposbeta/modules/group.dart';

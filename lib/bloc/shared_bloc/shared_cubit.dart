@@ -2,7 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:magicposbeta/modules/custom_exception.dart';
 import 'package:magicposbeta/modules/general_settings.dart';
 import 'package:magicposbeta/modules/user.dart';
+import 'package:magicposbeta/theme/app_profile.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
+import 'package:magicposbeta/theme/locale/locale.dart';
 import '../../database/database_functions.dart';
 import '../../database/users_functions.dart';
 import '../../modules/printer.dart';
@@ -54,12 +56,4 @@ class SharedCubit extends Cubit<SharedStates> {
     }
   }
 
-  void setScaleSettings(
-      {required String productNumber,
-      required String weight,
-      required String start}) {
-    settings.setWeightScale(value: int.parse(weight));
-    settings.setProductNumberScale(value: int.parse(productNumber));
-    settings.setStartScale(value: start);
-  }
 }

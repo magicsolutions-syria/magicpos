@@ -5,5 +5,7 @@ class AppProfile {
   static const String facebook = "MagicPOS";
   static const String email = "magicpos@gmail.com";
   static const String name = "MagicPOS";
+  static const String billLogoDefaultPath = "/data/user/0/com.example.magicposbeta1/logo.jpg";
+  static const int billWidth=48;
 
 }
