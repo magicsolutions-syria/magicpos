@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magicposbeta/bloc/product_bloc/product_bloc.dart';
 import 'package:magicposbeta/bloc/shared_bloc/shared_cubit.dart';
 import 'package:magicposbeta/components/waiting_widget.dart';
+import 'package:magicposbeta/modules/info_product.dart';
 import 'package:magicposbeta/screens/home_screen.dart';
 import 'package:magicposbeta/theme/app_formatters.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
@@ -32,7 +33,7 @@ class ProductCard extends StatelessWidget {
             builder: (context, state) {
               return IconButton(
                 onPressed: () async {
-                  Map productItem = {};
+                  InfoProduct productItem =context.read<ProductCardCubit>().product;
                   await showDialog(
                       context: context,
                       builder: (context) => ProductCardList(
@@ -40,7 +41,7 @@ class ProductCard extends StatelessWidget {
                               productItem = item;
                             },
                           ));
-                  if (productItem.isNotEmpty && context.mounted) {
+                  if (context.mounted) {
                     BlocProvider.of<ProductCardCubit>(context)
                         .initialProduct(productItem);
                   }

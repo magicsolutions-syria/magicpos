@@ -26,11 +26,11 @@ import 'screens/report_screens/group_report_screen.dart';
 import "./screens/pos_screen.dart";
 
 import "screens/reports_navigator_screen.dart";
+import "theme/pages_profiles.dart";
 
 void main() async {
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
-
 }
 
 class MyApp extends StatelessWidget {
@@ -58,18 +58,18 @@ class MyApp extends StatelessWidget {
           routes: {
             PosScreen.route: (context) => const PosScreen(),
             PersonCard.supplierRoute: (context) => PersonCard(
-                tableName: "suppliers",
-                color: Color(0xFFFFA640),
-                title: "الموردون",
-                icon: Icons.person_add_rounded,
-                fractionDigits: -1),
+                  tableName: "suppliers",
+                  color: const Color(0xFFFFA640),
+                  title: PagesProfiles.clients.enName,
+                  icon: Icons.person_add_rounded,
+                ),
             PersonCard.clientRoute: (context) => PersonCard(
-                tableName: "clients",
-                color: Theme.of(context).primaryColor,
-                title: "الزبائن",
-                icon: Icons.supervisor_account,
-                fractionDigits: -1),
-            ProductCard.route: (context) => ProductCard(),
+                  tableName: "clients",
+                  color: Theme.of(context).primaryColor,
+                  title: PagesProfiles.clients.arName,
+                  icon: Icons.supervisor_account,
+                ),
+            ProductCard.route: (context) => const ProductCard(),
             InOutScreen.route: (context) => InOutScreen(),
             ReportsNavigatorScreen.route: (context) =>
                 const ReportsNavigatorScreen(),
@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
             ProductReport.route: (context) => const ProductReport(),
             CashReport.route: (context) => const CashReport(),
             FunctionsKeysReport.route: (context) => const FunctionsKeysReport(),
-            UserCard.route: (context) => UserCard(),
+            UserCard.route: (context) => const UserCard(),
             SettingsScreen.route: (context) => SettingsScreen(),
             StartAppScreen.route: (context) => const StartAppScreen(),
             ResturantScreen.route: (context) => const ResturantScreen(),

@@ -8,6 +8,8 @@ class DiversePhrases {
   static String weight = "وزنية";
   static const String scaleSettings="إعدادات الميزان";
 
+  static const String searchBy= "البحث حسب";
+
   static List<String> productTypes() => [inventory, weight];
 
   static String get unitThree {

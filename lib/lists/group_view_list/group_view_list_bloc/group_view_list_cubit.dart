@@ -3,16 +3,15 @@ import 'package:magicposbeta/database/functions/groups_functions.dart';
 import 'package:magicposbeta/modules/department.dart';
 import 'package:magicposbeta/modules/group.dart';
 import '../../../database/functions/Sections_functions.dart';
-import '../../../database/initialize_database.dart';
 import 'group_view_list_states.dart';
 
 class GroupViewListCubit extends Cubit<GroupViewListStates> {
-  GroupViewListCubit(Function() InitialGroupListState,
+  GroupViewListCubit(Function() initialGroupListState,
       {required this.pivot,
       required this.departmentField,
       required this.groupField,
       required this.defaultValue})
-      : super(InitialGroupListState()) {
+      : super(initialGroupListState()) {
     groupFilter = "";
     departmentFilter = "";
     getListData();
@@ -38,7 +37,6 @@ class GroupViewListCubit extends Cubit<GroupViewListStates> {
       );
 
       departments = [];
-      print(departmentResponse);
       for (var department in departmentResponse) {
         Department newDepartment = Department(
             id: department["id_department"],
@@ -51,19 +49,18 @@ class GroupViewListCubit extends Cubit<GroupViewListStates> {
             printerCondition: defaultValue == -1
                 ? "`groups`.printer_id=-1 OR `groups`.printer_id=$pivot"
                 : "");
-        groupResponse.forEach((group) {
+        for (var group in groupResponse) {
           newDepartment.addGroup(
               id: group["id_group"],
               name: group["group_name"],
               isSelected: pivot == group[groupField]);
-        });
+        }
         print(groupResponse);
 
         departments.add(newDepartment);
       }
       emit(SuccessGroupViewListState());
     } catch (e) {
-
       emit(
         FailureGroupViewListState(
           error: e.toString(),
@@ -105,56 +102,34 @@ class GroupViewListCubit extends Cubit<GroupViewListStates> {
   Future<void> saveChanges() async {
     emit(LoadingGroupViewListState());
     try {
-      PosData data = PosData();
-      String printerCondition =
-          defaultValue == -1 ? "printer_id=-1 OR printer_id=$pivot" : "";
-      String sql = printerCondition == ""
-          ? "UPDATE departments SET $departmentField=$defaultValue "
-          : "UPDATE departments SET $departmentField=$defaultValue WHERE $printerCondition";
-      await data.changeData(sql);
-      printerCondition = defaultValue == -1
-          ? "`groups`.printer_id=-1 OR `groups`.printer_id=$pivot"
-          : "";
-      sql = printerCondition == ""
-          ? "UPDATE `groups` SET $groupField=$defaultValue "
-          : "UPDATE `groups` SET $groupField=$defaultValue WHERE $printerCondition";
-      await data.changeData(sql);
-
-      String condition1 = "";
+      await SectionsFunctions.changeSelectValues(
+          fieldName: departmentField,
+          newValue: defaultValue,
+          condition:
+              defaultValue == -1 ? "printer_id=-1 OR printer_id=$pivot" : "");
+      await GroupsFunctions.changeSelectValues(
+          fieldName: groupField,
+          newValue: defaultValue,
+          condition: defaultValue == -1
+              ? "`groups`.printer_id=-1 OR `groups`.printer_id=$pivot"
+              : "");
+      String condition1 = Department.getSelectId(departments);
       String condition2 = "";
-      List<Department> selectedDepartments =
-          departments.where((e) => e.isSelected).toList();
-      List<Department> othersDepartment = departments;
-
-      for (int i = 0; i < selectedDepartments.length; i++) {
-        condition1 += i == 0 ? "" : " OR ";
-        condition1 += " id_department =${selectedDepartments[i].id} ";
-        condition2 += i == 0 ? "" : " OR ";
-        condition2 += " section_number =${selectedDepartments[i].id} ";
-        othersDepartment.remove(selectedDepartments[i]);
+      for (var department in departments) {
+        condition2 += Group.getSelectId(department.groups);
       }
 
       if (condition1 != "") {
-        await data.changeData(
-            "UPDATE departments SET $departmentField=$pivot WHERE $condition1");
+        await SectionsFunctions.changeSelectValues(
+            fieldName: departmentField,
+            newValue: pivot,
+            condition: "id_department IN($condition1)");
       }
-
       if (condition2 != "") {
-        await data.changeData(
-            "UPDATE `groups` SET $groupField=$pivot WHERE $condition2");
-      }
-      String condition3 = "";
-
-      for (int i = 0; i < othersDepartment.length; i++) {
-        List<Group>selectedGroups=othersDepartment[i].groups.where((e)=>e.isSelected).toList();
-        selectedGroups.forEach((element) {
-          condition3 += "OR id_group =${element.id} ";
-        });
-      }
-      if (condition3 != "") {
-        print(condition3.substring(2));
-        await data.changeData(
-            "UPDATE `groups` SET $groupField=$pivot WHERE${condition3.substring(2)}");
+        await GroupsFunctions.changeSelectValues(
+            fieldName: groupField,
+            newValue: pivot,
+            condition: "id_group IN(${condition2.substring(1)})");
       }
 
       emit(CompletedOperationState());
@@ -164,15 +139,11 @@ class GroupViewListCubit extends Cubit<GroupViewListStates> {
   }
 
   Future<void> updateDepartmentFilter(String text) async {
-    print("554444444444444444444444444444444444444444444444444");
-    print(text);
     departmentFilter = text;
     await getListData();
   }
 
   Future<void> updateGroupFilter(String text) async {
-    print("554444444444444444444444444444444444444444444444444");
-    print(text);
     groupFilter = text;
     await getListData();
   }

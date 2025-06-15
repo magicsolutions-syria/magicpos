@@ -8,9 +8,9 @@ import 'product_functions.dart';
 class ProductUnitFunctions {
   static Future<List<String>> _namesData(String suffix) async {
     PosData data = PosData();
-   List<Map> response= await data
+    List<Map> response = await data
         .readData("SELECT names FROM units_names$suffix ORDER BY names ");
-    return   List.generate(response.length, (index) => response[index]["names"]);
+    return List.generate(response.length, (index) => response[index]["names"]);
   }
 
   static Future<void> addUnitName(
@@ -74,12 +74,18 @@ class ProductUnitFunctions {
         "INSERT INTO unit$suffix (Print_Name$suffix,name$suffix,cost_price$suffix,group_price$suffix,piece_price$suffix,code$suffix,pieces_quantity$suffix)VALUES('$printName','$name',$cost,$group,$piece,'$code',$pieceQTY)");
   }
 
-  static Future<int> initializeUnitExpanded(ProductUnitExpanded item) {
-    if (item.barcode != "") {
-      addUnitName(name: item.name, suffix: item.suffix);
-      return addUnitExpanded(item);
+  static Future<int> initializeUnitExpanded(
+      ProductUnitExpanded item, {int responseId = 0}) async {
+    if (responseId == 0) {
+      if (item.isNotEmpty) {
+        addUnitName(name: item.name, suffix: item.suffix);
+        return addUnitExpanded(item);
+      }
+      return Future(() => 0);
+    } else {
+      await ProductUnitFunctions.updateUnitExpanded(item: item, id: responseId);
+      return responseId;
     }
-    return Future(() => 0);
   }
 
   static Future<void> deleteUnit(
@@ -94,7 +100,7 @@ class ProductUnitFunctions {
     PosData data = PosData();
     String suffix = item.suffix;
 
-    if (item.barcode == "") {
+    if (item.isEmpty) {
       deleteUnit(id: id, suffix: suffix);
       return Future(() => 0);
     }
@@ -111,6 +117,7 @@ class ProductUnitFunctions {
     return await data.changeData(
         "UPDATE unit$suffix SET name$suffix ='$name' ,Print_Name$suffix='$printName' , cost_price$suffix =$cost , group_price$suffix =$group , piece_price$suffix = $piece , code$suffix = '$code' ,pieces_quantity$suffix = $pieceQTY WHERE id$suffix=$id ");
   }
+
   static Future<bool> barcodeIsUnique({
     required String barcode,
     required int id,
@@ -120,18 +127,19 @@ class ProductUnitFunctions {
         searchText: "",
         searchType: "",
         secondCondition:
-        " (code_1='$barcode' OR code_2='$barcode' OR code_3='$barcode') AND (id>$id OR id<$id )  ");
+            " (code_1='$barcode' OR code_2='$barcode' OR code_3='$barcode') AND (${ProductFunctions.idF}>$id OR ${ProductFunctions.idF}<$id )  ");
     return response.isEmpty;
   }
 
-  static Future<List<String>>namesData1() async {
+  static Future<List<String>> namesData1() async {
     return await _namesData("_1");
   }
-  static Future<List<String>>namesData2() async {
+
+  static Future<List<String>> namesData2() async {
     return await _namesData("_2");
   }
-  static Future<List<String>>namesData3() async {
+
+  static Future<List<String>> namesData3() async {
     return await _namesData("_3");
   }
-
 }

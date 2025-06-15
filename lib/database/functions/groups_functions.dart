@@ -6,6 +6,21 @@ import '../../components/reverse_string.dart';
 import '../initialize_database.dart';
 
 class GroupsFunctions {
+  static const String tableName="`groups`";
+  //fields
+  static const String idF = "id_group";
+  static const String nameF = "group_name";
+  static const String printerIdF = "printer_id";
+  static const String department = "section_number";
+  static const String sells2F = "total_sells_price_two";
+  static const String sells1F = "total_sells_price_one";
+  static const String qty2F = "sold_quantity_two";
+  static const String qty1F = "sold_quantity_one";
+  static const String productQtyF = "products_QTY";
+  static const String selectedF = "selected_department";
+  static const String printNameF = "Print_Name_department";
+  static final PosData _data=PosData();
+
   static Future<List<Map>> getGroupsList(
       {required String groupName,
       String departmentName = "",
@@ -13,8 +28,7 @@ class GroupsFunctions {
       bool sameGroup = false,
       printerCondition = ""}) async {
     try {
-      PosData data = PosData();
-      String condition = "";
+        String condition = "";
       String groupNameCondition = sameGroup
           ? "group_name='$groupName'"
           : "group_name LIKE '%$groupName%'";
@@ -29,7 +43,7 @@ class GroupsFunctions {
             departmentId: departmentId, departmentName: departmentName);
       }
       print("condition: $condition");
-      return await data.readData(
+      return await _data.readData(
           "SELECT `groups`.*,departments.section_name FROM `groups` JOIN departments ON departments.id_department=`groups`.section_number $condition ORDER BY group_name");
     } catch (e) {
       throw CustomException(e.toString());
@@ -54,7 +68,6 @@ class GroupsFunctions {
     String departmentName = "",
     int departmentId = -1,
   }) async {
-    PosData data = PosData();
     if (departmentName == "" && departmentId == -1) {
       throw Exception("يرجى تحديد قسم من قائمة الأقسام");
     }
@@ -81,9 +94,9 @@ class GroupsFunctions {
           id = departmentId;
         }
         String printName = reversArString(groupName);
-        await data.changeData(
+        await _data.changeData(
             "UPDATE departments SET selected_department=0 WHERE id_department=$id");
-        return await data.insertData(
+        return await _data.insertData(
             "INSERT INTO `groups` (group_name,section_number,Print_Name_group)VALUES('$groupName',$id,'$printName')");
       } else {
         throw Exception("هذه المجموعة موجودة\nمسبقاً");
@@ -98,7 +111,6 @@ class GroupsFunctions {
     String departmentName = "",
     int departmentId = -1,
   }) async {
-    PosData data = PosData();
     if (groupName != "") {
       List<Map> response = await getGroupsList(
           groupName: groupName,
@@ -122,7 +134,7 @@ class GroupsFunctions {
         id = departmentId;
       }
       await SectionsFunctions.checkSelectedUnselected(departmentName, id);
-      data.deleteData(
+      _data.deleteData(
           "DELETE FROM `groups` WHERE group_name='$groupName' AND section_number=$id");
       return true;
     } else {
@@ -132,11 +144,10 @@ class GroupsFunctions {
 
   static Future<int> addProductToGroup(
       String groupName, int departmentId) async {
-    PosData data = PosData();
     List<Map> response = await getGroupsList(
         groupName: groupName, departmentId: departmentId, sameGroup: true);
     int id = response[0]["id_group"];
-    await data.changeData(
+    await _data.changeData(
         "UPDATE `groups` set products_QTY=${response[0]["products_QTY"] + 1} WHERE id_group=$id");
     return id;
   }
@@ -159,7 +170,6 @@ class GroupsFunctions {
     required double qty2,
     required double sells2,
   }) async {
-    PosData data = PosData();
     int id = 0;
     List<Map> response = await getGroupsList(
         groupName: groupName, departmentId: departmentId, sameGroup: true);
@@ -174,7 +184,7 @@ class GroupsFunctions {
     double newSells2 = response[0]["total_sells_price_two"] + sells2;
     double newProductQty = response[0]["products_QTY"] + 1;
 
-    return await data.changeData(
+    return await _data.changeData(
         "UPDATE `groups` SET products_QTY=$newProductQty,sold_quantity_one=$newQty1, sold_quantity_two=$newQty2,total_sells_price_one=$newSells1,total_sells_price_two=$newSells2 WHERE id_group=$id");
   }
 
@@ -186,7 +196,6 @@ class GroupsFunctions {
     required double qty2,
     required double sells2,
   }) async {
-    PosData data = PosData();
     int id = 0;
     List<Map> response = await getGroupsList(
         groupName: groupName, departmentId: departmentId, sameGroup: true);
@@ -198,7 +207,7 @@ class GroupsFunctions {
     double newSells1 = response[0]["total_sells_price_one"] - sells1;
     double newSells2 = response[0]["total_sells_price_two"] - sells2;
     double newProductQty = response[0]["products_QTY"] - 1;
-    await data.changeData(
+    await _data.changeData(
         "UPDATE `groups` SET products_QTY=$newProductQty,sold_quantity_one=$newQty1, sold_quantity_two=$newQty2,total_sells_price_one=$newSells1,total_sells_price_two=$newSells2 WHERE id_group=$id");
   }
 
@@ -245,7 +254,6 @@ class GroupsFunctions {
     if (oldName == "") {
       throw CustomException("يرجى تحديد مجموعة من قائمة المجموعات");
     }
-    PosData data = PosData();
     if (newName == "") {
       if (sectionOld == sectionNew) {
         return;
@@ -268,7 +276,7 @@ class GroupsFunctions {
       String updateName = newName == ""
           ? ""
           : ",group_name ='$newName' , Print_Name_group='$printName'";
-      await data.changeData(
+      await _data.changeData(
           "UPDATE `groups` SET section_number=$index $updateName WHERE group_name='$oldName' ");
 
       await SectionsFunctions.checkSelectedUnselected(sectionOld, -1);
@@ -281,7 +289,7 @@ class GroupsFunctions {
           qty2: groupOldData[0]["sold_quantity_two"],
           sells2: groupOldData[0]["total_sells_price_two"],
           productQTY: groupOldData[0]["products_QTY"]);
-      await data.changeData(
+      await _data.changeData(
           "UPDATE products SET `department`=$index WHERE `group`=${groupOldData[0]["id_group"]}");
     } else {
       throw Exception("هذه المجموعة موجودة\nمسبقاً");
@@ -290,7 +298,6 @@ class GroupsFunctions {
 
   static Future<List<Map>> getSelectedUnSelectedGroups(
       bool selected, String departmentName, int id) async {
-    PosData data = PosData();
     String condition = "";
     if (departmentName != "") {
       condition = " AND section_name='$departmentName'";
@@ -298,7 +305,16 @@ class GroupsFunctions {
       condition = "  AND  section_number=$id";
     }
 
-    return await data.readData(
+    return await _data.readData(
         "SELECT * FROM `groups` JOIN departments ON (`groups`.section_number=`departments`.id_department) WHERE `selected_group`=${selected ? 1 : 0} $condition ORDER BY group_name");
+  }
+
+  static Future<void>changeSelectValues({required String fieldName, required int newValue, required String condition}) async {
+    String currentCondition = "";
+    if (condition != "") {
+      currentCondition = "WHERE $condition";
+    }
+    await _data.changeData(
+        "UPDATE `groups` SET $fieldName=$newValue $currentCondition");
   }
 }

@@ -51,15 +51,10 @@ class ProductCardCubit extends Cubit<ProductCardStates> {
   }
 
   bool deletePermission() {
-print(currentUser.product.product.update);
-print(currentUser.product.product.add);
-print(currentUser.product.product.delete);
-
     return !isAddMode && currentUser.product.product.delete;
   }
 
   bool updatePermission() {
-
     return !isAddMode && currentUser.product.product.update;
   }
 
@@ -131,12 +126,14 @@ print(currentUser.product.product.delete);
     }
   }
 
-  void initialProduct(Map item) {
-    emit(LoadingProductCardState());
-    product = InfoProduct.instanceFromMap(item);
-    constProduct = product;
-    isAddMode = false;
-    emit(SuccessProductCardState());
+  void initialProduct(InfoProduct item) {
+    if (product != item) {
+      emit(LoadingProductCardState());
+      product = item;
+      constProduct = item;
+      isAddMode = false;
+      emit(SuccessProductCardState());
+    }
   }
 
   bool isChanged() {
@@ -144,13 +141,13 @@ print(currentUser.product.product.delete);
   }
 
   void updateDepartmentName(String departmentVal) {
-    product.departmentName=departmentVal;
+    product.departmentName = departmentVal;
     emit(ChangedValueState());
   }
 
   void updateGroupName({required String group, required String department}) {
-    product.departmentName=department;
-    product.groupName=group;
+    product.departmentName = department;
+    product.groupName = group;
     emit(ChangedValueState());
   }
 }

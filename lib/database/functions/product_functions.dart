@@ -1,4 +1,5 @@
 import 'package:magicposbeta/database/database_functions.dart';
+import 'package:magicposbeta/modules/product.dart';
 import 'package:magicposbeta/theme/custom_exception.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
 import 'package:magicposbeta/theme/locale/search_types.dart';
@@ -11,9 +12,62 @@ import 'sections_functions.dart';
 import 'groups_functions.dart';
 
 class ProductFunctions {
+  static const String tableName = "products";
+
+  //fields names
+  static const String idF = "id";
+  static const String arNameF = "ar_name";
+  static const String enNameF = "en_name";
+  static const String printNameF = "print_name";
+  static const String departmentF = "department";
+  static const String groupF = "group";
+  static const String imagePathF = "image_dir";
+  static const String descriptionF = "description";
+  static const String minAmountF = "min_amount";
+  static const String maxAmountF = "max_amount";
+  static const String unit1F = "unit_one_id";
+  static const String unit2F = "unit_two_id";
+  static const String unit3F = "unit_three_id";
+  static const String productTypeF = "product_type";
+  static final PosData _data = PosData();
+
   static Future<String> initialProductId() async {
-    return await initialId("products");
+    return await initialId(tableName);
   }
+
+  static Future<List<InfoProduct>> _getProduct(String condition,
+      {String orderType = arNameF}) async {
+    List<Map> response = await _data.readData(
+        "SELECT * FROM $tableName JOIN departments ON id_department=`$departmentF` JOIN `groups` ON id_group=`$groupF` JOIN unit_1 ON $unit1F=id_1 JOIN unit_2 ON $unit2F=id_2 JOIN unit_3 ON $unit3F=id_3 $condition ORDER BY $orderType");
+    List<InfoProduct> products = [];
+    for (var product in response) {
+      products.add(InfoProduct.instanceFromMap(product));
+    }
+    return products;
+  }
+
+  static Future<InfoProduct> getProductById(int id) async {
+    return (await _getProduct("WHERE $idF=id",orderType: idF)).first;
+  }
+
+  static Future<List<InfoProduct>> searchProductByArabicName(String arName,{int filterByUnit=1}) async {
+    return await _getProduct("WHERE $arNameF LIKE '%$arName%' AND id_$filterByUnit>0", orderType: arNameF);
+  }
+  static Future<List<InfoProduct>> searchProductByEnglishName(String enName,{int filterByUnit=1}) async {
+    return await _getProduct("WHERE $enNameF LIKE '%$enName%' AND id_$filterByUnit>0", orderType: enNameF);
+  }
+  static Future<List<InfoProduct>> searchProductByCode1(String code1,{int filterByUnit=1}) async {
+    return await _getProduct("WHERE code_1 LIKE '%$code1%' AND id_$filterByUnit>0", orderType: "code_1");
+  }
+  static Future<List<InfoProduct>> searchProductByCode2(String code2,{int filterByUnit=1}) async {
+    return await _getProduct("WHERE code_2 LIKE '%$code2%' AND id_$filterByUnit>0", orderType: "code_2");
+  }
+  static Future<List<InfoProduct>> searchProductByCode3(String code3,{int filterByUnit=1}) async {
+    return await _getProduct("WHERE code_3 LIKE '%$code3%' AND id_$filterByUnit>0", orderType: "code_3");
+  }
+
+  static getProductByArName(
+      {required String searchText, required String searchType}) {}
 
   static Future<List<Map>> getProductList(
       {required String searchText,
@@ -24,12 +78,12 @@ class ProductFunctions {
     switch (searchType) {
       case (SearchTypes.arName):
         {
-          columnName = "ar_name";
+          columnName = arNameF;
           break;
         }
       case (SearchTypes.enName):
         {
-          columnName = "en_name";
+          columnName = enNameF;
           break;
         }
       case (SearchTypes.code1):
@@ -49,7 +103,7 @@ class ProductFunctions {
         }
       default:
         {
-          columnName = "ar_name";
+          columnName = arNameF;
           break;
         }
     }
@@ -63,7 +117,7 @@ class ProductFunctions {
     }
 
     return await data.readData(
-        "SELECT * FROM products JOIN departments ON id_department=`department` JOIN `groups` ON id_group=`group` JOIN unit_1 ON unit_one_id=id_1 JOIN unit_2 ON unit_two_id=id_2 JOIN unit_3 ON unit_three_id=id_3 $condition ORDER BY $columnName");
+        "SELECT * FROM $tableName JOIN departments ON id_department=`$departmentF` JOIN `groups` ON id_group=`$groupF` JOIN unit_1 ON $unit1F=id_1 JOIN unit_2 ON $unit2F=id_2 JOIN unit_3 ON $unit3F=id_3 $condition ORDER BY $columnName");
   }
 
   static Future<void> addProduct(InfoProduct item) async {
@@ -74,9 +128,9 @@ class ProductFunctions {
       int id_2 = await ProductUnitFunctions.initializeUnitExpanded(item.unit2);
       int id_3 = await ProductUnitFunctions.initializeUnitExpanded(item.unit3);
       int departmentId =
-          await SectionsFunctions.initializeDepartment(item.departmentName);
+          await SectionsFunctions.initializeDepartment(item.department.name);
       int idGroup = await GroupsFunctions.initializeGroup(
-          groupName: item.groupName, departmentId: departmentId);
+          groupName: item.group.name, departmentId: departmentId);
       String images = item.imagePath;
       String desc = item.description;
       String ar = item.arName;
@@ -87,61 +141,40 @@ class ProductFunctions {
       String printName = reversArString(ar);
 
       await data.insertData(
-          "INSERT INTO products (Print_Name,image_dir,description,ar_name,en_name,department,`group`,min_amount,max_amount,product_type,unit_one_id,unit_two_id,unit_three_id) VALUES ('$printName','$images','$desc','$ar','$en',$departmentId,$idGroup,$min,$max,$type,$id_1,$id_2,$id_3)");
+          "INSERT INTO $tableName ($printNameF,$imagePathF,$descriptionF,$arNameF,$enNameF,$departmentF,`$groupF`,$minAmountF,$maxAmountF,$productTypeF,$unit1F,$unit2F,$unit3F) VALUES ('$printName','$images','$desc','$ar','$en',$departmentId,$idGroup,$min,$max,$type,$id_1,$id_2,$id_3)");
     } catch (e) {
       throw CustomException(e.toString());
     }
   }
 
-  static Future<bool> updateProduct(InfoProduct item) async {
+  static Future<void> updateProduct(InfoProduct item) async {
     try {
       await _checkUniqueFields(item);
-      List<Map> response = await getProductList(
-          searchText: "", searchType: "", secondCondition: " id=${item.id}");
-      PosData data = PosData();
-      double soldQTYOne = response[0]['sold_quantity_one_1'] +
-          response[0]['sold_quantity_one_2'] +
-          response[0]['sold_quantity_one_3'];
-      double soldQTYTwo = response[0]['sold_quantity_two_1'] +
-          response[0]['sold_quantity_two_2'] +
-          response[0]['sold_quantity_two_3'];
-      double totalSellsPriceOne = response[0]['total_sells_price_one_1'] +
-          response[0]['total_sells_price_one_2'] +
-          response[0]['total_sells_price_one_3'];
-      double totalSellsPriceTwo = response[0]['total_sells_price_two_1'] +
-          response[0]['total_sells_price_two_2'] +
-          response[0]['total_sells_price_two_3'];
+
+      InfoProduct response = await getProductById(item.id);
+      double soldQTYOne = response.totalSoldQty1();
+      double soldQTYTwo = response.totalSoldQty2();
+      double totalSellsPriceOne = response.totalSoldPrice1();
+      double totalSellsPriceTwo = response.totalSoldPrice2();
       await ProductUnitFunctions.updateUnit(
-          item: item.unit1, id: response[0]['id_1']);
-      int id_1 = response[0]['id_1'];
-      int id_2 = 0;
-      if (response[0]['id_2'] == 0) {
-        id_2 = await ProductUnitFunctions.initializeUnitExpanded(item.unit2);
-      } else {
-        await ProductUnitFunctions.updateUnitExpanded(
-            item: item.unit2, id: response[0]['id_2']);
-        id_2 = response[0]['id_2'];
-      }
-      int id_3 = 0;
-      if (response[0]['id_3'] == 0) {
-        id_3 = await ProductUnitFunctions.initializeUnitExpanded(item.unit3);
-      } else {
-        await ProductUnitFunctions.updateUnitExpanded(
-            item: item.unit3, id: response[0]['id_3']);
-        id_3 = response[0]['id_3'];
-      }
+          item: item.unit1, id: response.unit1.id);
+      int id_1 = response.unit1.id;
+      int id_2 = await ProductUnitFunctions.initializeUnitExpanded(item.unit2,
+          responseId: response.unit2.id);
+      int id_3 = await ProductUnitFunctions.initializeUnitExpanded(item.unit3,
+          responseId: response.unit3.id);
       int idDepartment = await SectionsFunctions.transferQtySells(
-          nameNew: item.departmentName,
-          nameOld: response[0]["section_name"],
+          nameNew: item.department.name,
+          nameOld: response.department.name,
           qty1: soldQTYOne,
           sells1: totalSellsPriceOne,
           qty2: soldQTYTwo,
           sells2: totalSellsPriceTwo);
       int idGroup = await GroupsFunctions.transferQtySells(
-          groupNameNew: item.groupName,
+          groupNameNew: item.group.name,
           departmentIdNew: idDepartment,
-          departmentIdOld: response[0]["id_department"],
-          groupNameOld: response[0]["group_name"],
+          departmentIdOld: response.department.id,
+          groupNameOld: response.group.name,
           qty1: soldQTYOne,
           sells1: totalSellsPriceOne,
           qty2: soldQTYTwo,
@@ -156,9 +189,8 @@ class ProductFunctions {
       int type = item.productType;
       String printName = reversArString(ar);
 
-      await data.changeData(
-          "UPDATE products SET image_dir='$images',product_type=$type,max_amount=$maxA,min_amount=$minA,`group`=$idGroup,department=$idDepartment,en_name='$en',ar_name='$ar',description='$desc',unit_one_id=$id_1,unit_two_id=$id_2,unit_three_id=$id_3,Print_Name='$printName'   WHERE id=$id ");
-      return true;
+      await _data.changeData(
+          "UPDATE $tableName SET $imagePathF='$images',$productTypeF=$type,$maxAmountF=$maxA,$minAmountF=$minA,`$groupF`=$idGroup,$departmentF=$idDepartment,$enNameF='$en',$arNameF='$ar',$descriptionF='$desc',$unit1F=$id_1,$unit2F=$id_2,$unit3F=$id_3,$printNameF='$printName'   WHERE $idF=$id ");
     } catch (e) {
       throw CustomException(e.toString());
     }
@@ -168,7 +200,7 @@ class ProductFunctions {
     PosData data = PosData();
 
     List<Map> response = await getProductList(
-        searchText: "", searchType: "", secondCondition: "id=$id");
+        searchText: "", searchType: "", secondCondition: "$idF=$id");
     if (response[0]['current_quantity_3'] != 0 ||
         response[0]['current_quantity_2'] != 0 ||
         response[0]['current_quantity_1'] != 0) {
@@ -179,11 +211,10 @@ class ProductFunctions {
         response[0]['sold_quantity_two_2'] != 0 ||
         response[0]['sold_quantity_one_1'] != 0 ||
         response[0]['sold_quantity_two_1'] != 0) {
-      throw CustomException(
-          ErrorsCodes.notEmptySellsProduct);
+      throw CustomException(ErrorsCodes.notEmptySellsProduct);
     } else {
       await data
-          .deleteData("DELETE FROM products WHERE id=${response[0]['id']}");
+          .deleteData("DELETE FROM $tableName WHERE $idF=${response[0][idF]}");
       ProductUnitFunctions.deleteUnit(
           id: response[0]['unit_one_id'], suffix: "_1");
       ProductUnitFunctions.deleteUnit(
@@ -202,7 +233,7 @@ class ProductFunctions {
     PosData data = PosData();
     int _id = int.parse(id);
     List<Map> response = await getProductList(
-        searchText: "", searchType: "", secondCondition: " id=$_id");
+        searchText: "", searchType: "", secondCondition: " $idF=$_id");
     double newQty1 = response[0]["current_quantity_1"] +
         double.parse(qty1 == "" ? "0" : qty1);
     double newQty2 = response[0]["current_quantity_2"] +
@@ -235,7 +266,7 @@ class ProductFunctions {
     PosData data = PosData();
     int _id = int.parse(id);
     List<Map> response = await getProductList(
-        searchText: "", searchType: "", secondCondition: " id=$_id");
+        searchText: "", searchType: "", secondCondition: " $idF=$_id");
     double newQty1 = response[0]["current_quantity_1"] -
         double.parse(qty1 == "" ? "0" : qty1);
     double newQty2 = response[0]["current_quantity_2"] -
@@ -268,7 +299,7 @@ class ProductFunctions {
     List<Map> response = await ProductFunctions.getProductList(
         searchText: name,
         searchType: searchType,
-        secondCondition: " (id>$id OR id<$id )");
+        secondCondition: " ($idF>$id OR $idF<$id )");
     return response.isEmpty;
   }
 

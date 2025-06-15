@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../database/functions/Sections_functions.dart';
 import 'group.dart';
 
 class Department implements Equatable{
@@ -18,10 +19,10 @@ class Department implements Equatable{
 
   void checkIfSelected() {
     bool check = true;
-    groups.forEach((e) {
+    for (var e in groups) {
       check = check && e.isSelected;
       if(!check)return;
-    });
+    }
     if(check){isSelected=true;}
     else {
       isSelected=false;
@@ -35,4 +36,21 @@ class Department implements Equatable{
   @override
   // TODO: implement stringify
   bool? get stringify => true;
+
+  static String getSelectId(List<Department> departments) {
+    String value="";
+    for (var department in departments) {
+      if(department.isSelected) {
+        value+=", ${department.id}";
+      }
+    }
+    if(value.isEmpty)return value;
+    return value.substring(1);
+  }
+
+  static Department emptyInstance() {
+    return Department( id: 0,
+        name: SectionsFunctions.defaultDepartmentName,
+        isSelected: false);
+  }
 }

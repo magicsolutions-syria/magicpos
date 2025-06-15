@@ -18,21 +18,18 @@ class PersonCard extends StatelessWidget {
   static const String clientRoute = "${HomeScreen.route}/client_card";
   static const String supplierRoute = "${HomeScreen.route}/supplier_card";
 
-  const PersonCard(
-      {super.key,
-      required this.tableName,
-      required this.color,
-      required this.title,
-      required this.icon,
-      required this.fractionDigits});
+  const PersonCard({
+    super.key,
+    required this.tableName,
+    required this.color,
+    required this.title,
+    required this.icon,
+  });
 
   final String tableName;
   final Color color;
   final String title;
   final IconData icon;
-  final int fractionDigits;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +69,7 @@ class PersonCard extends StatelessWidget {
             if (state is InitialPersonState || state is LoadingPersonState) {
               return const WaitingWidget();
             } else {
-              Person person=context.read<PersonCubit>().person;
+              Person person = context.read<PersonCubit>().person;
 
               return SingleChildScrollView(
                 child: Column(
@@ -202,7 +199,8 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.text,
                                 onlyNumber: const [],
-                                controller: TextEditingController(text:person.arName ),
+                                controller:
+                                    TextEditingController(text: person.arName),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.arName =
                                       text;
@@ -214,7 +212,8 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.text,
                                 onlyNumber: const [],
-                                controller: TextEditingController(text: person.enName),
+                                controller:
+                                    TextEditingController(text: person.enName),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.enName =
                                       text;
@@ -226,7 +225,8 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.phone,
                                 onlyNumber: AppFormatters.numbersIntFormat(),
-                                controller: TextEditingController(text: person.tel),
+                                controller:
+                                    TextEditingController(text: person.tel),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.tel = text;
                                 },
@@ -237,7 +237,8 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.emailAddress,
                                 onlyNumber: const [],
-                                controller: TextEditingController(text: person.tel),
+                                controller:
+                                    TextEditingController(text: person.tel),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.email =
                                       text;
@@ -249,7 +250,8 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.phone,
                                 onlyNumber: AppFormatters.numbersIntFormat(),
-                                controller: TextEditingController(text: person.whatsNum),
+                                controller: TextEditingController(
+                                    text: person.whatsNum),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.whatsNum =
                                       text;
@@ -261,7 +263,8 @@ class PersonCard extends StatelessWidget {
                                 height: 45,
                                 inputType: TextInputType.number,
                                 onlyNumber: AppFormatters.numbersIntFormat(),
-                                controller: TextEditingController(text: person.barcode),
+                                controller:
+                                    TextEditingController(text: person.barcode),
                                 onChangeFunc: (text) {
                                   context.read<PersonCubit>().person.barcode =
                                       text;
@@ -284,7 +287,9 @@ class PersonCard extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 100),
                             child: OperatorButton(
                                 width: 180,
-                                onPressed: () {},
+                                onPressed: () async {
+
+                                },
                                 text: ButtonsNames.whatsAppButton,
                                 color: Theme.of(context).whatsAppButtonColor,
                                 enable: context

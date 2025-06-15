@@ -1,17 +1,33 @@
-import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:magicposbeta/database/functions/groups_functions.dart';
 import 'package:magicposbeta/database/initialize_database.dart';
 
 import '../../components/reverse_string.dart';
 
 class SectionsFunctions {
-  static Future<int> addProductToDepartment(String name) async {
-    PosData data = PosData();
-    List<Map> response = await getDepartmentList(name);
-    int id = response[0]["id_department"];
+  static const String tableName = "departments";
 
-    await data.changeData(
-        "UPDATE departments set products_QTY=${response[0]["products_QTY"] + 1} WHERE id_department=$id");
+  //fields
+  static const String idF = "id_department";
+  static const String nameF = "section_name";
+  static const String printerIdF = "printer_id";
+  static const String cash1F = "cash_total_sells_price_two";
+  static const String cash2F = "cash_total_sells_price_one";
+  static const String sells2F = "total_sells_price_two";
+  static const String sells1F = "total_sells_price_one";
+  static const String qty2F = "sold_quantity_two";
+  static const String qty1F = "sold_quantity_one";
+  static const String productQtyF = "products_QTY";
+  static const String selectedF = "selected_department";
+  static const String printNameF = "Print_Name_department";
+  static const String defaultDepartmentName = "متفرقات";
+  static final PosData _data = PosData();
+
+  static Future<int> addProductToDepartment(String name) async {
+    List<Map> response = await getDepartmentList(name);
+    int id = response[0][idF];
+
+    await _data.changeData(
+        "UPDATE $tableName set $productQtyF=${response[0][productQtyF] + 1} WHERE $idF=$id");
     return id;
   }
 
@@ -19,14 +35,13 @@ class SectionsFunctions {
       {String printerCondition = "",
       bool sameDepartment = false,
       String groupFilterValue = ""}) async {
-    PosData data = PosData();
     String condition = "WHERE ";
     String joinText = "";
     if (name != "") {
       if (sameDepartment) {
-        condition += "section_name='$name'";
+        condition += "$nameF='$name'";
       } else {
-        condition += "section_name LIKE '%$name%'";
+        condition += "$nameF LIKE '%$name%'";
       }
     }
     if (printerCondition != "") {
@@ -36,26 +51,24 @@ class SectionsFunctions {
     if (groupFilterValue != "") {
       if (name != "" || printerCondition != "") condition += " AND ";
       condition += "group_name LIKE '%$groupFilterValue%'";
-      joinText =
-          "JOIN `groups` ON(departments.id_department=`groups`.section_number)";
+      joinText = "JOIN `groups` ON($tableName.$idF=`groups`.section_number)";
     }
-    if(condition=="WHERE ")condition="";
+    if (condition == "WHERE ") condition = "";
 
-    return await data.readData(
-        "SELECT departments.* FROM departments $joinText $condition ORDER BY section_name ");
+    return await _data.readData(
+        "SELECT $tableName.* FROM $tableName $joinText $condition ORDER BY $nameF ");
   }
 
   static Future<int> addSection(
     String name,
   ) async {
-    PosData data = PosData();
     if (name != "") {
-      List<Map> response0 = await data
-          .readData("SELECT * FROM departments WHERE section_name='$name'");
+      List<Map> response0 =
+          await _data.readData("SELECT * FROM $tableName WHERE $nameF='$name'");
       if (response0.isEmpty) {
         String printName = reversArString(name);
-        return await data.insertData(
-            "INSERT INTO departments (section_name,Print_Name_department)VALUES('$name','$printName')");
+        return await _data.insertData(
+            "INSERT INTO $tableName ($nameF,$printNameF)VALUES('$name','$printName')");
       } else {
         throw Exception("هذا القسم موجود\nمسبقاً");
       }
@@ -67,29 +80,27 @@ class SectionsFunctions {
   static Future<bool> deleteSection(
     String name,
   ) async {
-    PosData data = PosData();
     if (name == "") {
       throw Exception("يجب تحديد قسم أولاً");
-    } else if (name == "متفرقات") {
+    } else if (name == defaultDepartmentName) {
       throw Exception("لا يمكنك حذف\nهذا القسم");
     } else {
       List<Map> response = await getDepartmentList(name);
       List<Map> response0 = await GroupsFunctions.getGroupsList(
           groupName: "", departmentId: response[0]["id_department"]);
-      List<Map> response1 = await data.readData(
-          "SELECT * FROM dept WHERE department=${response[0]['id_department']}");
+      List<Map> response1 = await _data
+          .readData("SELECT * FROM dept WHERE department=${response[0][idF]}");
       if (response1.isNotEmpty) {
         throw Exception("لا يمكنك حذف هذا القسم فهو\nيحتوي depts مرتبطة به");
       }
       if (response0.isNotEmpty) {
         throw Exception("لا يمكنك حذف هذا القسم فهو\nيحتوي مجموعات مرتبطة به");
-      } else if (response[0]["sold_quantity_one"] > 0 ||
-          response[0]["sold_quantity_two"] > 0) {
+      } else if (response[0][qty1F] > 0 || response[0][qty2F] > 0) {
         throw Exception(
             "لا يمكنك حذف هذا القسم عليك تصفير\nالتقارير المرتبطة به أولاً");
       } else {
-        data.deleteData(
-            "DELETE FROM departments WHERE id_department=${response[0]['id_department']}");
+        _data.deleteData(
+            "DELETE FROM $tableName WHERE $idF=${response[0][idF]}");
         return true;
       }
     }
@@ -110,21 +121,20 @@ class SectionsFunctions {
       required double qty2,
       required double sells2,
       required double productQTY}) async {
-    PosData data = PosData();
     int id = 0;
     List<Map> response = await getDepartmentList(name, sameDepartment: true);
     if (response.isEmpty) {
       id = await addSection(name);
     } else {
-      id = response[0]['id_department'];
+      id = response[0][idF];
     }
-    double newQty1 = response[0]["sold_quantity_one"] + qty1;
-    double newQty2 = response[0]["sold_quantity_two"] + qty2;
-    double newSells1 = response[0]["total_sells_price_one"] + sells1;
-    double newSells2 = response[0]["total_sells_price_two"] + sells2;
-    double newProductQty = response[0]["products_QTY"] + productQTY;
-    return await data.changeData(
-        "UPDATE departments SET products_QTY=$newProductQty,sold_quantity_one=$newQty1, sold_quantity_two=$newQty2,total_sells_price_one=$newSells1,total_sells_price_two=$newSells2 WHERE id_department=$id");
+    double newQty1 = response[0][qty1F] + qty1;
+    double newQty2 = response[0][qty2F] + qty2;
+    double newSells1 = response[0][sells1F] + sells1;
+    double newSells2 = response[0][sells2F] + sells2;
+    double newProductQty = response[0][productQtyF] + productQTY;
+    return await _data.changeData(
+        "UPDATE $tableName SET $productQtyF=$newProductQty,$qty1F=$newQty1, $qty2F=$newQty2,$sells1F=$newSells1,$sells2F=$newSells2 WHERE $idF=$id");
   }
 
   static Future<void> decreaseQtyAndSells(
@@ -134,19 +144,18 @@ class SectionsFunctions {
       required double qty2,
       required double sells2,
       required double productQTY}) async {
-    PosData data = PosData();
     int id = 0;
     List<Map> response = await getDepartmentList(name, sameDepartment: true);
 
-    id = response[0]['id_department'];
+    id = response[0][idF];
 
-    double newQty1 = response[0]["sold_quantity_one"] - qty1;
-    double newQty2 = response[0]["sold_quantity_two"] - qty2;
-    double newSells1 = response[0]["total_sells_price_one"] - sells1;
-    double newSells2 = response[0]["total_sells_price_two"] - sells2;
-    double newProductQty = response[0]["products_QTY"] - productQTY;
-    await data.changeData(
-        "UPDATE departments SET products_QTY=$newProductQty,sold_quantity_one=$newQty1, sold_quantity_two=$newQty2,total_sells_price_one=$newSells1,total_sells_price_two=$newSells2 WHERE id_department=$id");
+    double newQty1 = response[0][qty1F] - qty1;
+    double newQty2 = response[0][qty2F] - qty2;
+    double newSells1 = response[0][sells1F] - sells1;
+    double newSells2 = response[0][sells2F] - sells2;
+    double newProductQty = response[0][productQtyF] - productQTY;
+    await _data.changeData(
+        "UPDATE $tableName SET $productQtyF=$newProductQty,$qty1F=$newQty1, $qty2F=$newQty2,$sells1F=$newSells1,$sells2F=$newSells2 WHERE $idF=$id");
   }
 
   static Future<int> transferQtySells(
@@ -184,16 +193,15 @@ class SectionsFunctions {
     if (newName == "") {
       throw Exception("لم يتم تحديد اسم جديد للقسم");
     }
-    if (oldName == "متفرقات") {
+    if (oldName == defaultDepartmentName) {
       throw Exception("لا يمكنك تعديل هذا القسم");
     }
     if (newName != oldName) {
-      PosData data = PosData();
-      List<Map> response0 = await data
-          .readData("SELECT * FROM departments WHERE section_name='$newName' ");
+      List<Map> response0 = await _data
+          .readData("SELECT * FROM $tableName WHERE $nameF='$newName' ");
       if (response0.isEmpty) {
-        await data.changeData(
-            "UPDATE `departments` SET section_name='$newName',Print_Name_department='${reversArString(newName)}' WHERE section_name='$oldName'");
+        await _data.changeData(
+            "UPDATE `$tableName` SET $nameF='$newName',$printNameF='${reversArString(newName)}' WHERE $nameF='$oldName'");
       } else {
         throw Exception("هذا القسم موجود\nمسبقاً");
       }
@@ -201,12 +209,22 @@ class SectionsFunctions {
   }
 
   static checkSelectedUnselected(String sectionName, int id) async {
-    PosData data = PosData();
-    String condition =
-        sectionName == "" ? "id_department=$id" : "section_name='$sectionName'";
+    String condition = sectionName == "" ? "$idF=$id" : "$nameF='$sectionName'";
     List<Map> checkSelect = await GroupsFunctions.getSelectedUnSelectedGroups(
         false, sectionName, id);
-    await data.changeData(
-        "UPDATE departments SET selected_department=${checkSelect.isEmpty} WHERE $condition");
+    await _data.changeData(
+        "UPDATE $tableName SET $selectedF=${checkSelect.isEmpty} WHERE $condition");
+  }
+
+  static Future<void> changeSelectValues(
+      {required String fieldName,
+      required int newValue,
+      required String condition}) async {
+    String currentCondition = "";
+    if (condition != "") {
+      currentCondition = "WHERE $condition";
+    }
+    await _data.changeData(
+        "UPDATE $tableName SET $fieldName=$newValue $currentCondition");
   }
 }

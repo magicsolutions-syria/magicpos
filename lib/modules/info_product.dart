@@ -1,4 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:magicposbeta/database/functions/Sections_functions.dart';
+import 'package:magicposbeta/database/functions/groups_functions.dart';
+import 'package:magicposbeta/database/functions/product_functions.dart';
+import 'package:magicposbeta/modules/department.dart';
+import 'package:magicposbeta/modules/group.dart';
 import 'package:magicposbeta/screens_data/constants.dart' show productTypes;
 import 'package:magicposbeta/theme/custom_exception.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
@@ -12,6 +17,8 @@ class InfoProduct implements Equatable {
   String arName = "";
   String enName = "";
   String _departmentName = "";
+  Department department;
+  Group group;
   String _groupName = "";
   int _productType = 0;
   double minQty = 0;
@@ -33,6 +40,8 @@ class InfoProduct implements Equatable {
     required double maxQty,
     required this.description,
     required this.imagePath,
+    required this.department,
+    required this.group,
     required this.unit1,
     required this.unit2,
     required this.unit3,
@@ -150,44 +159,29 @@ class InfoProduct implements Equatable {
         maxQty: 0,
         description: "",
         imagePath: "",
-        unit1: ProductUnit(
-            suffix: "_1",
-            name: "",
-            barcode: "",
-            costPrice: 0,
-            groupPrice: 0,
-            piecePrice: 0,
-            currentQTY: 0),
-        unit2: ProductUnitExpanded(
-            suffix: "_2",
-            name: "",
-            barcode: "",
-            costPrice: 0,
-            groupPrice: 0,
-            piecePrice: 0,
-            currentQTY: 0,
-            piecesQTY: 0),
-        unit3: ProductUnitExpanded(
-            suffix: "_3",
-            name: "",
-            barcode: "",
-            costPrice: 0,
-            groupPrice: 0,
-            piecePrice: 0,
-            currentQTY: 0,
-            piecesQTY: 0));
+        unit1: ProductUnit.emptyInstance("_1"),
+        unit2: ProductUnitExpanded.emptyInstance("_2"),
+        unit3: ProductUnitExpanded.emptyInstance("_3"),
+        department: Department.emptyInstance(),
+        group: Group.emptyInstance());
   }
 
   static InfoProduct instanceFromMap(Map item) {
     ProductUnit unit1 = ProductUnit(
+        id: item["id_1"],
         suffix: "_1",
         name: item["name_1"],
         barcode: item["code_1"],
         costPrice: item["cost_price_1"],
         groupPrice: item["group_price_1"],
         piecePrice: item["piece_price_1"],
-        currentQTY: item["current_quantity_1"]);
+        currentQTY: item["current_quantity_1"],
+        soldPrice1: item['total_sells_price_one_1'],
+        soldPrice2: item['total_sells_price_two_1'],
+        soldQty1: item['sold_quantity_one_1'],
+        soldQty2: item['sold_quantity_two_1']);
     ProductUnitExpanded unit2 = ProductUnitExpanded(
+        id: item["id_2"],
         suffix: "_2",
         name: item["name_2"],
         barcode: item["code_2"],
@@ -195,8 +189,13 @@ class InfoProduct implements Equatable {
         groupPrice: item["group_price_2"],
         piecePrice: item["piece_price_2"],
         currentQTY: item["current_quantity_2"],
-        piecesQTY: item["pieces_quantity_2"]);
+        piecesQTY: item["pieces_quantity_2"],
+        soldPrice1: item['total_sells_price_one_2'],
+        soldPrice2: item['total_sells_price_two_2'],
+        soldQty1: item['sold_quantity_one_2'],
+        soldQty2: item['sold_quantity_two_2']);
     ProductUnitExpanded unit3 = ProductUnitExpanded(
+        id: item["id_3"],
         suffix: "_3",
         name: item["name_3"],
         barcode: item["code_3"],
@@ -204,22 +203,35 @@ class InfoProduct implements Equatable {
         groupPrice: item["group_price_3"],
         piecePrice: item["piece_price_3"],
         currentQTY: item["current_quantity_3"],
-        piecesQTY: item["pieces_quantity_3"]);
+        piecesQTY: item["pieces_quantity_3"],
+        soldPrice1: item['total_sells_price_one_3'],
+        soldPrice2: item['total_sells_price_two_3'],
+        soldQty1: item['sold_quantity_one_3'],
+        soldQty2: item['sold_quantity_two_3']);
     return InfoProduct(
-        id: item["id"],
-        arName: item["ar_name"],
-        enName: item["en_name"],
-        departmentName: item["section_name"],
-        groupName: item["group_name"],
-        productType:
-            DiversePhrases.productTypes().elementAt(item["product_type"]),
-        minQty: item["min_amount"].toDouble(),
-        maxQty: item["max_amount"].toDouble(),
-        description: item["description"],
-        imagePath: item["image_dir"],
-        unit1: unit1,
-        unit2: unit2,
-        unit3: unit3);
+      id: item[ProductFunctions.idF],
+      arName: item[ProductFunctions.arNameF],
+      enName: item[ProductFunctions.enNameF],
+      departmentName: item[SectionsFunctions.nameF],
+      groupName: item[GroupsFunctions.nameF],
+      productType: DiversePhrases.productTypes()
+          .elementAt(item[ProductFunctions.productTypeF]),
+      minQty: item[ProductFunctions.minAmountF].toDouble(),
+      maxQty: item[ProductFunctions.maxAmountF].toDouble(),
+      description: item[ProductFunctions.descriptionF],
+      imagePath: item[ProductFunctions.imagePathF],
+      unit1: unit1,
+      unit2: unit2,
+      unit3: unit3,
+      department: Department(
+          id: item[SectionsFunctions.idF],
+          name: item[SectionsFunctions.nameF],
+          isSelected: item[SectionsFunctions.selectedF]==1),
+      group: Group(
+          id: item[GroupsFunctions.idF],
+          name: item[GroupsFunctions.nameF],
+          isSelected: item[GroupsFunctions.selectedF]==1),
+    );
   }
 
   @override
@@ -248,4 +260,19 @@ class InfoProduct implements Equatable {
   // TODO: implement stringify
   bool? get stringify => true;
 
+  double totalSoldQty1() {
+    return unit1.soldQty1 + unit2.soldQty1 + unit3.soldQty1;
+  }
+
+  double totalSoldQty2() {
+    return unit1.soldQty2 + unit2.soldQty2 + unit3.soldQty2;
+  }
+
+  double totalSoldPrice1() {
+    return unit1.soldPrice1 + unit2.soldPrice1 + unit3.soldPrice1;
+  }
+
+  double totalSoldPrice2() {
+    return unit1.soldPrice2 + unit2.soldPrice2 + unit3.soldPrice2;
+  }
 }

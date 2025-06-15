@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-class ProductUnitExpanded implements Equatable{
+class ProductUnitExpanded implements Equatable {
+  final int id;
+
   double piecesQTY = 0;
   String name = "";
   final String suffix;
@@ -9,16 +11,28 @@ class ProductUnitExpanded implements Equatable{
   double groupPrice = 0;
   double piecePrice = 0;
   double currentQTY = 0;
-  ProductUnitExpanded({
-    required this.suffix,
-    required String name,
-    required String barcode,
-    required double costPrice,
-    required double groupPrice,
-    required double piecePrice,
-    required double currentQTY,
-    required double piecesQTY,
-  }) {
+  final double soldQty1;
+
+  final double soldQty2;
+
+  final double soldPrice1;
+
+  final double soldPrice2;
+
+  ProductUnitExpanded(
+      {required this.suffix,
+      required String name,
+      required String barcode,
+      required double costPrice,
+      required double groupPrice,
+      required double piecePrice,
+      required double currentQTY,
+      required double piecesQTY,
+      this.id = -1,
+      this.soldPrice1 = 0,
+      this.soldPrice2 = 0,
+      this.soldQty1 = 0,
+      this.soldQty2 = 0}) {
     if (barcode != "" && piecesQTY != 0) {
       this.piecesQTY = piecesQTY;
       this.currentQTY = currentQTY;
@@ -56,6 +70,7 @@ class ProductUnitExpanded implements Equatable{
       barcode = "";
     }
   }
+
   void updateCostPrice(String value) {
     if (value == "") {
       costPrice = 0;
@@ -63,6 +78,7 @@ class ProductUnitExpanded implements Equatable{
       costPrice = double.parse(value);
     }
   }
+
   void updateGroupPrice(String value) {
     if (value == "") {
       groupPrice = 0;
@@ -70,6 +86,7 @@ class ProductUnitExpanded implements Equatable{
       groupPrice = double.parse(value);
     }
   }
+
   void updatePiecePrice(String value) {
     if (value == "") {
       piecePrice = 0;
@@ -77,6 +94,7 @@ class ProductUnitExpanded implements Equatable{
       piecePrice = double.parse(value);
     }
   }
+
   void updatePiecesQTY(String value) {
     if (value == "") {
       piecesQTY = 0;
@@ -86,13 +104,13 @@ class ProductUnitExpanded implements Equatable{
   }
 
   String getViewName(String s) {
-    if(name==""||name=="بدون اسم"){
+    if (name == "" || name == "بدون اسم") {
       return s;
-    }
-    else {
+    } else {
       return name;
     }
   }
+
   String costPriceText() {
     return costPrice.toString();
   }
@@ -108,12 +126,29 @@ class ProductUnitExpanded implements Equatable{
   String piecesQTYText() {
     return piecesQTY.toString();
   }
+
   @override
   // TODO: implement props
-  List<Object?> get props => [name,barcode,costPrice,piecePrice,groupPrice,currentQTY,piecesQTY];
+  List<Object?> get props =>
+      [name, barcode, costPrice, piecePrice, groupPrice, currentQTY, piecesQTY];
 
   @override
   // TODO: implement stringify
   bool? get stringify => true;
 
+  bool get isNotEmpty => barcode!="";
+
+  bool get isEmpty => barcode!="";
+
+  static emptyInstance(String s) {
+    return ProductUnitExpanded(
+        suffix: s,
+        name: "",
+        barcode: "",
+        costPrice: 0,
+        groupPrice: 0,
+        piecePrice: 0,
+        currentQTY: 0,
+        piecesQTY: 0);
+  }
 }

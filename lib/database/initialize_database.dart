@@ -1,4 +1,7 @@
 import "package:flutter/foundation.dart";
+import "package:magicposbeta/database/functions/Sections_functions.dart";
+import "package:magicposbeta/database/functions/groups_functions.dart";
+import "package:magicposbeta/database/functions/product_functions.dart";
 import "package:sqflite/sqflite.dart";
 import "package:path/path.dart";
 
@@ -198,21 +201,20 @@ class PosData {
 
     // departments table
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS "departments"(
-      'id_department' INTEGER  PRIMARY KEY,
-      'section_name' TEXT NOT NULL,
-      'Print_Name_department' TEXT(20) DEFAULT "",
-      'selected_department' INTEGER DEFAULT 0,
-      'products_QTY'REAL DEFAULT 0,
-      "sold_quantity_one" REAL DEFAULT 0,
-      "sold_quantity_two" REAL DEFAULT 0,
-      "total_sells_price_one" REAL DEFAULT 0.0,
-      "total_sells_price_two" REAL DEFAULT 0.0,
-      "cash_total_sells_price_one" REAL DEFAULT 0.0,
-      "cash_total_sells_price_two" REAL DEFAULT 0.0,
-      'printer_id' INTEGER DEFAULT -1,
-      FOREIGN KEY ('id_department') REFERENCES groups (section_number),
-      FOREIGN KEY ('printer_id') REFERENCES printers (id)
+    CREATE TABLE IF NOT EXISTS "${SectionsFunctions.tableName}"(
+      '${SectionsFunctions.idF}' INTEGER  PRIMARY KEY,
+      '${SectionsFunctions.nameF}' TEXT NOT NULL,
+      '${SectionsFunctions.printNameF}' TEXT(20) DEFAULT "",
+      '${SectionsFunctions.selectedF}' INTEGER DEFAULT 0,
+      '${SectionsFunctions.productQtyF}'REAL DEFAULT 0,
+      "${SectionsFunctions.qty1F}" REAL DEFAULT 0,
+      "${SectionsFunctions.qty2F}" REAL DEFAULT 0,
+      "${SectionsFunctions.sells1F}" REAL DEFAULT 0.0,
+      "${SectionsFunctions.sells2F}" REAL DEFAULT 0.0,
+      "${SectionsFunctions.cash1F}" REAL DEFAULT 0.0,
+      "${SectionsFunctions.cash2F}" REAL DEFAULT 0.0,
+      '${SectionsFunctions.printerIdF}' INTEGER DEFAULT -1,
+      FOREIGN KEY ('${SectionsFunctions.printerIdF}') REFERENCES printers (id)
     )
     ''');
     await db.execute('''
@@ -237,19 +239,21 @@ class PosData {
 
 //groups table
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS "groups"(
-      'id_group' INTEGER  PRIMARY KEY,
-      'group_name' TEXT NOT NULL,
-      'Print_Name_group' TEXT(20) DEFAULT "",
-      'section_number' INTEGER NOT NULL,
-       'products_QTY' REAL DEFAULT 0,
-       'selected_group' INTEGER DEFAULT 0,
-       "sold_quantity_one" REAL DEFAULT 0,
-        "sold_quantity_two" REAL DEFAULT 0,
-        "total_sells_price_one" REAL DEFAULT 0.0,
-        "total_sells_price_two" REAL DEFAULT 0.0,
-        'printer_id' INTEGER DEFAULT -1,
-        FOREIGN KEY ('printer_id') REFERENCES printers (id)
+    CREATE TABLE IF NOT EXISTS "${GroupsFunctions.tableName}"(
+      '${GroupsFunctions.idF}' INTEGER  PRIMARY KEY,
+      '${GroupsFunctions.nameF}' TEXT NOT NULL,
+      '${GroupsFunctions.printNameF}' TEXT(20) DEFAULT "",
+      '${GroupsFunctions.department}' INTEGER NOT NULL,
+       '${GroupsFunctions.productQtyF}' REAL DEFAULT 0,
+       '${GroupsFunctions.selectedF}' INTEGER DEFAULT 0,
+       "${GroupsFunctions.qty1F}" REAL DEFAULT 0,
+        "${GroupsFunctions.qty2F}" REAL DEFAULT 0,
+        "${GroupsFunctions.sells1F}" REAL DEFAULT 0.0,
+        "${GroupsFunctions.sells2F}" REAL DEFAULT 0.0,
+        '${GroupsFunctions.printerIdF}' INTEGER DEFAULT -1,
+        FOREIGN KEY ('${GroupsFunctions.printerIdF}') REFERENCES printers (id),
+        FOREIGN KEY ('${GroupsFunctions.department}') REFERENCES departments (${SectionsFunctions.idF})
+
         
     )
     ''');
@@ -320,26 +324,26 @@ class PosData {
 
 //products table
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS "products"(
-      'id' INTEGER  PRIMARY KEY,
-      'Print_Name' TEXT(20) NOT NULL,
-      'image_dir' TEXT DEFAULT "",
-      'description' TEXT DEFAULT "",
-      'ar_name' TEXT NOT NULL,
-      'en_name' TEXT NOT NULL,
-      'department' INTEGER NOT NULL,
-      'group' INTEGER NOT NULL,
-      "min_amount" INTEGER DEFAULT 0,
-      "max_amount" INTEGER DEFAULT 0,
-      "product_type"INTEGER(1) DEFAULT 0,
-         "unit_one_id" INTEGER NOT NULL,
-         "unit_two_id" INTEGER DEFAULT 0,
-         "unit_three_id" INTEGER DEFAULT 0,
-      FOREIGN KEY ('department') REFERENCES departments (id_department),
-      FOREIGN KEY ('group') REFERENCES groups (id_group),
-      FOREIGN KEY ('unit_one_id') REFERENCES unit_one (id_1),
-      FOREIGN KEY ('unit_two_id') REFERENCES unit_two (id_2),
-      FOREIGN KEY ('unit_three_id') REFERENCES unit_three (id_3)
+    CREATE TABLE IF NOT EXISTS "${ProductFunctions.tableName}"(
+      '${ProductFunctions.idF}' INTEGER  PRIMARY KEY,
+      '${ProductFunctions.printNameF}' TEXT(20) NOT NULL,
+      '${ProductFunctions.imagePathF}' TEXT DEFAULT "",
+      '${ProductFunctions.descriptionF}' TEXT DEFAULT "",
+      '${ProductFunctions.arNameF}' TEXT NOT NULL,
+      '${ProductFunctions.enNameF}' TEXT NOT NULL,
+      '${ProductFunctions.departmentF}' INTEGER NOT NULL,
+      '${ProductFunctions.groupF}' INTEGER NOT NULL,
+      "${ProductFunctions.minAmountF}" INTEGER DEFAULT 0,
+      "${ProductFunctions.maxAmountF}" INTEGER DEFAULT 0,
+      "${ProductFunctions.productTypeF}"INTEGER(1) DEFAULT 0,
+         "${ProductFunctions.unit1F}" INTEGER NOT NULL,
+         "${ProductFunctions.unit2F}" INTEGER DEFAULT 0,
+         "${ProductFunctions.unit3F}" INTEGER DEFAULT 0,
+      FOREIGN KEY ('${ProductFunctions.departmentF}') REFERENCES departments (${SectionsFunctions.idF}),
+      FOREIGN KEY ('${ProductFunctions.groupF}') REFERENCES groups (${GroupsFunctions.idF}),
+      FOREIGN KEY ('${ProductFunctions.unit1F}') REFERENCES unit_one (id_1),
+      FOREIGN KEY ('${ProductFunctions.unit2F}') REFERENCES unit_two (id_2),
+      FOREIGN KEY ('${ProductFunctions.unit3F}') REFERENCES unit_three (id_3)
     )
       ''');
   }

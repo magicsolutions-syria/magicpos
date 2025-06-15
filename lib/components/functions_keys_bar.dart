@@ -189,13 +189,13 @@ class _FunctionsKeysBarState extends State<FunctionsKeysBar> {
               switch (controller.text) {
                 case "الوحدة الأولى":
                 case "":
-                  secondCondition = "unit_one_id>0";
+                  secondCondition = "${ProductFunctions.unit1F}>0";
                   break;
                 case "الوحدة الثانية":
-                  secondCondition = "unit_two_id>0";
+                  secondCondition = "${ProductFunctions.unit2F}>0";
                   break;
                 case "الوحدة الثالثة":
-                  secondCondition = "unit_three_id>0";
+                  secondCondition = "${ProductFunctions.unit3F}>0";
                   break;
               }
               List<Map> res = await ProductFunctions.getProductList(
@@ -208,7 +208,7 @@ class _FunctionsKeysBarState extends State<FunctionsKeysBar> {
             dataNames: const [
               "current_quantity_1",
               "piece_price_1",
-              "ar_name",
+              ProductFunctions.arNameF,
             ],
             columnsRatios: const [0.33333, 0.33333, 0.3333],
             addPage: ProductCard.route,
@@ -223,7 +223,7 @@ class _FunctionsKeysBarState extends State<FunctionsKeysBar> {
               return [
                 "current_quantity_${controller.text == "الوحدة الأولى" || controller.text == "" ? 1 : (controller.text == "الوحدة الثانية") ? 2 : 3}",
                 "piece_price_${controller.text == "الوحدة الأولى" || controller.text == "" ? 1 : (controller.text == "الوحدة الثانية") ? 2 : 3}",
-                "ar_name",
+                ProductFunctions.arNameF,
               ];
             },
           ),
@@ -259,13 +259,13 @@ class _FunctionsKeysBarState extends State<FunctionsKeysBar> {
               switch (controller.text) {
                 case "الوحدة الأولى":
                 case "":
-                  secondCondition = "unit_one_id>0";
+                  secondCondition = "${ProductFunctions.unit1F}>0";
                   break;
                 case "الوحدة الثانية":
-                  secondCondition = "unit_two_id>0";
+                  secondCondition = "${ProductFunctions.unit2F}>0";
                   break;
                 case "الوحدة الثالثة":
-                  secondCondition = "unit_three_id>0";
+                  secondCondition = "${ProductFunctions.unit3F}>0";
                   break;
               }
               List<Map> res = await ProductFunctions.getProductList(
@@ -302,16 +302,16 @@ class _FunctionsKeysBarState extends State<FunctionsKeysBar> {
             },
             dataNames: const [
               "code_1",
-              "en_name",
-              "ar_name",
-              "id",
+              (ProductFunctions.enNameF),
+              (ProductFunctions.arNameF),
+              (ProductFunctions.idF),
             ],
             columnsRatios: const [0.25, 0.3, 0.3, 0.15],
             addPage: ProductCard.route,
             exitFunction: () {
               productsTableProvider.closeRcPdCh();
             },
-            commas: [-1, -1, -1, -1],
+            commas: const [-1, -1, -1, -1],
           ),
         );
         break;
