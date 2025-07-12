@@ -15,9 +15,6 @@ import '../lists/person_info_list.dart';
 import '../templates/screens_template.dart';
 
 class PersonCard extends StatelessWidget {
-  static const String clientRoute = "${HomeScreen.route}/client_card";
-  static const String supplierRoute = "${HomeScreen.route}/supplier_card";
-
   const PersonCard({
     super.key,
     required this.tableName,

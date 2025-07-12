@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:magicposbeta/database/functions/person_functions.dart";
 
 import "package:magicposbeta/providers/products_table_provider.dart";
+import "package:magicposbeta/screens/screens.dart";
 import "package:magicposbeta/theme/locale/locale.dart";
 
 import "../database/database_functions.dart";
@@ -91,7 +92,7 @@ class _CHViewState extends State<CHView> {
         "Name_Arabic",
         "id",
       ],
-      addPage: PersonCard.clientRoute,
+      addPage: ClientsCard.route,
       columnsRatios: const [
         .25,
         .25,

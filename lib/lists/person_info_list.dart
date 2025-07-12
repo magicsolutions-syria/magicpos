@@ -3,6 +3,7 @@ import '../../database/functions/person_functions.dart';
 import '../../screens/person_card.dart';
 import '../../theme/locale/locale.dart';
 import '../components/general_list.dart';
+import '../screens/clients_card.dart';
 
 class PersonInfoList extends StatelessWidget {
   const PersonInfoList({
@@ -40,7 +41,7 @@ class PersonInfoList extends StatelessWidget {
       ],
       columnsRatios: const [0.25, 0.25, 0.25, 0.25],
       enableAddButton: false,
-      addPage: PersonCard.clientRoute,
+      addPage: ClientsCard.route,
     );
   }
 }

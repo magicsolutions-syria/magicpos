@@ -6,6 +6,7 @@ import "package:magicposbeta/providers/products_table_provider.dart";
 import "package:magicposbeta/theme/locale/locale.dart";
 
 import "../database/functions/person_functions.dart";
+import "../screens/clients_card.dart";
 import "../screens/person_card.dart";
 
 class RCView extends StatefulWidget {
@@ -73,7 +74,7 @@ class _RCViewState extends State<RCView> {
         "Name_Arabic",
         "id",
       ],
-      addPage: PersonCard.clientRoute,
+      addPage:ClientsCard.route,
       columnsRatios: const [
         .35,
         .25,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:magicposbeta/bloc/shared_bloc/shared_cubit.dart';
+import 'package:magicposbeta/screens/suppliers_card.dart';
 import '../../database/functions/person_functions.dart';
 import '../../screens/person_card.dart';
 import '../../theme/locale/search_types.dart';
@@ -51,7 +52,7 @@ class ClientSupplierList extends StatelessWidget {
         "Name_Arabic",
         "id",
       ],
-      addPage: PersonCard.supplierRoute,
+      addPage: SuppliersCard.route,
       columnsRatios: const [
         .35,
         .25,

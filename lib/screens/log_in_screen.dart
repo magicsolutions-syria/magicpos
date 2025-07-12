@@ -6,21 +6,13 @@ import "package:magicposbeta/theme/locale/locale.dart";
 class LogInScreen extends StatelessWidget {
   static const String route = "/log_in_screen";
 
-  LogInScreen({super.key});
-
-  final TextEditingController userName = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  const LogInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return StartAppTemplate(
-        userName: userName,
-        password: password,
         onPressed: () async {
-          await context.read<SharedCubit>().logInUser(
-                password: password.text,
-                userName: userName.text,
-              );
+          await context.read<SharedCubit>().logInUser();
         },
         title: DiversePhrases.logIn,
         buttonName: DiversePhrases.logIn);

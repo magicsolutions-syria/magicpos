@@ -35,11 +35,11 @@ class StartAppScreen extends StatelessWidget {
             }
           case StartAppLogInState _:
             {
-              return LogInScreen();
+              return const LogInScreen();
             }
           case StartAppSignUpState _:
             {
-              return SignUpScreen();
+              return const SignUpScreen();
             }
           default:
             {

@@ -10,15 +10,16 @@ import "package:magicposbeta/theme/locale/locale.dart";
 
 import "../complex_components/secured_text_field/secured_field_widget.dart";
 
-
 class StartAppTemplate extends StatelessWidget {
   static const String route = "/log_in_screen";
 
-  const StartAppTemplate({super.key, required this.userName, required this.password, required this.onPressed, required this.title, required this.buttonName});
+  const StartAppTemplate(
+      {super.key,
+      required this.onPressed,
+      required this.title,
+      required this.buttonName});
 
-  final TextEditingController userName ;
-  final TextEditingController password ;
-  final Function()onPressed;
+  final Function() onPressed;
   final String title;
   final String buttonName;
 
@@ -57,15 +58,23 @@ class StartAppTemplate extends StatelessWidget {
                     LabelTextFeild(
                       width: 340,
                       height: 70,
-                      title:DiversePhrases.userName,
-                      controller: userName,
+                      title: DiversePhrases.userName,
+                      controller: TextEditingController(
+                          text: context.read<SharedCubit>().userName),
+                      onChangeFunc: (String text) {
+                        context.read<SharedCubit>().userName = text;
+                      },
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     SecuredField(
-                      controller: password,
+                      controller: TextEditingController(
+                          text: context.read<SharedCubit>().password),
                       title: DiversePhrases.password,
+                      onChange: (String text) {
+                        context.read<SharedCubit>().password = text;
+                      },
                     ),
                     const SizedBox(
                       height: 10,
@@ -95,7 +104,7 @@ class StartAppTemplate extends StatelessWidget {
                               isWarning: true,
                               title: state.error);
                         }
-                        if(state is SuccessSharedState){
+                        if (state is SuccessSharedState) {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => const HomeScreen(),

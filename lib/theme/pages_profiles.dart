@@ -27,12 +27,12 @@ class PagesProfiles {
       arName: "الزبائن",
       enName: "Clients",
       icon: Icons.supervisor_account,
-      route: PersonCard.clientRoute);
-  static const PageProfile suppliers = PageProfile(
+      route:ClientsCard.route);
+  static PageProfile suppliers = PageProfile(
       arName: "الموردون",
       enName: "Suppliers",
       icon: Icons.group_add_rounded,
-      route: PersonCard.supplierRoute);
+      route:SuppliersCard.route);
   static const PageProfile users = PageProfile(
       arName: "المستخدمون",
       enName: "Users",

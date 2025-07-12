@@ -1,23 +1,14 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:magicposbeta/components/bottom_button.dart';
-import 'package:magicposbeta/components/choises_list.dart';
 import 'package:magicposbeta/components/general_text_field.dart';
 import 'package:magicposbeta/components/my_dialog.dart';
-import 'package:magicposbeta/components/not_availble_widget.dart';
-import 'package:magicposbeta/components/operator_button.dart';
 import 'package:magicposbeta/components/waiting_widget.dart';
 import 'package:magicposbeta/lists/group_view_list/group_view_list_bloc/group_view_list_cubit.dart';
 import 'package:magicposbeta/lists/group_view_list/group_view_list_bloc/group_view_list_states.dart';
 import 'package:magicposbeta/modules/department.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
-import 'package:magicposbeta/database/functions/groups_functions.dart';
-import 'package:magicposbeta/database/functions/sections_functions.dart';
-import 'package:magicposbeta/database/initialize_database.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
-
 import '../../modules/group.dart';
 
 class GroupViewList extends StatefulWidget {

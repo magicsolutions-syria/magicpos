@@ -13,6 +13,7 @@ import 'package:magicposbeta/providers/products_table_provider.dart';
 import '../database/functions/person_functions.dart';
 import '../modules/person.dart';
 import '../modules/product.dart';
+import '../screens/clients_card.dart';
 import '../screens/person_card.dart';
 import '../screens_data/constants.dart';
 import '../theme/locale/search_types.dart';
@@ -257,7 +258,7 @@ class _SecondCashPopUpViewState extends State<SecondCashPopUpView> {
                                 "Name_Arabic",
                                 "id",
                               ],
-                              addPage: PersonCard.clientRoute,
+                              addPage:ClientsCard.route,
                               columnsRatios: const [
                                 .25,
                                 .25,
