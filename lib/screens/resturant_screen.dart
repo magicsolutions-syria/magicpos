@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:magicposbeta/components/bottom_button.dart';
-import 'package:magicposbeta/components/control_panel.dart';
 import 'package:magicposbeta/components/custom_view_panel.dart';
-import 'package:magicposbeta/components/list_view_button.dart';
-import 'package:magicposbeta/components/operator_button.dart';
 import 'package:magicposbeta/components/rest_functions_keys_bar.dart';
-import 'package:magicposbeta/components/view_panel.dart';
-import 'package:magicposbeta/database/shared_preferences_functions.dart';
 import 'package:magicposbeta/providers/group_provider.dart';
 import 'package:magicposbeta/screens_data/functions_keys_data.dart';
 import 'package:provider/provider.dart';

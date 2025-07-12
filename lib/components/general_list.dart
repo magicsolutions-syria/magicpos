@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:magicposbeta/components/not_availble_widget.dart';
 
 import 'package:magicposbeta/components/waiting_widget.dart';
+import 'package:magicposbeta/screens/suppliers_card.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/providers/products_table_provider.dart';
 
 
+import '../screens/clients_card.dart';
 import '../screens/person_card.dart';
 import 'custom_drop_down_menu.dart';
 import 'general_text_field.dart';
@@ -86,8 +88,8 @@ class GeneralList extends StatelessWidget {
       }
       if (isRcPd) {
         addPage = secondaryController.text == "الزبائن"
-            ? PersonCard.clientRoute
-            : PersonCard.supplierRoute;
+            ? ClientsCard.route
+            : SuppliersCard.route;
       }
       _streamController.add(
           await getData(_searchController.text, _textFieldController.text));

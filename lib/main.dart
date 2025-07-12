@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:magicposbeta/bloc/shared_bloc/shared_bloc.dart";
+import "package:magicposbeta/screens/clients_card.dart";
 import "package:magicposbeta/screens/in_out_screen.dart";
+import "package:magicposbeta/screens/screens.dart";
 import "package:magicposbeta/screens/start_app_screen.dart";
 import "package:magicposbeta/screens/product_card.dart";
 import "package:magicposbeta/screens/report_screens/depts_report_screen.dart";
@@ -57,18 +59,8 @@ class MyApp extends StatelessWidget {
           initialRoute: "/",
           routes: {
             PosScreen.route: (context) => const PosScreen(),
-            PersonCard.supplierRoute: (context) => PersonCard(
-                  tableName: "suppliers",
-                  color: const Color(0xFFFFA640),
-                  title: PagesProfiles.clients.enName,
-                  icon: Icons.person_add_rounded,
-                ),
-            PersonCard.clientRoute: (context) => PersonCard(
-                  tableName: "clients",
-                  color: Theme.of(context).primaryColor,
-                  title: PagesProfiles.clients.arName,
-                  icon: Icons.supervisor_account,
-                ),
+            SuppliersCard.route: (context) =>const SuppliersCard() ,
+            ClientsCard.route: (context) =>const ClientsCard() ,
             ProductCard.route: (context) => const ProductCard(),
             InOutScreen.route: (context) => InOutScreen(),
             ReportsNavigatorScreen.route: (context) =>

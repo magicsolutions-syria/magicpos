@@ -4,7 +4,6 @@ import 'package:magicposbeta/database/functions/groups_functions.dart';
 import 'package:magicposbeta/database/functions/product_functions.dart';
 import 'package:magicposbeta/modules/department.dart';
 import 'package:magicposbeta/modules/group.dart';
-import 'package:magicposbeta/screens_data/constants.dart' show productTypes;
 import 'package:magicposbeta/theme/custom_exception.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';

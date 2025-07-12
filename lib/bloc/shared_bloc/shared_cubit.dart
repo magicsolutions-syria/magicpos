@@ -14,9 +14,10 @@ class SharedCubit extends Cubit<SharedStates> {
   SharedCubit(Function() InitialUserState) : super(InitialUserState());
   User currentUser = User.emptyInstance();
   late GeneralSettings settings;
+  String userName = "";
+  String password = "";
 
-  Future<void> logInUser(
-      {required String password, required String userName}) async {
+  Future<void> logInUser() async {
     try {
       emit(LoadingSharedState());
       if (userName.isEmpty) {
@@ -36,7 +37,7 @@ class SharedCubit extends Cubit<SharedStates> {
     }
   }
 
-  Future<void> signUpUser({required String password, required userName}) async {
+  Future<void> signUpUser() async {
     try {
       emit(LoadingSharedState());
       if (password.isEmpty) {
@@ -55,5 +56,4 @@ class SharedCubit extends Cubit<SharedStates> {
       emit(FailureSharedState(error: e.toString()));
     }
   }
-
 }

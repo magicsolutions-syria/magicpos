@@ -1,4 +1,3 @@
-import "package:flutter/services.dart";
 import "package:magicposbeta/database/database_functions.dart";
 
 import "../modules/product.dart";

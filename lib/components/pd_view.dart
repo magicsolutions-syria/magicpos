@@ -6,6 +6,7 @@ import "package:magicposbeta/theme/locale/locale.dart";
 import "../database/database_functions.dart";
 import "../database/functions/person_functions.dart";
 import "../modules/person.dart";
+import "../screens/clients_card.dart";
 import "../screens/person_card.dart";
 import "general_list.dart";
 
@@ -74,7 +75,7 @@ class _PDViewState extends State<PDView> {
         "Name_Arabic",
         "id",
       ],
-      addPage: PersonCard.clientRoute,
+      addPage: ClientsCard.route,
       columnsRatios: const [
         .25,
         .25,

@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:magicposbeta/components/my_dialog.dart';
 import 'package:magicposbeta/database/initialize_database.dart';
 import 'package:magicposbeta/database/printers_database_functions.dart';
 import 'package:magicposbeta/database/shared_preferences_functions.dart';
 import 'package:magicposbeta/modules/custom_exception.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/utils/utils.dart';
+
 
 class Printer{
   static const platform = MethodChannel('IcodPrinter');

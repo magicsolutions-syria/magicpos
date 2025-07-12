@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:magicposbeta/bloc/product_bloc/product_bloc.dart';
 import 'package:magicposbeta/components/big_text_field.dart';
-import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
 
 import '../../../components/text_view.dart';

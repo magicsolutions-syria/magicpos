@@ -31,12 +31,12 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         //client
 
-                        CustomButton(
+                        const CustomButton(
                           profile: PagesProfiles.clients,
                         ),
                         //suppliers
