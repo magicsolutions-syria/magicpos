@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:magicposbeta/screens/home_screen.dart';
+import 'package:magicposbeta/bloc/report_bloc/report_bloc.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/modules/custom_exception.dart';
-import 'package:provider/provider.dart';
-
 import '../database/initialize_database.dart';
 import '../database/shared_preferences_functions.dart';
 import '../modules/pair.dart';
-import '../providers/reports_provider.dart';
-import 'custom_button.dart';
 import 'custom_button3.dart';
 import 'my_dialog.dart';
 import 'printer_helper_functions.dart';
@@ -449,9 +445,9 @@ abstract class ReportsScreenState extends State<ReportsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
+    return BlocProvider(  
       create: (BuildContext context) {
-        return Pro();
+        return ReportCubit(() => InitialReportState());
       },
       child: Scaffold(
           appBar: AppBar(
@@ -477,8 +473,8 @@ abstract class ReportsScreenState extends State<ReportsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Consumer<Pro>(
-                  builder: (BuildContext context, value, child) {
+                BlocBuilder<ReportCubit, ReportStates>(
+                  builder: (BuildContext context, value) {
                     return FutureBuilder(
                     future: getData(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -512,19 +508,19 @@ abstract class ReportsScreenState extends State<ReportsScreen> {
                                   MaterialButton(
                                     onPressed: hasOptions()
                                         ? () {
-                                      value.flip();
+                                      context.read<ReportCubit>().flip();
                                     }
                                         : null,
                                     color: Theme.of(context).primaryColor,
                                     child: Text(
-                                      value.button(hasOptions()),
+                                      context.read<ReportCubit>().button(hasOptions()),
                                       style: TextStyle(
                                           color: Theme.of(context).fieldsColor,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18),
                                     ),
 
-                                  ),drop(value.notifyListeners)
+                                  ),drop(context.read<ReportCubit>().notifyListeners)
                                 ],
                               ),
                             ),
@@ -544,7 +540,7 @@ abstract class ReportsScreenState extends State<ReportsScreen> {
                                     children: [
 
                                       SizedBox(width: 0.02*MediaQuery.of(context).size.width,child: checkBoxes()),
-                                        SizedBox(width: 0.3*MediaQuery.of(context).size.width,child: listview(value.s,qtyComma,priceComma)),
+                                        SizedBox(width: 0.3*MediaQuery.of(context).size.width,child: listview(context.read<ReportCubit>().s,qtyComma,priceComma)),
 
                                     ],
                                   ),
