@@ -18,6 +18,21 @@ class ErrorsCodes {
   static const String emptySectionData = "there is no departments";
 
   static const String emptyData = "no results";
+  static const String sectionIsExistPreviously = "هذا القسم موجود\nمسبقاً";
+
+  static String cannotEditSection="لا يمكنك تعديل هذا القسم";
+
+  static String didnotDetermineNewSectionName="لم يتم تحديد اسم جديد للقسم";
+
+  static String selectSectionFirst="يرجى اختيار قسم أولاً";
+
+  static String canNotDeleteSectionReportsRefernce= "لا يمكنك حذف هذا القسم عليك تصفير\nالتقارير المرتبطة به أولاً";
+
+  static String canNotDeleteSectionGroupsRefernce="لا يمكنك حذف هذا القسم فهو\nيحتوي مجموعات مرتبطة به";
+
+  static String canNotDeleteSectionDeptsRefernce="لا يمكنك حذف هذا القسم فهو\nيحتوي depts مرتبطة به";
+
+  static String canNotDeleteThisSection="لا يمكنك حذف\nهذا القسم";
 
   static String get emptyBarcode {
     return "لا يجب ترك حقل الباركود فارغاً";

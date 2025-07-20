@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/pages_profiles.dart';
+import '../theme/home_pages_profiles.dart';
 import 'home_screen.dart';
 import 'person_card.dart';
 
@@ -15,7 +15,7 @@ class SuppliersCard extends StatelessWidget {
     return PersonCard(
       tableName: "suppliers",
       color: const Color(0xFFFFA640),
-      title: PagesProfiles.clients.enName,
+      title: HomePagesProfiles.clients.enName,
       icon: Icons.person_add_rounded,
     );
   }

@@ -1,7 +1,9 @@
 import 'package:magicposbeta/database/functions/groups_functions.dart';
 import 'package:magicposbeta/database/initialize_database.dart';
+import 'package:magicposbeta/theme/locale/errors.dart';
 
 import '../../components/reverse_string.dart';
+import '../../theme/custom_exception.dart';
 
 class SectionsFunctions {
   static const String tableName = "departments";
@@ -70,10 +72,10 @@ class SectionsFunctions {
         return await _data.insertData(
             "INSERT INTO $tableName ($nameF,$printNameF)VALUES('$name','$printName')");
       } else {
-        throw Exception("هذا القسم موجود\nمسبقاً");
+        throw CustomException(ErrorsCodes.sectionIsExistPreviously);
       }
     } else {
-      throw Exception("حقل القسم لا يمكن ان\nيكون فارغاً");
+      throw CustomException(ErrorsCodes.selectSectionFirst);
     }
   }
 
@@ -81,9 +83,9 @@ class SectionsFunctions {
     String name,
   ) async {
     if (name == "") {
-      throw Exception("يجب تحديد قسم أولاً");
+      throw CustomException(ErrorsCodes.selectSectionFirst);
     } else if (name == defaultDepartmentName) {
-      throw Exception("لا يمكنك حذف\nهذا القسم");
+      throw CustomException(ErrorsCodes.canNotDeleteThisSection);
     } else {
       List<Map> response = await getDepartmentList(name);
       List<Map> response0 = await GroupsFunctions.getGroupsList(
@@ -91,13 +93,12 @@ class SectionsFunctions {
       List<Map> response1 = await _data
           .readData("SELECT * FROM dept WHERE department=${response[0][idF]}");
       if (response1.isNotEmpty) {
-        throw Exception("لا يمكنك حذف هذا القسم فهو\nيحتوي depts مرتبطة به");
+        throw CustomException(ErrorsCodes.canNotDeleteSectionDeptsRefernce);
       }
       if (response0.isNotEmpty) {
-        throw Exception("لا يمكنك حذف هذا القسم فهو\nيحتوي مجموعات مرتبطة به");
+        throw CustomException(ErrorsCodes.canNotDeleteSectionGroupsRefernce);
       } else if (response[0][qty1F] > 0 || response[0][qty2F] > 0) {
-        throw Exception(
-            "لا يمكنك حذف هذا القسم عليك تصفير\nالتقارير المرتبطة به أولاً");
+        throw CustomException(ErrorsCodes.canNotDeleteSectionReportsRefernce);
       } else {
         _data.deleteData(
             "DELETE FROM $tableName WHERE $idF=${response[0][idF]}");
@@ -188,13 +189,13 @@ class SectionsFunctions {
   static updateDepartmentName(
       {required String oldName, required String newName}) async {
     if (oldName == "") {
-      throw Exception("يرجى اختيار قسم أولاً");
+      throw CustomException(ErrorsCodes.selectSectionFirst);
     }
     if (newName == "") {
-      throw Exception("لم يتم تحديد اسم جديد للقسم");
+      throw CustomException(ErrorsCodes.didnotDetermineNewSectionName);
     }
     if (oldName == defaultDepartmentName) {
-      throw Exception("لا يمكنك تعديل هذا القسم");
+      throw CustomException(ErrorsCodes.cannotEditSection);
     }
     if (newName != oldName) {
       List<Map> response0 = await _data
@@ -203,7 +204,7 @@ class SectionsFunctions {
         await _data.changeData(
             "UPDATE `$tableName` SET $nameF='$newName',$printNameF='${reversArString(newName)}' WHERE $nameF='$oldName'");
       } else {
-        throw Exception("هذا القسم موجود\nمسبقاً");
+        throw CustomException(ErrorsCodes.sectionIsExistPreviously);
       }
     }
   }
