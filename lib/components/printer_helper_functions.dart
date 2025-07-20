@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:magicposbeta/database/printers_database_functions.dart';
 import 'package:magicposbeta/providers/products_table_provider.dart';
 
-import '../database/database_functions.dart';
-import '../database/shared_preferences_functions.dart';
 import '../modules/printer.dart';
 import '../modules/product.dart';
 import 'my_dialog.dart';

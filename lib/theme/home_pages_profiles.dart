@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magicposbeta/modules/page_profile.dart';
 import 'package:magicposbeta/screens/screens.dart';
 
-class PagesProfiles {
+class HomePagesProfiles {
   static const PageProfile settings = PageProfile(
       arName: "الإعدادات",
       enName: "Settings",
@@ -27,12 +27,12 @@ class PagesProfiles {
       arName: "الزبائن",
       enName: "Clients",
       icon: Icons.supervisor_account,
-      route:ClientsCard.route);
-  static PageProfile suppliers = PageProfile(
+      route: ClientsCard.route);
+  static const PageProfile suppliers = PageProfile(
       arName: "الموردون",
       enName: "Suppliers",
       icon: Icons.group_add_rounded,
-      route:SuppliersCard.route);
+      route: SuppliersCard.route);
   static const PageProfile users = PageProfile(
       arName: "المستخدمون",
       enName: "Users",

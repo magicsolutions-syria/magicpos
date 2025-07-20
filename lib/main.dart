@@ -28,7 +28,7 @@ import 'screens/report_screens/group_report_screen.dart';
 import "./screens/pos_screen.dart";
 
 import "screens/reports_navigator_screen.dart";
-import "theme/pages_profiles.dart";
+import "theme/home_pages_profiles.dart";
 
 void main() async {
   runApp(const MyApp());

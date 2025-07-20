@@ -1,9 +1,7 @@
 import 'package:magicposbeta/database/database_functions.dart';
-import 'package:magicposbeta/modules/product.dart';
 import 'package:magicposbeta/theme/custom_exception.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
 import 'package:magicposbeta/theme/locale/search_types.dart';
-
 import '../../components/reverse_string.dart';
 import '../../modules/info_product.dart';
 import '../initialize_database.dart';
@@ -12,6 +10,7 @@ import 'sections_functions.dart';
 import 'groups_functions.dart';
 
 class ProductFunctions {
+  //table name
   static const String tableName = "products";
 
   //fields names
@@ -66,8 +65,6 @@ class ProductFunctions {
     return await _getProduct("WHERE code_3 LIKE '%$code3%' AND id_$filterByUnit>0", orderType: "code_3");
   }
 
-  static getProductByArName(
-      {required String searchText, required String searchType}) {}
 
   static Future<List<Map>> getProductList(
       {required String searchText,

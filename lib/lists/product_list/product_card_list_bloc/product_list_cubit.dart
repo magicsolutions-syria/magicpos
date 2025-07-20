@@ -18,38 +18,38 @@ class ProductCardListCubit extends Cubit<ProductCardListStates> {
   int dropDownValue = 1;
 
   Future<void> getData() async {
-    emit(LoadingProductCardListState());
-    switch (searchType) {
-      case (SearchTypes.enName):
-        {
-          products =
-          await ProductFunctions.searchProductByEnglishName(searchText);
-          break;
-        }
-      case (SearchTypes.code1):
-        {
-          products = await ProductFunctions.searchProductByCode1(searchText);
-          break;
-        }
-      case (SearchTypes.code2):
-        {
-          products = await ProductFunctions.searchProductByCode2(searchText);
-          break;
-        }
-      case (SearchTypes.code3):
-        {
-          products = await ProductFunctions.searchProductByCode3(searchText);
-          break;
-        }
-      default:
-        {
-          products =
-          await ProductFunctions.searchProductByArabicName(searchText);
-          break;
-        }
-    }
-    try {
 
+    try {
+      emit(LoadingProductCardListState());
+      switch (searchType) {
+        case (SearchTypes.enName):
+          {
+            products =
+            await ProductFunctions.searchProductByEnglishName(searchText);
+            break;
+          }
+        case (SearchTypes.code1):
+          {
+            products = await ProductFunctions.searchProductByCode1(searchText);
+            break;
+          }
+        case (SearchTypes.code2):
+          {
+            products = await ProductFunctions.searchProductByCode2(searchText);
+            break;
+          }
+        case (SearchTypes.code3):
+          {
+            products = await ProductFunctions.searchProductByCode3(searchText);
+            break;
+          }
+        default:
+          {
+            products =
+            await ProductFunctions.searchProductByArabicName(searchText);
+            break;
+          }
+      }
       emit(SuccessProductCardListState());
     } catch (e) {
       emit(FailureProductCardListState(error: e.toString()));
