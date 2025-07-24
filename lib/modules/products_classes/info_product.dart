@@ -11,10 +11,8 @@ import '../product_unit.dart';
 import '../product_unit_expanded.dart';
 
 class InfoProduct extends AbsProduct implements Equatable {
-  String _departmentName = "";
   InfoDepartment department;
   InfoGroup group;
-  String _groupName = "";
   int _productType = 0;
   double minQty = 0;
   double maxQty = 0;
@@ -25,9 +23,7 @@ class InfoProduct extends AbsProduct implements Equatable {
   ProductUnitExpanded unit3;
 
   InfoProduct(
-      {required String departmentName,
-      required String groupName,
-      required String productType,
+      {required String productType,
       required double minQty,
       required double maxQty,
       required this.description,
@@ -41,24 +37,6 @@ class InfoProduct extends AbsProduct implements Equatable {
       required super.enName,
       super.id}) {
     setProductType(productType);
-    this.departmentName = departmentName;
-    _groupName = groupName;
-  }
-
-  set departmentName(String value) {
-    if (value == "") {
-      _departmentName = "متفرقات";
-    } else {
-      _departmentName = value;
-    }
-  }
-
-  set groupName(String value) {
-    if (value == "") {
-      throw Exception("حقل المجموعة لا يمكن أن يكون فارغاً");
-    } else {
-      _groupName = value;
-    }
   }
 
   void setProductType(String value) {
@@ -79,14 +57,6 @@ class InfoProduct extends AbsProduct implements Equatable {
     } else {
       maxQty = double.parse(text);
     }
-  }
-
-  String get departmentName {
-    return _departmentName;
-  }
-
-  String get groupName {
-    return _groupName;
   }
 
   int get productType {
@@ -134,8 +104,6 @@ class InfoProduct extends AbsProduct implements Equatable {
     return InfoProduct(
         arName: "",
         enName: "",
-        departmentName: "",
-        groupName: "",
         productType: DiversePhrases.productTypes()[0],
         minQty: 0,
         maxQty: 0,
@@ -190,12 +158,19 @@ class InfoProduct extends AbsProduct implements Equatable {
         soldPrice2: item['total_sells_price_two_3'],
         soldQty1: item['sold_quantity_one_3'],
         soldQty2: item['sold_quantity_two_3']);
+    InfoDepartment department = InfoDepartment.fullInstance(
+      id: item[SectionsFunctions.idF],
+      name: item[SectionsFunctions.nameF],
+    );
+    InfoGroup group = InfoGroup.fullInstance(
+      id: item[GroupsFunctions.idF],
+      name: item[GroupsFunctions.nameF],
+      department: department,
+    );
     return InfoProduct(
       id: item[ProductFunctions.idF],
       arName: item[ProductFunctions.arNameF],
       enName: item[ProductFunctions.enNameF],
-      departmentName: item[SectionsFunctions.nameF],
-      groupName: item[GroupsFunctions.nameF],
       productType: DiversePhrases.productTypes()
           .elementAt(item[ProductFunctions.productTypeF]),
       minQty: item[ProductFunctions.minAmountF].toDouble(),
@@ -205,21 +180,14 @@ class InfoProduct extends AbsProduct implements Equatable {
       unit1: unit1,
       unit2: unit2,
       unit3: unit3,
-      department: InfoDepartment(
-        id: item[SectionsFunctions.idF],
-        name: item[SectionsFunctions.nameF],
-      ),
-      group: InfoGroup(
-        id: item[GroupsFunctions.idF],
-        name: item[GroupsFunctions.nameF],
-        department: InfoDepartment.emptyInstance(),
-      ),
+      department: department,
+      group: group,
     );
   }
 
   @override
   String toString() {
-    return "arname:{$arName},enname:{$enName},group:{$_groupName},department:{$_departmentName}";
+    return "arname:{$arName},enname:{$enName}";
   }
 
   @override
@@ -227,8 +195,6 @@ class InfoProduct extends AbsProduct implements Equatable {
   List<Object?> get props => [
         arName,
         enName,
-        _groupName,
-        _departmentName,
         productType,
         minQty,
         maxQty,

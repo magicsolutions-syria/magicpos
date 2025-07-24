@@ -12,4 +12,14 @@ class InfoDepartment extends AbsDepartment {
   static InfoDepartment emptyInstance() {
     return InfoDepartment(id: -1, name: '');
   }
+
+  static InfoDepartment fullInstance({required int id,required String name}) {
+    String nameV = "";
+    if (name == "") {
+      nameV = "متفرقات";
+    } else {
+      nameV = name;
+    }
+    return InfoDepartment(id: -2, name: nameV);
+  }
 }
