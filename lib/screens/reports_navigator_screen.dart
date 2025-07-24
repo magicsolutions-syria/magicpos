@@ -133,7 +133,7 @@ class _ReportsNavigatorScreenState extends State<ReportsNavigatorScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.account_circle_outlined,
                                 size: 90,
                                 color: Colors.blue,

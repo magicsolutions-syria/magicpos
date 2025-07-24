@@ -1,5 +1,7 @@
 import 'package:magicposbeta/database/functions/groups_functions.dart';
 import 'package:magicposbeta/database/initialize_database.dart';
+import 'package:magicposbeta/modules/products_classes/info_department.dart';
+import 'package:magicposbeta/modules/products_classes/view_select_department.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
 
 import '../../components/reverse_string.dart';
@@ -24,13 +26,10 @@ class SectionsFunctions {
   static const String defaultDepartmentName = "متفرقات";
   static final PosData _data = PosData();
 
-  static Future<int> addProductToDepartment(String name) async {
-    List<Map> response = await getDepartmentList(name);
-    int id = response[0][idF];
-
+  static Future<int> addProductToDepartment(InfoDepartment department) async {
     await _data.changeData(
-        "UPDATE $tableName set $productQtyF=${response[0][productQtyF] + 1} WHERE $idF=$id");
-    return id;
+        "UPDATE $tableName set $productQtyF=${department.productQty + 1} WHERE $idF=${department.id}");
+    return department.id;
   }
 
   static Future<List<Map>> getDepartmentList(String name,
@@ -81,7 +80,7 @@ class SectionsFunctions {
 
   static Future<bool> deleteSection(
     String name,
-  ) async {
+  ) async {/*
     if (name == "") {
       throw CustomException(ErrorsCodes.selectSectionFirst);
     } else if (name == defaultDepartmentName) {
@@ -104,15 +103,16 @@ class SectionsFunctions {
             "DELETE FROM $tableName WHERE $idF=${response[0][idF]}");
         return true;
       }
-    }
+    }*/
+    return false;
   }
 
-  static Future<int> initializeDepartment(String name) async {
-    List<Map> response = await getDepartmentList(name);
+  static Future<int> initializeDepartment(InfoDepartment department) async {/*
+    List<Map> response = await getDepartmentList(department);
     if (response.isEmpty) {
-      await addSection(name);
+      await addSection(department);
     }
-    return addProductToDepartment(name);
+    return addProductToDepartment(department);*/return 0;
   }
 
   static Future<int> increaseQtyAndSells(
@@ -160,14 +160,9 @@ class SectionsFunctions {
   }
 
   static Future<int> transferQtySells(
-      {required String nameNew,
-      required String nameOld,
-      required double qty1,
-      required double sells1,
-      required double qty2,
-      required double sells2,
-      double productQTY = 1}) async {
-    if (nameNew == nameOld) {
+      {required InfoDepartment oldDepartment,
+      required InfoDepartment newDepartment}) async {
+    /*if (nameNew == nameOld) {
       return initializeDepartment(nameNew);
     }
     decreaseQtyAndSells(
@@ -183,7 +178,8 @@ class SectionsFunctions {
         sells1: sells1,
         qty2: qty2,
         sells2: sells2,
-        productQTY: productQTY);
+        productQTY: productQTY);*/
+    return 0;
   }
 
   static updateDepartmentName(
@@ -209,12 +205,12 @@ class SectionsFunctions {
     }
   }
 
-  static checkSelectedUnselected(String sectionName, int id) async {
-    String condition = sectionName == "" ? "$idF=$id" : "$nameF='$sectionName'";
+  static checkSelectedUnselected(ViewSelectDepartment department) async {
+    /*String condition = sectionName == "" ? "$idF=$id" : "$nameF='$sectionName'";
     List<Map> checkSelect = await GroupsFunctions.getSelectedUnSelectedGroups(
         false, sectionName, id);
     await _data.changeData(
-        "UPDATE $tableName SET $selectedF=${checkSelect.isEmpty} WHERE $condition");
+        "UPDATE $tableName SET $selectedF=${checkSelect.isEmpty} WHERE $condition");*/
   }
 
   static Future<void> changeSelectValues(

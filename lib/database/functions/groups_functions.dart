@@ -1,12 +1,16 @@
 import 'package:flutter/src/widgets/editable_text.dart';
+import 'package:magicposbeta/database/functions/product_functions.dart';
 import 'package:magicposbeta/database/functions/sections_functions.dart';
 import 'package:magicposbeta/modules/custom_exception.dart';
+import 'package:magicposbeta/modules/products_classes/info_department.dart';
 
 import '../../components/reverse_string.dart';
+import '../../modules/products_classes/info_group.dart';
 import '../initialize_database.dart';
 
 class GroupsFunctions {
-  static const String tableName="`groups`";
+  static const String tableName = "`groups`";
+
   //fields
   static const String idF = "id_group";
   static const String nameF = "group_name";
@@ -17,49 +21,33 @@ class GroupsFunctions {
   static const String qty2F = "sold_quantity_two";
   static const String qty1F = "sold_quantity_one";
   static const String productQtyF = "products_QTY";
-  static const String selectedF = "selected_department";
-  static const String printNameF = "Print_Name_department";
-  static final PosData _data=PosData();
+  static const String selectedF = "selected_group";
+  static const String printNameF = "Print_Name_group";
+  static final PosData _data = PosData();
 
   static Future<List<Map>> getGroupsList(
-      {required String groupName,
-      String departmentName = "",
-      int departmentId = -1,
+      {required InfoGroup group,
       bool sameGroup = false,
       printerCondition = ""}) async {
     try {
-        String condition = "";
+      String condition = "";
       String groupNameCondition = sameGroup
-          ? "group_name='$groupName'"
-          : "group_name LIKE '%$groupName%'";
-      if (groupName != "") {
-        condition =
-            "${_departmentCondition(departmentName: departmentName, departmentId: departmentId)} AND $groupNameCondition";
+          ? "group_name='${group.name}'"
+          : "group_name LIKE '%${group.name}%'";
+      String departmentCondition = group.department.id != -1
+          ? "WHERE section_number=${group.department.id}'"
+          : "";
+      if (group.name != "") {
+        condition = "$departmentCondition AND $groupNameCondition";
       } else if (printerCondition != "") {
-        condition =
-            "${_departmentCondition(departmentName: departmentName, departmentId: departmentId)} AND ($printerCondition)";
+        condition = "$departmentCondition AND ($printerCondition)";
       } else {
-        condition = _departmentCondition(
-            departmentId: departmentId, departmentName: departmentName);
+        condition = departmentCondition;
       }
-      print("condition: $condition");
       return await _data.readData(
           "SELECT `groups`.*,departments.section_name FROM `groups` JOIN departments ON departments.id_department=`groups`.section_number $condition ORDER BY group_name");
     } catch (e) {
       throw CustomException(e.toString());
-    }
-  }
-
-  static String _departmentCondition({
-    String departmentName = "",
-    int departmentId = -1,
-  }) {
-    if (departmentId != -1) {
-      return "WHERE section_number=$departmentId";
-    } else if (departmentName != "") {
-      return "WHERE section_name='$departmentName'";
-    } else {
-      return "";
     }
   }
 
@@ -78,9 +66,10 @@ class GroupsFunctions {
     }
     if (groupName != "") {
       List<Map> response = await getGroupsList(
-          groupName: groupName,
-          departmentName: departmentName,
-          departmentId: departmentId,
+          group: InfoGroup(
+              department:
+                  InfoDepartment(id: departmentId, name: departmentName),
+              name: groupName),
           sameGroup: true);
       if (response.isEmpty) {
         int id = 0;
@@ -111,12 +100,8 @@ class GroupsFunctions {
     String departmentName = "",
     int departmentId = -1,
   }) async {
-    if (groupName != "") {
-      List<Map> response = await getGroupsList(
-          groupName: groupName,
-          departmentName: departmentName,
-          departmentId: departmentId,
-          sameGroup: true);
+    /*  if (groupName != "") {
+      List<Map> response = await getGroupsList(group: group, sameGroup: true);
       if (response[0]['products_QTY'] > 0) {
         throw Exception("لا يمكنك حذف هذه المجموعة فهي\nتحتوي مواد مرتبطة بها");
       }
@@ -139,27 +124,28 @@ class GroupsFunctions {
       return true;
     } else {
       throw CustomException("يجب تحديد مجموعة\nأولاًً");
-    }
+    }*/
+    return false;
   }
 
   static Future<int> addProductToGroup(
       String groupName, int departmentId) async {
-    List<Map> response = await getGroupsList(
-        groupName: groupName, departmentId: departmentId, sameGroup: true);
+    /*  List<Map> response = await getGroupsList(group: group, sameGroup: true);
     int id = response[0]["id_group"];
     await _data.changeData(
         "UPDATE `groups` set products_QTY=${response[0]["products_QTY"] + 1} WHERE id_group=$id");
-    return id;
+    return id;*/
+    return 0;
   }
 
-  static Future<int> initializeGroup(
-      {required String groupName, required int departmentId}) async {
-    List<Map> response = await getGroupsList(
-        groupName: groupName, departmentId: departmentId, sameGroup: true);
+  static Future<int> initializeGroup(InfoGroup group) async {
+    /*
+    List<Map> response = await getGroupsList(group: group, sameGroup: true);
     if (response.isEmpty) {
-      await addGroup(groupName: groupName, departmentId: departmentId);
+      await addGroup(group: group);
     }
-    return addProductToGroup(groupName, departmentId);
+    return addProductToGroup(group: group);*/
+    return 0;
   }
 
   static Future<int> increaseQtyAndSells({
@@ -170,9 +156,8 @@ class GroupsFunctions {
     required double qty2,
     required double sells2,
   }) async {
-    int id = 0;
-    List<Map> response = await getGroupsList(
-        groupName: groupName, departmentId: departmentId, sameGroup: true);
+    /* int id = 0;
+    List<Map> response = await getGroupsList(group: group, sameGroup: true);
     if (response.isEmpty) {
       id = await addGroup(groupName: groupName, departmentId: departmentId);
     } else {
@@ -186,6 +171,8 @@ class GroupsFunctions {
 
     return await _data.changeData(
         "UPDATE `groups` SET products_QTY=$newProductQty,sold_quantity_one=$newQty1, sold_quantity_two=$newQty2,total_sells_price_one=$newSells1,total_sells_price_two=$newSells2 WHERE id_group=$id");
+  */
+    return 0;
   }
 
   static Future<void> decreaseQtyAndSells({
@@ -196,9 +183,9 @@ class GroupsFunctions {
     required double qty2,
     required double sells2,
   }) async {
+    /*
     int id = 0;
-    List<Map> response = await getGroupsList(
-        groupName: groupName, departmentId: departmentId, sameGroup: true);
+    List<Map> response = await getGroupsList(group: group, sameGroup: true);
 
     id = response[0]['id_group'];
 
@@ -209,6 +196,7 @@ class GroupsFunctions {
     double newProductQty = response[0]["products_QTY"] - 1;
     await _data.changeData(
         "UPDATE `groups` SET products_QTY=$newProductQty,sold_quantity_one=$newQty1, sold_quantity_two=$newQty2,total_sells_price_one=$newSells1,total_sells_price_two=$newSells2 WHERE id_group=$id");
+ */
   }
 
 //todo when add group and section is not exist
@@ -222,11 +210,9 @@ class GroupsFunctions {
     required double qty2,
     required double sells2,
   }) async {
+    /*
     if (groupNameNew == groupNameOld && departmentIdNew == departmentIdOld) {
-      List<Map> response = await getGroupsList(
-          groupName: groupNameNew,
-          departmentId: departmentIdNew,
-          sameGroup: true);
+      List<Map> response = await getGroupsList(group: group, sameGroup: true);
       return response[0]['id_group'];
     }
 
@@ -243,57 +229,48 @@ class GroupsFunctions {
         qty1: qty1,
         sells1: sells1,
         qty2: qty2,
-        sells2: sells2);
+        sells2: sells2);*/
+    return 0;
   }
 
-  static Future<void> updateGroup(
-      {required String oldName,
-      required String newName,
-      required String sectionOld,
-      required String sectionNew}) async {
-    if (oldName == "") {
+  static Future<void> updateGroup({
+    required InfoGroup oldGroup,
+    required InfoGroup newGroup,
+  }) async {
+    /*
+    if (oldGroup.name == "") {
       throw CustomException("يرجى تحديد مجموعة من قائمة المجموعات");
     }
-    if (newName == "") {
-      if (sectionOld == sectionNew) {
+    if (newGroup.name == "") {
+      if (oldGroup.department == newGroup.department) {
         return;
       }
-      newName = oldName;
+      newGroup.setName(oldGroup.name);
     }
-    List<Map> response = await getGroupsList(
-        groupName: newName,
-        departmentName: sectionNew,
-        departmentId: -1,
-        sameGroup: true);
+    List<Map> response = await getGroupsList(group: newGroup, sameGroup: true);
     if (response.isEmpty) {
-      List<Map> groupOldData = await getGroupsList(
-          groupName: oldName, departmentName: sectionOld, sameGroup: true);
-
       List<Map> response =
-          await SectionsFunctions.getDepartmentList(sectionNew);
+          await SectionsFunctions.getDepartmentList(newGroup.department);
       int index = response[0]["id_department"];
-      String printName = reversArString(newName);
-      String updateName = newName == ""
-          ? ""
-          : ",group_name ='$newName' , Print_Name_group='$printName'";
-      await _data.changeData(
-          "UPDATE `groups` SET section_number=$index $updateName WHERE group_name='$oldName' ");
+      String printName = reversArString(newGroup.name);
 
-      await SectionsFunctions.checkSelectedUnselected(sectionOld, -1);
-      await SectionsFunctions.checkSelectedUnselected(sectionNew, -1);
-      await SectionsFunctions.transferQtySells(
-          nameNew: sectionNew,
-          nameOld: sectionOld,
-          qty1: groupOldData[0]["sold_quantity_one"],
-          sells1: groupOldData[0]["total_sells_price_one"],
-          qty2: groupOldData[0]["sold_quantity_two"],
-          sells2: groupOldData[0]["total_sells_price_two"],
-          productQTY: groupOldData[0]["products_QTY"]);
       await _data.changeData(
-          "UPDATE products SET `department`=$index WHERE `group`=${groupOldData[0]["id_group"]}");
+          "UPDATE `groups` SET section_number=$index ,group_name ='${newGroup.name}' , Print_Name_group='$printName' WHERE group_name='${oldGroup.name}' ");
+
+      await SectionsFunctions.checkSelectedUnselected(
+        oldGroup.department,
+      );
+      await SectionsFunctions.checkSelectedUnselected(
+        newGroup.department,
+      );
+      await SectionsFunctions.transferQtySells(
+          oldDepartment: oldGroup.department,
+          newDepartment: newGroup.department);
+
+      await ProductFunctions.updateProductDepartmentByGroup(index, oldGroup.id);
     } else {
       throw Exception("هذه المجموعة موجودة\nمسبقاً");
-    }
+    }*/
   }
 
   static Future<List<Map>> getSelectedUnSelectedGroups(
@@ -309,7 +286,10 @@ class GroupsFunctions {
         "SELECT * FROM `groups` JOIN departments ON (`groups`.section_number=`departments`.id_department) WHERE `selected_group`=${selected ? 1 : 0} $condition ORDER BY group_name");
   }
 
-  static Future<void>changeSelectValues({required String fieldName, required int newValue, required String condition}) async {
+  static Future<void> changeSelectValues(
+      {required String fieldName,
+      required int newValue,
+      required String condition}) async {
     String currentCondition = "";
     if (condition != "") {
       currentCondition = "WHERE $condition";

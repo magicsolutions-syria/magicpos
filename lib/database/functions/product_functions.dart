@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:magicposbeta/database/database_functions.dart';
+import 'package:magicposbeta/modules/products_classes/info_department.dart';
+import 'package:magicposbeta/modules/products_classes/view_product.dart';
+import 'package:magicposbeta/modules/products_classes/view_select_department.dart';
+import 'package:magicposbeta/modules/products_classes/view_select_group.dart';
 import 'package:magicposbeta/theme/custom_exception.dart';
 import 'package:magicposbeta/theme/locale/errors.dart';
 import 'package:magicposbeta/theme/locale/search_types.dart';
 import '../../components/reverse_string.dart';
-import '../../modules/info_product.dart';
+import '../../modules/products_classes/info_product.dart';
 import '../initialize_database.dart';
 import 'product_unit_functions.dart';
 import 'sections_functions.dart';
@@ -30,41 +35,104 @@ class ProductFunctions {
   static const String productTypeF = "product_type";
   static final PosData _data = PosData();
 
-  static Future<String> initialProductId() async {
-    return await initialId(tableName);
-  }
-
-  static Future<List<InfoProduct>> _getProduct(String condition,
+  static Future<List<Map>> _getProduct(String condition,
       {String orderType = arNameF}) async {
     List<Map> response = await _data.readData(
         "SELECT * FROM $tableName JOIN departments ON id_department=`$departmentF` JOIN `groups` ON id_group=`$groupF` JOIN unit_1 ON $unit1F=id_1 JOIN unit_2 ON $unit2F=id_2 JOIN unit_3 ON $unit3F=id_3 $condition ORDER BY $orderType");
-    List<InfoProduct> products = [];
-    for (var product in response) {
-      products.add(InfoProduct.instanceFromMap(product));
+
+    return response;
+  }
+
+  static Future<Map> _getProductById(int id) async {
+    return (await _getProduct("WHERE $idF=id", orderType: idF)).first;
+  }
+
+  static Future<List<Map>> _searchProductByArabicName(String arName,
+      {int filterByUnit = 1}) async {
+    return await _getProduct(
+        "WHERE $arNameF LIKE '%$arName%' AND id_$filterByUnit>0",
+        orderType: arNameF);
+  }
+
+  static Future<List<Map>> _searchProductByEnglishName(String enName,
+      {int filterByUnit = 1}) async {
+    return await _getProduct(
+        "WHERE $enNameF LIKE '%$enName%' AND id_$filterByUnit>0",
+        orderType: enNameF);
+  }
+
+  static Future<List<Map>> _searchProductByCode1(String code1,
+      {int filterByUnit = 1}) async {
+    return await _getProduct(
+        "WHERE code_1 LIKE '%$code1%' AND id_$filterByUnit>0",
+        orderType: "code_1");
+  }
+
+  static Future<List<Map>> _searchProductByCode2(String code2,
+      {int filterByUnit = 1}) async {
+    return await _getProduct(
+        "WHERE code_2 LIKE '%$code2%' AND id_$filterByUnit>0",
+        orderType: "code_2");
+  }
+
+  static Future<List<Map>> _searchProductByCode3(String code3,
+      {int filterByUnit = 1}) async {
+    return await _getProduct(
+        "WHERE code_3 LIKE '%$code3%' AND id_$filterByUnit>0",
+        orderType: "code_3");
+  }
+
+  static Future<List<InfoProduct>> searchProductByCode2(String code2,
+      {int filterByUnit = 1}) async {
+    return InfoProduct.getList(await _searchProductByCode2(code2));
+  }
+
+  static Future<List<InfoProduct>> searchProductByArabicName(String code2,
+      {int filterByUnit = 1}) async {
+    return InfoProduct.getList(await _searchProductByArabicName(code2));
+  }
+
+  static Future<List<InfoProduct>> searchProductByEnglishName(String code2,
+      {int filterByUnit = 1}) async {
+    return InfoProduct.getList(await _searchProductByEnglishName(code2));
+  }
+
+  static Future<List<InfoProduct>> searchProductByCode1(String code2,
+      {int filterByUnit = 1}) async {
+    return InfoProduct.getList(await _searchProductByCode1(code2));
+  }
+
+  static Future<List<InfoProduct>> searchProductByCode3(String code2,
+      {int filterByUnit = 1}) async {
+    return InfoProduct.getList(await _searchProductByCode3(code2));
+  }
+
+  static Future<List<ViewProduct>> searchByGroupsUnit(
+      {required List<ViewSelectDepartment> departments,
+      required String unit}) async {
+    String prefix = "1";
+    switch (unit) {
+      case "الوحدة الثانية":
+        prefix = "2";
+        break;
+      case "الوحدة الثالثة":
+        prefix = "3";
+        break;
+      default:
+        prefix = "1";
+        break;
     }
-    return products;
+    String condition1 = ViewSelectDepartment.getSelectId(departments);
+    String condition2 = "";
+    for (var department in departments) {
+      condition2 += ViewSelectGroup.getSelectId(department.groups);
+    }
+    condition1 = condition1 != "" ? " AND id_department IN($condition1)" : "";
+    condition2 = condition2 != "" ? " AND id_group IN($condition2)" : "";
+    List<Map> response =
+        await _getProduct("WHERE id_$prefix>0 $condition1 $condition2 ");
+    return ViewProduct.getList(response);
   }
-
-  static Future<InfoProduct> getProductById(int id) async {
-    return (await _getProduct("WHERE $idF=id",orderType: idF)).first;
-  }
-
-  static Future<List<InfoProduct>> searchProductByArabicName(String arName,{int filterByUnit=1}) async {
-    return await _getProduct("WHERE $arNameF LIKE '%$arName%' AND id_$filterByUnit>0", orderType: arNameF);
-  }
-  static Future<List<InfoProduct>> searchProductByEnglishName(String enName,{int filterByUnit=1}) async {
-    return await _getProduct("WHERE $enNameF LIKE '%$enName%' AND id_$filterByUnit>0", orderType: enNameF);
-  }
-  static Future<List<InfoProduct>> searchProductByCode1(String code1,{int filterByUnit=1}) async {
-    return await _getProduct("WHERE code_1 LIKE '%$code1%' AND id_$filterByUnit>0", orderType: "code_1");
-  }
-  static Future<List<InfoProduct>> searchProductByCode2(String code2,{int filterByUnit=1}) async {
-    return await _getProduct("WHERE code_2 LIKE '%$code2%' AND id_$filterByUnit>0", orderType: "code_2");
-  }
-  static Future<List<InfoProduct>> searchProductByCode3(String code3,{int filterByUnit=1}) async {
-    return await _getProduct("WHERE code_3 LIKE '%$code3%' AND id_$filterByUnit>0", orderType: "code_3");
-  }
-
 
   static Future<List<Map>> getProductList(
       {required String searchText,
@@ -125,9 +193,8 @@ class ProductFunctions {
       int id_2 = await ProductUnitFunctions.initializeUnitExpanded(item.unit2);
       int id_3 = await ProductUnitFunctions.initializeUnitExpanded(item.unit3);
       int departmentId =
-          await SectionsFunctions.initializeDepartment(item.department.name);
-      int idGroup = await GroupsFunctions.initializeGroup(
-          groupName: item.group.name, departmentId: departmentId);
+          await SectionsFunctions.initializeDepartment(item.department);
+      int idGroup = await GroupsFunctions.initializeGroup(item.group);
       String images = item.imagePath;
       String desc = item.description;
       String ar = item.arName;
@@ -136,7 +203,8 @@ class ProductFunctions {
       double max = item.maxQty;
       int type = item.productType;
       String printName = reversArString(ar);
-
+      print(
+          "INSERT INTO $tableName ($printNameF,$imagePathF,$descriptionF,$arNameF,$enNameF,$departmentF,`$groupF`,$minAmountF,$maxAmountF,$productTypeF,$unit1F,$unit2F,$unit3F) VALUES ('$printName','$images','$desc','$ar','$en',$departmentId,$idGroup,$min,$max,$type,$id_1,$id_2,$id_3)");
       await data.insertData(
           "INSERT INTO $tableName ($printNameF,$imagePathF,$descriptionF,$arNameF,$enNameF,$departmentF,`$groupF`,$minAmountF,$maxAmountF,$productTypeF,$unit1F,$unit2F,$unit3F) VALUES ('$printName','$images','$desc','$ar','$en',$departmentId,$idGroup,$min,$max,$type,$id_1,$id_2,$id_3)");
     } catch (e) {
@@ -148,25 +216,23 @@ class ProductFunctions {
     try {
       await _checkUniqueFields(item);
 
-      InfoProduct response = await getProductById(item.id);
+      InfoProduct response =
+          InfoProduct.instanceFromMap(await _getProductById(item.id));
       double soldQTYOne = response.totalSoldQty1();
       double soldQTYTwo = response.totalSoldQty2();
       double totalSellsPriceOne = response.totalSoldPrice1();
       double totalSellsPriceTwo = response.totalSoldPrice2();
       await ProductUnitFunctions.updateUnit(
-          item: item.unit1, id: response.unit1.id);
-      int id_1 = response.unit1.id;
+        item: item.unit1,
+      );
+      int id_1 = item.unit1.id;
       int id_2 = await ProductUnitFunctions.initializeUnitExpanded(item.unit2,
           responseId: response.unit2.id);
       int id_3 = await ProductUnitFunctions.initializeUnitExpanded(item.unit3,
           responseId: response.unit3.id);
+      print("****************");
       int idDepartment = await SectionsFunctions.transferQtySells(
-          nameNew: item.department.name,
-          nameOld: response.department.name,
-          qty1: soldQTYOne,
-          sells1: totalSellsPriceOne,
-          qty2: soldQTYTwo,
-          sells2: totalSellsPriceTwo);
+          newDepartment: item.department, oldDepartment: response.department);
       int idGroup = await GroupsFunctions.transferQtySells(
           groupNameNew: item.group.name,
           departmentIdNew: idDepartment,
@@ -185,9 +251,10 @@ class ProductFunctions {
       double maxA = item.maxQty;
       int type = item.productType;
       String printName = reversArString(ar);
-
+      print(
+          "UPDATE $tableName SET $imagePathF='$images',$productTypeF=$type,$maxAmountF=$maxA,$minAmountF=$minA,`$groupF`=$idGroup,$departmentF=$idDepartment,$enNameF='$en',$arNameF='$ar',$descriptionF='$desc',$unit1F=$id_1,$unit2F=$id_2,$unit3F=$id_3,$printNameF='$printName'  WHERE $idF=$id ");
       await _data.changeData(
-          "UPDATE $tableName SET $imagePathF='$images',$productTypeF=$type,$maxAmountF=$maxA,$minAmountF=$minA,`$groupF`=$idGroup,$departmentF=$idDepartment,$enNameF='$en',$arNameF='$ar',$descriptionF='$desc',$unit1F=$id_1,$unit2F=$id_2,$unit3F=$id_3,$printNameF='$printName'   WHERE $idF=$id ");
+          "UPDATE $tableName SET $imagePathF='$images',$productTypeF=$type,$maxAmountF=$maxA,$minAmountF=$minA,`$groupF`=$idGroup,$departmentF=$idDepartment,$enNameF='$en',$arNameF='$ar',$descriptionF='$desc',$unit1F=$id_1,$unit2F=$id_2,$unit3F=$id_3,$printNameF='$printName'  WHERE $idF=$id ");
     } catch (e) {
       throw CustomException(e.toString());
     }
@@ -327,5 +394,9 @@ class ProductFunctions {
       throw CustomException(ErrorsCodes.code3IsNotUnique);
     }
     return;
+  }
+
+  static Future<String> initialProductId() async {
+    return await initialId(tableName);
   }
 }

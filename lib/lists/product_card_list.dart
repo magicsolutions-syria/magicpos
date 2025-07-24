@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magicposbeta/lists/product_list/product_list.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
 import '../../screens/product_card.dart';
-import '../modules/info_product.dart';
+import '../modules/products_classes/info_product.dart';
 
 class ProductCardList extends StatelessWidget {
   const ProductCardList({super.key, required this.onDoubleTap});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:magicposbeta/modules/info_product.dart';
+import 'package:magicposbeta/modules/products_classes/info_product.dart';
 import 'package:magicposbeta/bloc/product_bloc/product_bloc.dart';
 import '../../../components/custom_drop_down_menu.dart';
 import '../../../components/general_text_field.dart';

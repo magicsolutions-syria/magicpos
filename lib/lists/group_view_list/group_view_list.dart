@@ -6,10 +6,12 @@ import 'package:magicposbeta/components/my_dialog.dart';
 import 'package:magicposbeta/components/waiting_widget.dart';
 import 'package:magicposbeta/lists/group_view_list/group_view_list_bloc/group_view_list_cubit.dart';
 import 'package:magicposbeta/lists/group_view_list/group_view_list_bloc/group_view_list_states.dart';
-import 'package:magicposbeta/modules/department.dart';
+import 'package:magicposbeta/modules/products_classes/info_department.dart';
+import 'package:magicposbeta/modules/products_classes/view_select_department.dart';
+import 'package:magicposbeta/modules/products_classes/view_select_group.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
-import '../../modules/group.dart';
+import '../../modules/products_classes/info_group.dart';
 
 class GroupViewList extends StatefulWidget {
   final int pivot;
@@ -118,7 +120,7 @@ class _GroupViewListState extends State<GroupViewList> {
                               }
                               return ListView.separated(
                                   itemBuilder: (context, index) {
-                                    Department department = context
+                                    ViewSelectDepartment department = context
                                         .read<GroupViewListCubit>()
                                         .departments[index];
                                     return Column(
@@ -181,7 +183,7 @@ class _GroupViewListState extends State<GroupViewList> {
                                                   const NeverScrollableScrollPhysics(),
                                               itemBuilder:
                                                   (context, groupIndex) {
-                                                Group group = department
+                                                ViewSelectGroup group = department
                                                     .groups[groupIndex];
 
                                                 return Row(

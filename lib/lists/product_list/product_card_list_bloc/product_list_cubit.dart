@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:magicposbeta/database/functions/product_functions.dart';
-import 'package:magicposbeta/modules/info_product.dart';
+import 'package:magicposbeta/modules/products_classes/info_product.dart';
 import 'package:magicposbeta/theme/locale/drop_down_data.dart';
 import '../../../theme/locale/search_types.dart';
 import 'product_list_states.dart';

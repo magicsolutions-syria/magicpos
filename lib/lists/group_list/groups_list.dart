@@ -28,7 +28,8 @@ class GroupsList extends StatelessWidget {
 
   final TextEditingController _groupController = TextEditingController();
   String _department = "";
-  final Function({required String groupValue,required String departmentValue}) onDoubleTap;
+  final Function({required String groupValue, required String departmentValue})
+      onDoubleTap;
 
   final ScrollController scrollController = ScrollController();
 
@@ -55,7 +56,9 @@ class GroupsList extends StatelessWidget {
                 child: BlocProvider<GroupListCubit>(
                   create: (BuildContext context) {
                     return GroupListCubit(() => InitialGroupListState(),
-                        context.read<SharedCubit>().currentUser,groupFilter:_groupController.text,sectionFilter:_department);
+                        context.read<SharedCubit>().currentUser,
+                        groupFilter: _groupController.text,
+                        sectionFilter: _department);
                   },
                   child: Column(
                     children: [
@@ -112,7 +115,7 @@ class GroupsList extends StatelessWidget {
                               ChooseButton(
                                   width: 462,
                                   fieldWidth: 292,
-                                  initialValue:_department,
+                                  initialValue: _department,
                                   onTap: (String value) {
                                     context.read<GroupListCubit>().getListData(
                                         groupFilter: _groupController.text,
@@ -156,7 +159,6 @@ class GroupsList extends StatelessWidget {
                                   } else if (data.isEmpty) {
                                     return const NotAvailableWidget();
                                   } else {
-
                                     return ListView.separated(
                                         controller: scrollController,
                                         addAutomaticKeepAlives: false,
@@ -240,7 +242,7 @@ class GroupsList extends StatelessWidget {
                                 builder: (BuildContext context,
                                     GroupListStates state) {
                                   return BottomButton(
-                                    title:ButtonsNames.deleteButton,
+                                    title: ButtonsNames.deleteButton,
                                     enable: context
                                         .read<GroupListCubit>()
                                         .deletePermission(),
@@ -256,7 +258,10 @@ class GroupsList extends StatelessWidget {
                                         onTap: () async {
                                           await context
                                               .read<GroupListCubit>()
-                                              .deleteSelectedGroup(groupFilter: _groupController.text, sectionFilter: _department);
+                                              .deleteSelectedGroup(
+                                                  groupFilter:
+                                                      _groupController.text,
+                                                  sectionFilter: _department);
                                         },
                                       );
                                     },

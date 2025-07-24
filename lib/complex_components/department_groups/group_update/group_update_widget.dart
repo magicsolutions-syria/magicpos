@@ -53,9 +53,9 @@ class GroupUpdateWidget extends StatelessWidget {
                 width: 350,
                 prefix: IconButton(
                   onPressed: () async {
-                    String groupVal = context.read<GroupUpdateCubit>().oldGroup;
+                    String groupVal =  context.read<GroupUpdateCubit>().oldGroup.name;
                     String departmentVal =
-                        context.read<GroupUpdateCubit>().newDepartment;
+                        context.read<GroupUpdateCubit>().newDepartment.name;
                     await showDialog(
                         context: context,
                         builder: (context) => GroupsList(
@@ -80,24 +80,24 @@ class GroupUpdateWidget extends StatelessWidget {
                 withSpacer: true,
                 title: FieldsNames.oldName,
                 controller: TextEditingController(
-                    text: context.read<GroupUpdateCubit>().oldGroup),
+                    text: context.read<GroupUpdateCubit>().oldGroup.name),
               ),
               GeneralTextField(
                 width: 350,
                 withSpacer: true,
                 title: FieldsNames.newName,
                 onChangeFunc: (value) {
-                  context.read<GroupUpdateCubit>().newGroup = value;
+                  context.read<GroupUpdateCubit>().newGroup.setName(value);
                 },
                 controller: TextEditingController(
-                    text: context.read<GroupUpdateCubit>().newGroup),
+                    text: context.read<GroupUpdateCubit>().newGroup.name),
               ),
               GeneralTextField(
                 width: 350,
                 prefix: IconButton(
                   onPressed: () async {
                     String departmentVal =
-                        context.read<GroupUpdateCubit>().newDepartment;
+                        context.read<GroupUpdateCubit>().newDepartment.name;
                     await showDialog(
                         context: context,
                         builder: (context) => SectionsList(
@@ -119,7 +119,7 @@ class GroupUpdateWidget extends StatelessWidget {
                 withSpacer: true,
                 title: FieldsNames.departmentName,
                 controller: TextEditingController(
-                    text: context.read<GroupUpdateCubit>().newDepartment),
+                    text: context.read<GroupUpdateCubit>().newDepartment.name),
               ),
             ],
           );

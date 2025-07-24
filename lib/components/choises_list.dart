@@ -47,13 +47,14 @@ class _ChoicesListState extends State<ChoicesList> {
   late List<Map> groupsList;
   Future<List<Map>> getGroupsList(
       String departmentName, int departmentId) async {
-    PosData db = PosData();
+    /*PosData db = PosData();
     groupsList = await db.readData("SELECT * FROM 'groups'");
-    List<Map> res = await GroupsFunctions.getGroupsList(
+   *//* List<Map> res = await GroupsFunctions.getGroupsList(
         groupName: '',
         departmentName: departmentName,
-        departmentId: departmentId);
-    return res;
+        departmentId: departmentId);*//*
+    return res;*/
+    return [];
   }
 
   @override
@@ -207,16 +208,7 @@ class _ChoicesListState extends State<ChoicesList> {
                                             ),
                                           ),
                                           FutureBuilder(
-                                              future: GroupsFunctions.getGroupsList(
-                                                  groupName: "",
-                                                  departmentName:
-                                                      departmentSnapshot.data?[
-                                                              departmentIndex]
-                                                          ["section_name"],
-                                                  departmentId:
-                                                      departmentSnapshot.data?[
-                                                              departmentIndex]
-                                                          ["id_department"]),
+                                              future: Future(()=>[]),
                                               builder: (BuildContext context,
                                                   groupSnapshot) {
                                                 if (groupSnapshot
