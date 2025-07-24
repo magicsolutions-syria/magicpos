@@ -29,8 +29,8 @@ class GeneralPage extends StatelessWidget {
                   GeneralTextField(
                       prefix: IconButton(
                         onPressed: () async {
-                          String groupVal = prod.groupName;
-                          String departmentVal = prod.departmentName;
+                          String groupVal = prod.group.name;
+                          String departmentVal = prod.department.name;
                           await showDialog(
                             context: context,
                             builder: (BuildContext context) => GroupsList(
@@ -40,8 +40,8 @@ class GeneralPage extends StatelessWidget {
                                   {String? departmentValue,
                                   String? groupValue}) {
                                 departmentVal =
-                                    departmentValue ?? prod.departmentName;
-                                groupVal = groupValue ?? prod.groupName;
+                                    departmentValue ?? prod.department.name;
+                                groupVal = groupValue ?? prod.group.name;
                               },
                             ),
                           );
@@ -58,19 +58,19 @@ class GeneralPage extends StatelessWidget {
                       onChangeFunc: (text) {
                         BlocProvider.of<ProductCardCubit>(context)
                             .product
-                            .groupName = text;
+                            .group.setName( text);
                       },
                       controller: TextEditingController(
                           text: context
                               .read<ProductCardCubit>()
                               .product
-                              .groupName),
+                              .group.name),
                       inputType: TextInputType.text,
                       onlyNumber: const []),
                   GeneralTextField(
                       prefix: IconButton(
                         onPressed: () async {
-                          String departmentVal = prod.departmentName;
+                          String departmentVal = prod.department.name;
                           await showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -92,7 +92,7 @@ class GeneralPage extends StatelessWidget {
                       onChangeFunc: (text) {
                         BlocProvider.of<ProductCardCubit>(context)
                             .product
-                            .departmentName = text;
+                            .department.setName( text);
                       },
                       width: 350,
                       title: FieldsNames.departmentName,
@@ -100,7 +100,7 @@ class GeneralPage extends StatelessWidget {
                           text: context
                               .read<ProductCardCubit>()
                               .product
-                              .departmentName),
+                              .department.name),
                       inputType: TextInputType.text,
                       onlyNumber: const []),
                 ],

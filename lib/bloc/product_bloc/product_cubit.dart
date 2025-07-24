@@ -71,7 +71,7 @@ class ProductCardCubit extends Cubit<ProductCardStates> {
       if (product.enName == "") {
         throw CustomException(ErrorsCodes.emptyEnName);
       }
-      if (product.groupName == "") {
+      if (product.group.name == "") {
         throw CustomException(ErrorsCodes.emptyGroupName);
       }
       if (product.checkQty()) {
@@ -99,7 +99,7 @@ class ProductCardCubit extends Cubit<ProductCardStates> {
       if (product.enName == "") {
         throw CustomException(ErrorsCodes.emptyEnName);
       }
-      if (product.groupName == "") {
+      if (product.group.name == "") {
         throw CustomException(ErrorsCodes.emptyGroupName);
       }
       if (product.checkBarcodes()) {
@@ -141,13 +141,13 @@ class ProductCardCubit extends Cubit<ProductCardStates> {
   }
 
   void updateDepartmentName(String departmentVal) {
-    product.departmentName = departmentVal;
+    product.department.setName(departmentVal);
     emit(ChangedValueState());
   }
 
   void updateGroupName({required String group, required String department}) {
-    product.departmentName = department;
-    product.groupName = group;
+    product.department.setName(department);
+    product.group.setName(group);
     emit(ChangedValueState());
   }
 }
