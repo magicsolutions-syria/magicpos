@@ -59,8 +59,8 @@ class MyApp extends StatelessWidget {
           initialRoute: "/",
           routes: {
             PosScreen.route: (context) => const PosScreen(),
-            SuppliersCard.route: (context) =>const SuppliersCard() ,
-            ClientsCard.route: (context) =>const ClientsCard() ,
+            SuppliersCard.route: (context) => const SuppliersCard(),
+            ClientsCard.route: (context) => const ClientsCard(),
             ProductCard.route: (context) => const ProductCard(),
             InOutScreen.route: (context) => InOutScreen(),
             ReportsNavigatorScreen.route: (context) =>

@@ -26,7 +26,7 @@ class StartAppScreen extends StatelessWidget {
                 backgroundColor: Colors.white,
                 body: Center(
                   child: Image.asset(
-                   AppProfile.logo,
+                    AppProfile.logo,
                     width: 150,
                     height: 150,
                   ),
