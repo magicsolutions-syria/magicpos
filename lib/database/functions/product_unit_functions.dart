@@ -13,14 +13,13 @@ class ProductUnitFunctions {
     return List.generate(response.length, (index) => response[index]["names"]);
   }
 
-  static Future<void> addUnitName(
-      {required String name, required String suffix}) async {
+  static Future<void> addUnitName(ProductUnit item) async {
     PosData data = PosData();
-    List<Map> res = await data
-        .readData("SELECT * FROM units_names$suffix WHERE names='$name'");
+    List<Map> res = await data.readData(
+        "SELECT * FROM units_names${item.suffix} WHERE names='${item.name}'");
     if (res.isEmpty) {
-      await data
-          .insertData("INSERT INTO units_names$suffix (names)VALUES('$name')");
+      await data.insertData(
+          "INSERT INTO units_names${item.name} (names)VALUES('${item.name}')");
     }
   }
 
@@ -40,13 +39,14 @@ class ProductUnitFunctions {
 
   static Future<int> initializeUnit(ProductUnit item) async {
     if (item.name != "") {
-      await addUnitName(name: item.name, suffix: item.suffix);
+      await addUnitName(item);
     }
     return addUnit(item);
   }
 
-  static Future<int> updateUnit(
-      {required ProductUnit item, required int id}) async {
+  static Future<int> updateUnit({
+    required ProductUnit item,
+  }) async {
     PosData data = PosData();
     double cost = item.costPrice;
     double group = item.groupPrice;
@@ -55,8 +55,12 @@ class ProductUnitFunctions {
     String name = item.name;
     String suffix = item.suffix;
     String printName = reversArString(name);
+    int id = item.id;
+    print(item.toString());
+    print(
+        "UPDATE  unit$suffix SET name$suffix ='$name' ,Print_Name$suffix='$printName' , cost_price$suffix =$cost , group_price$suffix =$group , piece_price$suffix = $piece , code$suffix = '$code' WHERE id$suffix>${id - 1} AND  id$suffix<${id + 1} ");
     return await data.changeData(
-        "UPDATE  unit$suffix SET name$suffix ='$name' ,Print_Name$suffix='$printName' , cost_price$suffix =$cost , group_price$suffix =$group , piece_price$suffix = $piece , code$suffix = '$code' WHERE id$suffix=$id ");
+        "UPDATE  unit$suffix SET name$suffix ='$name' ,Print_Name$suffix='$printName' , cost_price$suffix =$cost , group_price$suffix =$group , piece_price$suffix = $piece , code$suffix = '$code' WHERE id$suffix>${id - 1} AND  id$suffix<${id + 1} ");
   }
 
   static Future<int> addUnitExpanded(ProductUnitExpanded item) async {
@@ -74,8 +78,8 @@ class ProductUnitFunctions {
         "INSERT INTO unit$suffix (Print_Name$suffix,name$suffix,cost_price$suffix,group_price$suffix,piece_price$suffix,code$suffix,pieces_quantity$suffix)VALUES('$printName','$name',$cost,$group,$piece,'$code',$pieceQTY)");
   }
 
-  static Future<int> initializeUnitExpanded(
-      ProductUnitExpanded item, {int responseId = 0}) async {
+  static Future<int> initializeUnitExpanded(ProductUnitExpanded item,
+      {int responseId = 0}) async {/*
     if (responseId == 0) {
       if (item.isNotEmpty) {
         addUnitName(name: item.name, suffix: item.suffix);
@@ -85,7 +89,8 @@ class ProductUnitFunctions {
     } else {
       await ProductUnitFunctions.updateUnitExpanded(item: item, id: responseId);
       return responseId;
-    }
+    }*/
+    return await 0;
   }
 
   static Future<void> deleteUnit(
@@ -96,7 +101,7 @@ class ProductUnitFunctions {
   }
 
   static Future<int> updateUnitExpanded(
-      {required ProductUnitExpanded item, required int id}) async {
+      {required ProductUnitExpanded item, required int id}) async {/*
     PosData data = PosData();
     String suffix = item.suffix;
 
@@ -116,6 +121,8 @@ class ProductUnitFunctions {
 
     return await data.changeData(
         "UPDATE unit$suffix SET name$suffix ='$name' ,Print_Name$suffix='$printName' , cost_price$suffix =$cost , group_price$suffix =$group , piece_price$suffix = $piece , code$suffix = '$code' ,pieces_quantity$suffix = $pieceQTY WHERE id$suffix=$id ");
+  */
+    return await 0;
   }
 
   static Future<bool> barcodeIsUnique({

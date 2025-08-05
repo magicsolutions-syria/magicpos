@@ -21,8 +21,8 @@ class GroupListCubit extends Cubit<GroupListStates> {
       {String groupFilter = "", String departmentFilter = ""}) async {
     try {
       emit(LoadingGroupListState());
-      data = await GroupsFunctions.getGroupsList(
-          groupName: groupFilter, departmentName: departmentFilter);
+     /* data = await GroupsFunctions.getGroupsList(
+          groupName: groupFilter, departmentName: departmentFilter);*/
       groupName="";
       departmentName="";
       emit(SuccessGroupListState());

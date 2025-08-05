@@ -1,7 +1,11 @@
 import 'package:magicposbeta/database/functions/groups_functions.dart';
 import 'package:magicposbeta/database/initialize_database.dart';
+import 'package:magicposbeta/modules/products_classes/info_department.dart';
+import 'package:magicposbeta/modules/products_classes/view_select_department.dart';
+import 'package:magicposbeta/theme/locale/errors.dart';
 
 import '../../components/reverse_string.dart';
+import '../../theme/custom_exception.dart';
 
 class SectionsFunctions {
   static const String tableName = "departments";
@@ -22,13 +26,10 @@ class SectionsFunctions {
   static const String defaultDepartmentName = "متفرقات";
   static final PosData _data = PosData();
 
-  static Future<int> addProductToDepartment(String name) async {
-    List<Map> response = await getDepartmentList(name);
-    int id = response[0][idF];
-
+  static Future<int> addProductToDepartment(InfoDepartment department) async {
     await _data.changeData(
-        "UPDATE $tableName set $productQtyF=${response[0][productQtyF] + 1} WHERE $idF=$id");
-    return id;
+        "UPDATE $tableName set $productQtyF=${department.productQty + 1} WHERE $idF=${department.id}");
+    return department.id;
   }
 
   static Future<List<Map>> getDepartmentList(String name,
@@ -70,20 +71,20 @@ class SectionsFunctions {
         return await _data.insertData(
             "INSERT INTO $tableName ($nameF,$printNameF)VALUES('$name','$printName')");
       } else {
-        throw Exception("هذا القسم موجود\nمسبقاً");
+        throw CustomException(ErrorsCodes.sectionIsExistPreviously);
       }
     } else {
-      throw Exception("حقل القسم لا يمكن ان\nيكون فارغاً");
+      throw CustomException(ErrorsCodes.selectSectionFirst);
     }
   }
 
   static Future<bool> deleteSection(
     String name,
-  ) async {
+  ) async {/*
     if (name == "") {
-      throw Exception("يجب تحديد قسم أولاً");
+      throw CustomException(ErrorsCodes.selectSectionFirst);
     } else if (name == defaultDepartmentName) {
-      throw Exception("لا يمكنك حذف\nهذا القسم");
+      throw CustomException(ErrorsCodes.canNotDeleteThisSection);
     } else {
       List<Map> response = await getDepartmentList(name);
       List<Map> response0 = await GroupsFunctions.getGroupsList(
@@ -91,27 +92,27 @@ class SectionsFunctions {
       List<Map> response1 = await _data
           .readData("SELECT * FROM dept WHERE department=${response[0][idF]}");
       if (response1.isNotEmpty) {
-        throw Exception("لا يمكنك حذف هذا القسم فهو\nيحتوي depts مرتبطة به");
+        throw CustomException(ErrorsCodes.canNotDeleteSectionDeptsRefernce);
       }
       if (response0.isNotEmpty) {
-        throw Exception("لا يمكنك حذف هذا القسم فهو\nيحتوي مجموعات مرتبطة به");
+        throw CustomException(ErrorsCodes.canNotDeleteSectionGroupsRefernce);
       } else if (response[0][qty1F] > 0 || response[0][qty2F] > 0) {
-        throw Exception(
-            "لا يمكنك حذف هذا القسم عليك تصفير\nالتقارير المرتبطة به أولاً");
+        throw CustomException(ErrorsCodes.canNotDeleteSectionReportsRefernce);
       } else {
         _data.deleteData(
             "DELETE FROM $tableName WHERE $idF=${response[0][idF]}");
         return true;
       }
-    }
+    }*/
+    return false;
   }
 
-  static Future<int> initializeDepartment(String name) async {
-    List<Map> response = await getDepartmentList(name);
+  static Future<int> initializeDepartment(InfoDepartment department) async {/*
+    List<Map> response = await getDepartmentList(department);
     if (response.isEmpty) {
-      await addSection(name);
+      await addSection(department);
     }
-    return addProductToDepartment(name);
+    return addProductToDepartment(department);*/return 0;
   }
 
   static Future<int> increaseQtyAndSells(
@@ -159,14 +160,9 @@ class SectionsFunctions {
   }
 
   static Future<int> transferQtySells(
-      {required String nameNew,
-      required String nameOld,
-      required double qty1,
-      required double sells1,
-      required double qty2,
-      required double sells2,
-      double productQTY = 1}) async {
-    if (nameNew == nameOld) {
+      {required InfoDepartment oldDepartment,
+      required InfoDepartment newDepartment}) async {
+    /*if (nameNew == nameOld) {
       return initializeDepartment(nameNew);
     }
     decreaseQtyAndSells(
@@ -182,19 +178,20 @@ class SectionsFunctions {
         sells1: sells1,
         qty2: qty2,
         sells2: sells2,
-        productQTY: productQTY);
+        productQTY: productQTY);*/
+    return 0;
   }
 
   static updateDepartmentName(
       {required String oldName, required String newName}) async {
     if (oldName == "") {
-      throw Exception("يرجى اختيار قسم أولاً");
+      throw CustomException(ErrorsCodes.selectSectionFirst);
     }
     if (newName == "") {
-      throw Exception("لم يتم تحديد اسم جديد للقسم");
+      throw CustomException(ErrorsCodes.didnotDetermineNewSectionName);
     }
     if (oldName == defaultDepartmentName) {
-      throw Exception("لا يمكنك تعديل هذا القسم");
+      throw CustomException(ErrorsCodes.cannotEditSection);
     }
     if (newName != oldName) {
       List<Map> response0 = await _data
@@ -203,17 +200,17 @@ class SectionsFunctions {
         await _data.changeData(
             "UPDATE `$tableName` SET $nameF='$newName',$printNameF='${reversArString(newName)}' WHERE $nameF='$oldName'");
       } else {
-        throw Exception("هذا القسم موجود\nمسبقاً");
+        throw CustomException(ErrorsCodes.sectionIsExistPreviously);
       }
     }
   }
 
-  static checkSelectedUnselected(String sectionName, int id) async {
-    String condition = sectionName == "" ? "$idF=$id" : "$nameF='$sectionName'";
+  static checkSelectedUnselected(ViewSelectDepartment department) async {
+    /*String condition = sectionName == "" ? "$idF=$id" : "$nameF='$sectionName'";
     List<Map> checkSelect = await GroupsFunctions.getSelectedUnSelectedGroups(
         false, sectionName, id);
     await _data.changeData(
-        "UPDATE $tableName SET $selectedF=${checkSelect.isEmpty} WHERE $condition");
+        "UPDATE $tableName SET $selectedF=${checkSelect.isEmpty} WHERE $condition");*/
   }
 
   static Future<void> changeSelectValues(

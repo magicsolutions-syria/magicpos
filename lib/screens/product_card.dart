@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magicposbeta/bloc/product_bloc/product_bloc.dart';
 import 'package:magicposbeta/bloc/shared_bloc/shared_cubit.dart';
 import 'package:magicposbeta/components/waiting_widget.dart';
-import 'package:magicposbeta/modules/info_product.dart';
+import 'package:magicposbeta/modules/products_classes/info_product.dart';
 import 'package:magicposbeta/screens/home_screen.dart';
 import 'package:magicposbeta/theme/app_formatters.dart';
 import 'package:magicposbeta/theme/custom_colors.dart';

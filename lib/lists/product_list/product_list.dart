@@ -11,7 +11,7 @@ import 'package:magicposbeta/theme/locale/locale.dart';
 import '../../components/custom_drop_down_menu.dart';
 import '../../components/general_list_row.dart';
 import '../../components/general_text_field.dart';
-import '../../modules/info_product.dart';
+import '../../modules/products_classes/info_product.dart';
 import '../../theme/app_functions.dart';
 
 class ProductList extends StatelessWidget {

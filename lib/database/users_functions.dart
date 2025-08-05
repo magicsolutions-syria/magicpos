@@ -8,31 +8,47 @@ import '../modules/user.dart';
 import '../theme/locale/search_types.dart';
 
 class UsersFunctions {
+  //table name
+  static const String tableName = "users";
+
+  //fields names
+  static const String idF = "id_user";
+  static const String arNameF = "ar_name";
+  static const String enNameF = "en_name";
+  static const String passwordF = "password";
+  static const String printNameF = "print_name";
+  static const String mobileF = "mobile";
+  static const String emailF = "email";
+  static const String jobTitleF = "job_title";
+  static const String sells2F = "total_sells_price_two";
+  static const String sells1F = "total_sells_price_one";
+  static const String qty2F = "sold_quantity_two";
+  static const String qty1F = "sold_quantity_one";
+  static final PosData _data = PosData();
   static Future<List<Map>> getUsersList(
       {required String searchText,
       required String searchType,
       String secondCondition = ""}) async {
-    PosData data = PosData();
     String columnName = "";
     switch (searchType) {
       case (SearchTypes.arName):
         {
-          columnName = "ar_name";
+          columnName = arNameF;
           break;
         }
       case (SearchTypes.enName):
         {
-          columnName = "en_name";
+          columnName = enNameF;
           break;
         }
       case (SearchTypes.jopTitle):
         {
-          columnName = "jop_title_name";
+          columnName = jobTitleF;
           break;
         }
       default:
         {
-          columnName = "ar_name";
+          columnName = arNameF;
           break;
         }
     }
@@ -44,15 +60,14 @@ class UsersFunctions {
     } else if (searchText == "" && secondCondition != "") {
       condition = "WHERE $secondCondition";
     }
-    List<Map> res = await data.readData(
+    List<Map> res = await _data.readData(
         "SELECT * FROM users JOIN jop_titles ON jop_title=id $condition");
     return res;
   }
 
   static Future<Map<String, dynamic>> getUserPermissions(int userId) async {
-    PosData data = PosData();
 
-    List<Map> res = await data.readData(
+    List<Map> res = await _data.readData(
         "SELECT permission_name FROM user_permissions JOIN permissions ON permission_id=permissions.id WHERE user_id=$userId");
     List<String> item =
         List.generate(res.length, (index) => res[index]["permission_name"]);
@@ -77,22 +92,20 @@ class UsersFunctions {
   }
 
   static Future<void> addUser({required User user}) async {
-    PosData data = PosData();
 
     await _checkUniqueFields(user);
     int index = await getJopTitleId(user.jobTitle);
     List<int> permissions = user.getPermissions();
     String printName = reversArString(user.arName);
-    int user_id = await data.insertData(
+    int user_id = await _data.insertData(
         "INSERT INTO users (Print_Name,ar_name,en_name,mobile,email,password,jop_title)VALUES('$printName','${user.arName}','${user.enName}','${user.phone}','${user.email}','${user.password}',$index)");
     for (int id in permissions) {
-      await data.insertData(
+      await _data.insertData(
           "INSERT INTO user_permissions (user_id,permission_id)VALUES($user_id,${id + 1})");
     }
   }
 
   static Future<User> verifyUser(String name, String password) async {
-    PosData data = PosData();
     if (name == "") {
       throw CustomException("اسم المستخدم لا يمكن أن يكون فارغاً");
     }
@@ -111,19 +124,17 @@ class UsersFunctions {
   }
 
   static Future<List<String>> getJopTitleList() async {
-    PosData data = PosData();
-    List<Map> response = await data.readData("SELECT * FROM jop_titles");
+    List<Map> response = await _data.readData("SELECT * FROM jop_titles");
     return List.generate(
         response.length, (index) => response[index]["jop_title_name"]);
   }
 
   static Future<int> getJopTitleId(String job) async {
-    PosData data = PosData();
     if (job == "") throw Exception("حقل المسمى الوظيفي لا يمكن أن يكون فارغاً");
     List<String> jopTitleNames = await getJopTitleList();
     int index = jopTitleNames.indexOf(job) + 1;
     if (index == 0) {
-      index = await data.insertData(
+      index = await _data.insertData(
           "INSERT INTO jop_titles (jop_title_name) VALUES ('$job')");
     }
     return index;
@@ -161,7 +172,6 @@ class UsersFunctions {
   }
 
   static Future<void> deleteUser(User user) async {
-    PosData data = PosData();
 
     List<Map> response = await getUsersList(
         secondCondition:
@@ -177,13 +187,12 @@ class UsersFunctions {
       }
     }
 
-    await data.deleteData("DELETE FROM users WHERE id_user=${user.id}");
-    await data
+    await _data.deleteData("DELETE FROM users WHERE id_user=${user.id}");
+    await _data
         .deleteData("DELETE FROM user_permissions WHERE user_id=${user.id}");
   }
 
   static Future<void> updateUser(User user) async {
-    PosData data = PosData();
     try{
       String updatePassword = "";
       if (user.jobTitle != jopTitleData.first) {
@@ -202,12 +211,12 @@ class UsersFunctions {
       int index = await getJopTitleId(user.jobTitle);
       List<int> permissions = user.getPermissions();
       String printName = reversArString(user.arName);
-      await data.changeData(
+      await _data.changeData(
           "UPDATE users SET Print_Name='$printName',ar_name='${user.arName}',en_name='${user.enName}',mobile='${user.phone}',email='${user.email}',jop_title=$index $updatePassword WHERE id_user=${user.id}");
-      await data
+      await _data
           .deleteData("DELETE FROM user_permissions WHERE user_id=${user.id}");
       for (int id in permissions) {
-        await data.insertData(
+        await _data.insertData(
             "INSERT INTO user_permissions (user_id,permission_id)VALUES(${user.id},${id + 1})");
       }
     }

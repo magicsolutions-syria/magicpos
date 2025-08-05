@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:magicposbeta/modules/page_profile.dart";
-import "package:magicposbeta/theme/pages_profiles.dart";
+import "package:magicposbeta/theme/home_pages_profiles.dart";
 
 class CustomButton extends StatelessWidget {
   final double ratio = 0.12;

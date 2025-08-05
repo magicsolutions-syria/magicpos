@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../database/functions/person_functions.dart';
-import '../../screens/person_card.dart';
 import '../../theme/locale/locale.dart';
 import '../components/general_list.dart';
 import '../screens/clients_card.dart';

@@ -2,23 +2,17 @@ import 'package:equatable/equatable.dart';
 import 'package:magicposbeta/database/functions/Sections_functions.dart';
 import 'package:magicposbeta/database/functions/groups_functions.dart';
 import 'package:magicposbeta/database/functions/product_functions.dart';
-import 'package:magicposbeta/modules/department.dart';
-import 'package:magicposbeta/modules/group.dart';
-import 'package:magicposbeta/theme/custom_exception.dart';
-import 'package:magicposbeta/theme/locale/errors.dart';
+import 'package:magicposbeta/modules/products_classes/info_department.dart';
+import 'package:magicposbeta/modules/products_classes/abs_product.dart';
+import 'package:magicposbeta/modules/products_classes/info_group.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
 
-import 'product_unit.dart';
-import 'product_unit_expanded.dart';
+import '../product_unit.dart';
+import '../product_unit_expanded.dart';
 
-class InfoProduct implements Equatable {
-  int _id = -1;
-  String arName = "";
-  String enName = "";
-  String _departmentName = "";
-  Department department;
-  Group group;
-  String _groupName = "";
+class InfoProduct extends AbsProduct implements Equatable {
+  InfoDepartment department;
+  InfoGroup group;
   int _productType = 0;
   double minQty = 0;
   double maxQty = 0;
@@ -28,50 +22,21 @@ class InfoProduct implements Equatable {
   ProductUnitExpanded unit2;
   ProductUnitExpanded unit3;
 
-  InfoProduct({
-    int id = 0,
-    required this.arName,
-    required this.enName,
-    required String departmentName,
-    required String groupName,
-    required String productType,
-    required double minQty,
-    required double maxQty,
-    required this.description,
-    required this.imagePath,
-    required this.department,
-    required this.group,
-    required this.unit1,
-    required this.unit2,
-    required this.unit3,
-  }) {
-    _id = id;
+  InfoProduct(
+      {required String productType,
+      required double minQty,
+      required double maxQty,
+      required this.description,
+      required this.imagePath,
+      required this.department,
+      required this.group,
+      required this.unit1,
+      required this.unit2,
+      required this.unit3,
+      required super.arName,
+      required super.enName,
+      super.id}) {
     setProductType(productType);
-    this.departmentName = departmentName;
-    _groupName = groupName;
-  }
-
-  set departmentName(String value) {
-    if (value == "") {
-      _departmentName = "متفرقات";
-    } else {
-      _departmentName = value;
-    }
-  }
-
-  set groupName(String value) {
-    if (value == "") {
-      throw Exception("حقل المجموعة لا يمكن أن يكون فارغاً");
-    } else {
-      _groupName = value;
-    }
-  }
-
-  set id(int value) {
-    if (value < 0) {
-      throw CustomException(ErrorsCodes.invalidID);
-    }
-    _id = value;
   }
 
   void setProductType(String value) {
@@ -92,18 +57,6 @@ class InfoProduct implements Equatable {
     } else {
       maxQty = double.parse(text);
     }
-  }
-
-  int get id {
-    return _id;
-  }
-
-  String get departmentName {
-    return _departmentName;
-  }
-
-  String get groupName {
-    return _groupName;
   }
 
   int get productType {
@@ -151,8 +104,6 @@ class InfoProduct implements Equatable {
     return InfoProduct(
         arName: "",
         enName: "",
-        departmentName: "",
-        groupName: "",
         productType: DiversePhrases.productTypes()[0],
         minQty: 0,
         maxQty: 0,
@@ -161,8 +112,8 @@ class InfoProduct implements Equatable {
         unit1: ProductUnit.emptyInstance("_1"),
         unit2: ProductUnitExpanded.emptyInstance("_2"),
         unit3: ProductUnitExpanded.emptyInstance("_3"),
-        department: Department.emptyInstance(),
-        group: Group.emptyInstance());
+        department: InfoDepartment.emptyInstance(),
+        group: InfoGroup.emptyInstance());
   }
 
   static InfoProduct instanceFromMap(Map item) {
@@ -207,12 +158,19 @@ class InfoProduct implements Equatable {
         soldPrice2: item['total_sells_price_two_3'],
         soldQty1: item['sold_quantity_one_3'],
         soldQty2: item['sold_quantity_two_3']);
+    InfoDepartment department = InfoDepartment.fullInstance(
+      id: item[SectionsFunctions.idF],
+      name: item[SectionsFunctions.nameF],
+    );
+    InfoGroup group = InfoGroup.fullInstance(
+      id: item[GroupsFunctions.idF],
+      name: item[GroupsFunctions.nameF],
+      department: department,
+    );
     return InfoProduct(
       id: item[ProductFunctions.idF],
       arName: item[ProductFunctions.arNameF],
       enName: item[ProductFunctions.enNameF],
-      departmentName: item[SectionsFunctions.nameF],
-      groupName: item[GroupsFunctions.nameF],
       productType: DiversePhrases.productTypes()
           .elementAt(item[ProductFunctions.productTypeF]),
       minQty: item[ProductFunctions.minAmountF].toDouble(),
@@ -222,20 +180,14 @@ class InfoProduct implements Equatable {
       unit1: unit1,
       unit2: unit2,
       unit3: unit3,
-      department: Department(
-          id: item[SectionsFunctions.idF],
-          name: item[SectionsFunctions.nameF],
-          isSelected: item[SectionsFunctions.selectedF]==1),
-      group: Group(
-          id: item[GroupsFunctions.idF],
-          name: item[GroupsFunctions.nameF],
-          isSelected: item[GroupsFunctions.selectedF]==1),
+      department: department,
+      group: group,
     );
   }
 
   @override
   String toString() {
-    return "arname:{$arName},enname:{$enName},group:{$_groupName},department:{$_departmentName}";
+    return "arname:{$arName},enname:{$enName}";
   }
 
   @override
@@ -243,8 +195,6 @@ class InfoProduct implements Equatable {
   List<Object?> get props => [
         arName,
         enName,
-        _groupName,
-        _departmentName,
         productType,
         minQty,
         maxQty,
@@ -273,5 +223,13 @@ class InfoProduct implements Equatable {
 
   double totalSoldPrice2() {
     return unit1.soldPrice2 + unit2.soldPrice2 + unit3.soldPrice2;
+  }
+
+  static Future<List<InfoProduct>> getList(List<Map> list) async {
+    List<InfoProduct> products = [];
+    for (var product in list) {
+      products.add(instanceFromMap(product));
+    }
+    return products;
   }
 }

@@ -2,6 +2,7 @@ import "package:flutter/foundation.dart";
 import "package:magicposbeta/database/functions/Sections_functions.dart";
 import "package:magicposbeta/database/functions/groups_functions.dart";
 import "package:magicposbeta/database/functions/product_functions.dart";
+import "package:magicposbeta/database/users_functions.dart";
 import "package:sqflite/sqflite.dart";
 import "package:path/path.dart";
 
@@ -91,20 +92,20 @@ class PosData {
     ''');
     print("printers");
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS "users"(
-      'id_user' INTEGER  PRIMARY KEY,
-      'Print_Name' TEXT(20) NOT NULL,
-      'ar_name' TEXT NOT NULL,
-      'en_name' TEXT DEFAULT "",
-      'password' TEXT NOT NULL,
-      'mobile' TEXT DEFAULT "",
-      'email' TEXT DEFAULT "",
-      'jop_title' INTEGER DEFAULT 1,
-      "sold_quantity_one" REAL DEFAULT 0,
-      "sold_quantity_two" REAL DEFAULT 0,
-      "total_sells_price_one" REAL DEFAULT 0.0,
-      "total_sells_price_two" REAL DEFAULT 0.0,
-      FOREIGN KEY(jop_title) REFERENCES jop_titles(id)
+    CREATE TABLE IF NOT EXISTS "${UsersFunctions.tableName}"(
+      '${UsersFunctions.idF}' INTEGER  PRIMARY KEY,
+      '${UsersFunctions.printNameF}' TEXT(20) NOT NULL,
+      '${UsersFunctions.arNameF}' TEXT NOT NULL,
+      '${UsersFunctions.enNameF}' TEXT DEFAULT "",
+      '${UsersFunctions.passwordF}' TEXT NOT NULL,
+      '${UsersFunctions.mobileF}' TEXT DEFAULT "",
+      '${UsersFunctions.emailF}' TEXT DEFAULT "",
+      '${UsersFunctions.jobTitleF}' INTEGER DEFAULT 1,
+      "${UsersFunctions.qty1F}" REAL DEFAULT 0,
+      "${UsersFunctions.qty2F}" REAL DEFAULT 0,
+      "${UsersFunctions.sells1F}" REAL DEFAULT 0.0,
+      "${UsersFunctions.sells2F}" REAL DEFAULT 0.0,
+      FOREIGN KEY(${UsersFunctions.jobTitleF}) REFERENCES jop_titles(id)
     )
       ''');
     await db.execute('''

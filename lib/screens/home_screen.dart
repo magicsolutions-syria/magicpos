@@ -4,7 +4,7 @@ import "package:magicposbeta/bloc/shared_bloc/shared_bloc.dart";
 import "package:magicposbeta/screens/screens.dart";
 import "package:magicposbeta/templates/main_screens_template.dart";
 import "package:magicposbeta/theme/locale/locale.dart";
-import "package:magicposbeta/theme/pages_profiles.dart";
+import "package:magicposbeta/theme/home_pages_profiles.dart";
 import "../components/custom_button.dart";
 
 class HomeScreen extends StatelessWidget {
@@ -31,17 +31,17 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         //client
 
-                        const CustomButton(
-                          profile: PagesProfiles.clients,
+                        CustomButton(
+                          profile: HomePagesProfiles.clients,
                         ),
                         //suppliers
                         CustomButton(
-                          profile: PagesProfiles.suppliers,
+                          profile: HomePagesProfiles.suppliers,
                         ),
                       ],
                     ),
@@ -55,12 +55,12 @@ class HomeScreen extends StatelessWidget {
                               .read<SharedCubit>()
                               .currentUser
                               .isManger(),
-                          profile: PagesProfiles.users,
+                          profile: HomePagesProfiles.users,
                         ),
                         //manual
 
                         const CustomButton(
-                          profile: PagesProfiles.manual,
+                          profile: HomePagesProfiles.manual,
                         ),
                       ],
                     ),
@@ -74,7 +74,9 @@ class HomeScreen extends StatelessWidget {
                 iconSize: 100,
                 width: 380,
                 height: 380,
-                profile: isPos ? PagesProfiles.pos : PagesProfiles.restaurant,
+                profile: isPos
+                    ? HomePagesProfiles.pos
+                    : HomePagesProfiles.restaurant,
               ),
               SizedBox(
                 width: 380,
@@ -89,12 +91,12 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           //products
                           CustomButton(
-                            profile: PagesProfiles.products,
+                            profile: HomePagesProfiles.products,
                           ),
                           //reports
 
                           CustomButton(
-                            profile: PagesProfiles.reports,
+                            profile: HomePagesProfiles.reports,
                           ),
                         ],
                       ),
@@ -107,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                           // In/Out
 
                           const CustomButton(
-                            profile: PagesProfiles.inOut,
+                            profile: HomePagesProfiles.inOut,
                           ),
                           //settings
                           CustomButton(
@@ -115,7 +117,7 @@ class HomeScreen extends StatelessWidget {
                                   .read<SharedCubit>()
                                   .currentUser
                                   .isManger(),
-                              profile: PagesProfiles.settings),
+                              profile: HomePagesProfiles.settings),
                         ],
                       ),
                     ),

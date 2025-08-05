@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/pages_profiles.dart';
+import '../theme/home_pages_profiles.dart';
 import 'home_screen.dart';
 import 'person_card.dart';
 
@@ -13,7 +13,7 @@ class ClientsCard extends StatelessWidget {
     return PersonCard(
       tableName: "clients",
       color: Theme.of(context).primaryColor,
-      title: PagesProfiles.clients.arName,
+      title: HomePagesProfiles.clients.arName,
       icon: Icons.supervisor_account,
     );
   }

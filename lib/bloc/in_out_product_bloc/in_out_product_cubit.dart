@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:magicposbeta/modules/in_out_product.dart';
-import 'package:magicposbeta/modules/info_product.dart';
+import 'package:magicposbeta/modules/products_classes/info_product.dart';
 import 'package:magicposbeta/modules/person.dart';
 import 'package:magicposbeta/theme/custom_exception.dart';
 import 'package:magicposbeta/theme/locale/locale.dart';
